@@ -6,13 +6,22 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_width="135dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="155dp"
         android:src="@drawable/logo" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login" />
+    <Button
+        android:id="@+id/btn_login"
+        style="@style/AppTheme.AccentButton"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="100dp"
+        android:drawableStart="@drawable/vk_btn_icon"
+        android:gravity="center"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:text="@string/login" />
 
 </LinearLayout>

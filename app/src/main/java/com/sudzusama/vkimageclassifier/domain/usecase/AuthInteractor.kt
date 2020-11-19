@@ -6,6 +6,7 @@ import com.vk.api.sdk.auth.VKScope
 import javax.inject.Inject
 
 class AuthInteractor @Inject constructor(private val authRepository: AuthRepository) {
+
     fun getToken(): String? {
         return authRepository.getToken()
     }
@@ -14,16 +15,14 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
         authRepository.saveToken(token)
     }
 
-    fun isLoggedIn(): Boolean {
-        return authRepository.isLoggedIn()
-    }
-
     fun login(activityContext: Activity) {
-        val scopes = listOf<VKScope>(VKScope.GROUPS)
+        val scopes = listOf(VKScope.GROUPS)
         authRepository.login(activityContext, scopes)
     }
 
     fun logout() {
         authRepository.logout()
     }
+
+    fun getLoginStateFlow() = authRepository.getLoginStateFlow()
 }

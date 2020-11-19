@@ -1,36 +1,27 @@
 package com.sudzusama.vkimageclassifier.ui.auth
 
 import android.app.Activity
-import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.sudzusama.vkimageclassifier.domain.repository.AuthRepository
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
-import com.vk.api.sdk.VK
-import com.vk.api.sdk.auth.VKScope
-import kotlinx.coroutines.launch
+import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
 
 class AuthViewModel @ViewModelInject constructor(private val authInteractor: AuthInteractor) :
-    ViewModel() {
+    BaseViewModel(authInteractor) {
 
-    val isAuthorized = MutableLiveData<Boolean>()
+    override fun onCreate() {}
 
-    init {
-        isAuthorized.postValue(authInteractor.isLoggedIn())
-    }
-
-    fun onAuth(activityContext: Activity) {
-        authInteractor.login(activityContext)
-    }
-
-    fun onLogin(token: String) {
+    fun onLoginSuccess(token: String) {
         authInteractor.saveToken(token)
-        isAuthorized.postValue(true)
+    }
+
+    fun onLogin(activityContext: Activity) {
+        authInteractor.login(activityContext)
     }
 
     fun onError(errorCode: Int) {
         TODO("Not Implemented")
     }
+
+
+
 }

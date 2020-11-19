@@ -15,9 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class GroupsFragment : Fragment() {
-
-    private val viewModel: GroupsViewModel by viewModels()
     private lateinit var binding: FragmentGroupsBinding
+    private val viewModel: GroupsViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,7 +30,7 @@ class GroupsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnSignOut.setOnClickListener {
-            findNavController().navigate(R.id.action_global_mainFragment)
+            viewModel.onSignOutButtonClicked()
         }
     }
 
