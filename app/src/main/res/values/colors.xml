@@ -7,4 +7,6 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorRipple">#cccccc</color>
     <color name="colorStatusBar">#DEFFFFFF</color>
+
+    <color name="colorUnactiveGray">#cccccc</color>
 </resources>

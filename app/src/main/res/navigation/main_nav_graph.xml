@@ -4,13 +4,6 @@
     android:id="@+id/main_nav_graph"
     app:startDestination="@id/groupsFragment">
 
-    <include app:graph="@navigation/auth_nav_graph" />
-    <action
-        android:id="@+id/action_global_mainFragment"
-        app:destination="@id/auth_nav_graph"
-        app:launchSingleTop="true"
-        app:popUpTo="@+id/auth_nav_graph" />
-
     <fragment
         android:id="@+id/groupsFragment"
         android:name="com.sudzusama.vkimageclassifier.ui.groups.GroupsFragment"

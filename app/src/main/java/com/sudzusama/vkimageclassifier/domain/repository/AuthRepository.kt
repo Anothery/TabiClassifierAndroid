@@ -8,9 +8,10 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface AuthRepository {
     fun getToken() : String?
-    fun saveToken(token: String)
     fun isLoggedIn(): Boolean
     fun login(activityContext: Activity, scopes: Collection<VKScope>)
     fun logout()
     fun getLoginStateFlow(): StateFlow<Boolean>
+    fun saveSession(token: String, userId: String)
+    fun getUserId(): String?
 }

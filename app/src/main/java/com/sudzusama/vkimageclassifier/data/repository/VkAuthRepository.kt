@@ -1,7 +1,7 @@
 package com.sudzusama.vkimageclassifier.data.repository
 
 import android.app.Activity
-import com.sudzusama.vkimageclassifier.data.local.preferences.VKAuthPreferences
+import com.sudzusama.vkimageclassifier.data.local.preferences.VKSessionPreferences
 import com.sudzusama.vkimageclassifier.domain.repository.AuthRepository
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKScope
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
-class VkAuthRepository @Inject constructor(private val vkAuthPreferences: VKAuthPreferences) :
+class VkAuthRepository @Inject constructor(private val vkSessionPreferences: VKSessionPreferences) :
     AuthRepository {
 
     private val loginState: MutableStateFlow<Boolean> = MutableStateFlow(isLoggedIn())
@@ -24,17 +24,18 @@ class VkAuthRepository @Inject constructor(private val vkAuthPreferences: VKAuth
 
     override fun logout() {
         VK.logout()
-        vkAuthPreferences.removeToken()
+        vkSessionPreferences.clearSession()
+        updateLoginState()
+    }
+
+    override fun getToken(): String? = vkSessionPreferences.getToken()
+    override fun getUserId(): String? = vkSessionPreferences.getUserId()
+    override fun saveSession(token: String, userId: String) {
+        vkSessionPreferences.saveSession(token, userId)
         updateLoginState()
     }
 
     private fun updateLoginState() {
         loginState.value = isLoggedIn()
-    }
-
-    override fun getToken(): String? = vkAuthPreferences.getToken()
-    override fun saveToken(token: String) {
-        vkAuthPreferences.saveToken(token)
-        updateLoginState()
     }
 }

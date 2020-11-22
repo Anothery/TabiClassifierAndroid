@@ -24,8 +24,8 @@ class MainViewModel @ViewModelInject constructor(authInteractor: AuthInteractor)
         viewModelScope.launch {
             loginState.collect {
                 when (it) {
-                    false -> _toLoginFlow.postValue(true)
-                    true -> _toMainFlow.postValue(true)
+                    false -> _toLoginFlow.value = true
+                    true -> _toMainFlow.value = true
                 }
             }
         }

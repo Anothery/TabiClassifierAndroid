@@ -4,6 +4,8 @@
     android:id="@+id/auth_nav_graph"
     app:startDestination="@id/authFragment">
 
+    <include app:graph="@navigation/main_nav_graph" />
+
     <fragment
         android:id="@+id/authFragment"
         android:name="com.sudzusama.vkimageclassifier.ui.auth.AuthFragment"

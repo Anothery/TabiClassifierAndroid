@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.sudzusama.vkimageclassifier.databinding.FragmentAuthBinding
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAccessToken
@@ -35,6 +37,9 @@ class AuthFragment : Fragment() {
         binding.btnLogin.setOnClickListener {
             activity?.let { viewModel.onLogin(it as AppCompatActivity) }
         }
+        viewModel.errorMessage.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun onStart() {
@@ -50,7 +55,7 @@ class AuthFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val callback = object : VKAuthCallback {
             override fun onLogin(token: VKAccessToken) {
-                viewModel.onLoginSuccess(token.accessToken)
+                viewModel.onLoginSuccess(token)
             }
 
             override fun onLoginFailed(errorCode: Int) {

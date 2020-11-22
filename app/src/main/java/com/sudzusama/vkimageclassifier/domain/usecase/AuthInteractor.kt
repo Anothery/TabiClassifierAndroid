@@ -7,16 +7,16 @@ import javax.inject.Inject
 
 class AuthInteractor @Inject constructor(private val authRepository: AuthRepository) {
 
-    fun getToken(): String? {
-        return authRepository.getToken()
+    fun getLoginStateFlow() = authRepository.getLoginStateFlow()
+
+    fun saveSession(token: String, userId: String) {
+        authRepository.saveSession(token, userId)
     }
 
-    fun saveToken(token: String) {
-        authRepository.saveToken(token)
-    }
+    fun getUserId() = authRepository.getUserId()
 
     fun login(activityContext: Activity) {
-        val scopes = listOf(VKScope.GROUPS)
+        val scopes = listOf(VKScope.GROUPS, VKScope.OFFLINE)
         authRepository.login(activityContext, scopes)
     }
 
@@ -24,5 +24,4 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
         authRepository.logout()
     }
 
-    fun getLoginStateFlow() = authRepository.getLoginStateFlow()
 }
