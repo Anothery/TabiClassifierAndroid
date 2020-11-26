@@ -9,6 +9,7 @@ import javax.inject.Inject
 class VkGroupsRepository @Inject constructor(
     private val groupsApi: GroupsApi,
     private val groupsListResponseMapper: GroupsListResponseMapper
+
 ) : GroupsRepository {
     override suspend fun getGroups(version: String, userId: String, extended: Int): List<Group> {
         val groups = groupsApi.getGroups(version, userId, extended)

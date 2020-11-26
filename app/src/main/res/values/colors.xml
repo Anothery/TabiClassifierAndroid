@@ -9,4 +9,5 @@
     <color name="colorStatusBar">#DEFFFFFF</color>
 
     <color name="colorUnactiveGray">#cccccc</color>
+    <color name="colorTextPrimary">#000000</color>
 </resources>

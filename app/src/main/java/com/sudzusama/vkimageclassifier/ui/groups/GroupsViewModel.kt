@@ -22,7 +22,7 @@ class GroupsViewModel @ViewModelInject constructor(
         // TODO onGroupClicked
     }
 
-    fun onSignOutButtonClicked() {
+    fun onSignOutItemClicked() {
         onUserLogout()
     }
 

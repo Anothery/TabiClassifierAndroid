@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
+import com.vk.api.sdk.utils.VKUtils
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 

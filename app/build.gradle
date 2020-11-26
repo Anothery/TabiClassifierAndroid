@@ -57,6 +57,9 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$app_compat_version"
     implementation "androidx.constraintlayout:constraintlayout:${constraint_version}"
 
+    // Views
+
+
     // Kotlin - KTX
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
@@ -85,4 +88,5 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+
 }

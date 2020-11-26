@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name" translatable="false">Tabi Classifier</string>
     <string name="login">Login</string>
+    <string name="groups">Groups</string>
+    <string name="groups_drawer_open" translatable="false">groups_drawer_open</string>
+    <string name="groups_drawer_close" translatable="false">groups_drawer_close</string>
+    <string name="sign_out">Sign out</string>
 </resources>
