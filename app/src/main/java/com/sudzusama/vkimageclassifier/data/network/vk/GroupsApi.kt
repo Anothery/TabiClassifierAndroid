@@ -10,6 +10,7 @@ interface GroupsApi {
     suspend fun getGroups(
         @Query("v") version: String,
         @Query("user_id") userId: String,
-        @Query("extended") extended: Int
+        @Query("extended") extended: Int,
+        @Query("fields") fields: String
     ): GroupsListResponse
 }

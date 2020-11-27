@@ -14,6 +14,7 @@ class GroupsInteractor @Inject constructor(
     }
 
     suspend fun getGroups(): List<Group> {
-        return groupsRepository.getGroups(API_VERSION, authInteractor.getUserId() ?: "", EXTENDED)
+        val fields = listOf("activity")
+        return groupsRepository.getGroups(API_VERSION, authInteractor.getUserId() ?: "", EXTENDED, fields)
     }
 }

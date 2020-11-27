@@ -11,8 +11,13 @@ class VkGroupsRepository @Inject constructor(
     private val groupsListResponseMapper: GroupsListResponseMapper
 
 ) : GroupsRepository {
-    override suspend fun getGroups(version: String, userId: String, extended: Int): List<Group> {
-        val groups = groupsApi.getGroups(version, userId, extended)
+    override suspend fun getGroups(
+        version: String,
+        userId: String,
+        extended: Int,
+        fields: List<String>
+    ): List<Group> {
+        val groups = groupsApi.getGroups(version, userId, extended, fields.joinToString(","))
         return groupsListResponseMapper.map(groups)
     }
 }

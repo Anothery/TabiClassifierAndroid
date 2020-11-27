@@ -20,7 +20,7 @@ class GroupsAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupsAdapter.ViewHolder {
-        val binding = GroupItemBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = GroupItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -34,6 +34,7 @@ class GroupsAdapter(
         fun bind(group: Group) {
             binding.root.setOnClickListener { onItemClicked(group.id) }
             binding.tvGroupName.text = group.name
+            binding.tvGroupType.text = group.activity
             Glide.with(context).load(group.photo200).into(binding.ivGroupAvatar)
         }
     }

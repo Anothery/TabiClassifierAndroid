@@ -2,12 +2,10 @@
 <resources>
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#99ffffff</color>
-    <color name="colorAccent">#383838</color>
-
-    <color name="colorWhite">#ffffff</color>
+    <color name="colorSecondary">#383838</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+    <color name="colorOnPrimary">#7b8084</color>
     <color name="colorRipple">#cccccc</color>
     <color name="colorStatusBar">#DEFFFFFF</color>
-
-    <color name="colorUnactiveGray">#cccccc</color>
-    <color name="colorTextPrimary">#000000</color>
+    <color name="colorOnPrimaryDisabled">#aaaaaa</color>
 </resources>

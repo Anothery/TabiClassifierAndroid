@@ -18,7 +18,8 @@ class GroupsListResponseMapper {
                 it.photo100,
                 it.photo200,
                 it.photo50,
-                it.screenName
+                it.screenName,
+                it.activity
             )
         }
 }

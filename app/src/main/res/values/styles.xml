@@ -1,19 +1,21 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="BaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorControlHighlight">@color/colorRipple</item>
+        <item name="colorAccent">@color/colorSecondary</item>
         <item name="android:windowBackground">@color/colorPrimary</item>
-        <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@color/colorStatusBar</item>
+        <item name="android:textColor">@color/colorOnPrimary</item>
     </style>
+
+    <style name="AppTheme" parent="BaseTheme" />
 
 
     <style name="AppTheme.AccentButton" parent="Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/accent_button_bg</item>
-        <item name="backgroundTint">@color/colorAccent</item>
+        <item name="backgroundTint">@color/colorSecondary</item>
         <item name="android:stateListAnimator">@null</item>
         <item name="iconTint">@android:color/white</item>
         <item name="iconGravity">textStart</item>
@@ -29,7 +31,7 @@
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
         <item name="background">@android:color/transparent</item>
-        <item name="iconTint">@color/colorAccent</item>
+        <item name="iconTint">@color/colorSecondary</item>
     </style>
 
     <style name="AppTheme.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
@@ -42,7 +44,9 @@
         <item name="android:focusable">true</item>
         <item name="android:gravity">center</item>
         <item name="android:lines">1</item>
+        <item name="fontFamily">sans-serif-medium</item>
     </style>
 
     <style name="VK.Material" parent="AppTheme" />
+
 </resources>

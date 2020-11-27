@@ -13,4 +13,5 @@ data class Group(
     val photo200: String,
     val photo50: String,
     val screenName: String?,
+    val activity: String?,
 )
