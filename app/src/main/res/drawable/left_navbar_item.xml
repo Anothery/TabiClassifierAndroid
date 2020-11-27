@@ -7,7 +7,6 @@
             <corners
                 android:bottomRightRadius="24dp"
                 android:topRightRadius="24dp" />
-            <size android:height="48dp" />
         </shape>
     </item>
 

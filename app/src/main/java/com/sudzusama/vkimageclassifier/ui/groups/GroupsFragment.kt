@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
-import androidx.core.view.iterator
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +24,7 @@ class GroupsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentGroupsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -32,9 +32,9 @@ class GroupsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initDrawer()
-        initLeftNavView()
         initToolbar()
+        initDrawer()
+        initNavLeftMenu()
         initGroupsList()
 
         viewModel.groups.observe(viewLifecycleOwner, {
@@ -44,19 +44,13 @@ class GroupsFragment : Fragment() {
         viewModel.onCreate()
     }
 
-    private fun initLeftNavView() {
-        binding.navView.apply {
-            setNavigationItemSelectedListener {
-                when (it.itemId) {
-                    R.id.item_log_out -> viewModel.onSignOutItemClicked()
-                }
-                true
-            }
+    private fun initNavLeftMenu() {
+        binding.btnSignOut.setOnClickListener {
+            viewModel.onSignOutItemClicked()
         }
     }
 
     private fun initDrawer() {
-
         binding.drawerLayout.apply {
             setScrimColor(Color.TRANSPARENT)
             drawerElevation = 0f
@@ -67,18 +61,44 @@ class GroupsFragment : Fragment() {
                 R.string.groups_drawer_open,
                 R.string.groups_drawer_close
             ) {
-                private val scaleFactor = 6f
+                private val scaleFactor = 8f
+
+                override fun onDrawerStateChanged(newState: Int) {
+                    super.onDrawerStateChanged(newState)
+                    if (newState == DrawerLayout.STATE_SETTLING) {
+
+                        if (!binding.drawerLayout.isDrawerOpen(GravityCompat.START)) { // is opening
+
+                            this.isDrawerIndicatorEnabled = false
+                            binding.innerToolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+                            this.isDrawerIndicatorEnabled = true
+
+                            showContentElevation()
+                        }
+                    }
+                }
+
+                override fun onDrawerClosed(drawerView: View) {
+                    super.onDrawerClosed(drawerView)
+
+                    this.isDrawerIndicatorEnabled = false
+                    binding.innerToolbar.setNavigationIcon(R.drawable.three_bars)
+                    this.isDrawerIndicatorEnabled = true
+
+                    hideContentElevation()
+                }
 
                 override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
                     super.onDrawerSlide(drawerView, slideOffset)
                     val slideX = drawerView.width * slideOffset
-                    with(binding.llContent) {
+                    with(binding.cvContainerContent) {
                         translationX = slideX
                         scaleX = 1 - (slideOffset / scaleFactor)
                         scaleY = 1 - (slideOffset / scaleFactor)
                     }
                 }
             }
+
             addDrawerListener(toggle)
         }
     }
@@ -91,12 +111,15 @@ class GroupsFragment : Fragment() {
         }
     }
 
+
     private fun toogleDrawer() {
         with(binding.drawerLayout) {
             if (this.isDrawerOpen(GravityCompat.START)) {
                 this.closeDrawer(GravityCompat.START)
             } else {
                 this.openDrawer(GravityCompat.START)
+                binding.innerToolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+
             }
         }
     }
@@ -107,4 +130,17 @@ class GroupsFragment : Fragment() {
         binding.rvGroups.adapter = this.adapter
     }
 
+    private fun showContentElevation() {
+        with(binding.cvContainerContent) {
+            elevation = 25f
+            radius = 50f
+        }
+    }
+
+    private fun hideContentElevation() {
+        with(binding.cvContainerContent) {
+            elevation = 0f
+            radius = 0f
+        }
+    }
 }

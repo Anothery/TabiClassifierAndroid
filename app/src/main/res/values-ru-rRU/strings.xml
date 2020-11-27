@@ -2,5 +2,5 @@
 <resources>
     <string name="login">Войти</string>
     <string name="groups">Сообщества</string>
-    <string name="sign_out">Выйти</string>
+    <string name="sign_out">Выйти из аккаунта</string>
 </resources>

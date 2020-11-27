@@ -6,7 +6,6 @@ import androidx.navigation.findNavController
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.ActivityMainBinding
 import com.sudzusama.vkimageclassifier.ui.base.BaseActivity
-import com.vk.api.sdk.utils.VKUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,7 +15,6 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val test = VKUtils.getCertificateFingerprint(this, packageName)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

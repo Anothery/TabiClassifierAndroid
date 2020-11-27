@@ -5,69 +5,90 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/ll_content"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_container_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:fitsSystemWindows="true"
-            app:elevation="0dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <com.google.android.material.card.MaterialCardView
+            <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="3dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="true"
-                app:layout_scrollFlags="scroll|enterAlways|snap">
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fitsSystemWindows="true"
+                app:elevation="0dp">
 
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/inner_toolbar"
-                    style="AppTheme.Toolbar"
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="48dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="3dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="true"
+                    app:layout_scrollFlags="scroll|enterAlways|snap">
 
-                    <EditText
+                    <com.google.android.material.appbar.MaterialToolbar
+                        android:id="@+id/inner_toolbar"
+                        style="AppTheme.Toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="8dp"
-                        android:background="@null"
-                        android:focusedByDefault="false"
-                        android:hint="@string/groups"
-                        android:lines="1" />
-                </androidx.appcompat.widget.Toolbar>
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:orientation="horizontal"
+                        app:contentInsetEnd="0dp"
+                        app:contentInsetLeft="0dp"
+                        app:contentInsetRight="0dp"
+                        app:contentInsetStart="0dp">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:background="@null"
+                            android:hint="@string/groups"
+                            android:lines="1" />
+                    </com.google.android.material.appbar.MaterialToolbar>
 
 
-            </com.google.android.material.card.MaterialCardView>
+                </com.google.android.material.card.MaterialCardView>
 
-        </com.google.android.material.appbar.AppBarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_groups"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_groups"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:id="@+id/navLeftMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start|center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/btn_sign_out"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:background="@drawable/left_navbar_item"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/sign_out"
+            android:textStyle="bold"
+            android:theme="@style/AppTheme.TextViewButton" />
     </LinearLayout>
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navView"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical"
-        android:theme="@style/AppTheme.NavigationItem"
-        app:itemBackground="@drawable/left_navbar_item"
-        app:itemTextColor="@color/colorTextPrimary"
-        app:menu="@menu/groups_left_navbar_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
