@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentGroupsBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.round
 
 @AndroidEntryPoint
 class GroupsFragment : Fragment() {
@@ -62,6 +63,8 @@ class GroupsFragment : Fragment() {
                 R.string.groups_drawer_close
             ) {
                 private val scaleFactor = 8f
+                private val maxElevation = 25f
+                private val maxRadius = 50f
 
                 override fun onDrawerStateChanged(newState: Int) {
                     super.onDrawerStateChanged(newState)
@@ -72,8 +75,6 @@ class GroupsFragment : Fragment() {
                             this.isDrawerIndicatorEnabled = false
                             binding.innerToolbar.setNavigationIcon(R.drawable.ic_arrow_back)
                             this.isDrawerIndicatorEnabled = true
-
-                            showContentElevation()
                         }
                     }
                 }
@@ -84,17 +85,18 @@ class GroupsFragment : Fragment() {
                     this.isDrawerIndicatorEnabled = false
                     binding.innerToolbar.setNavigationIcon(R.drawable.three_bars)
                     this.isDrawerIndicatorEnabled = true
-
-                    hideContentElevation()
                 }
 
                 override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
                     super.onDrawerSlide(drawerView, slideOffset)
                     val slideX = drawerView.width * slideOffset
+
                     with(binding.cvContainerContent) {
                         translationX = slideX
                         scaleX = 1 - (slideOffset / scaleFactor)
                         scaleY = 1 - (slideOffset / scaleFactor)
+                        elevation = round(maxElevation * slideOffset)
+                        radius = round(maxRadius * slideOffset)
                     }
                 }
             }
@@ -128,19 +130,5 @@ class GroupsFragment : Fragment() {
         adapter = GroupsAdapter(requireContext()) { viewModel.onGroupClicked(it) }
         binding.rvGroups.layoutManager = LinearLayoutManager(activity)
         binding.rvGroups.adapter = this.adapter
-    }
-
-    private fun showContentElevation() {
-        with(binding.cvContainerContent) {
-            elevation = 25f
-            radius = 50f
-        }
-    }
-
-    private fun hideContentElevation() {
-        with(binding.cvContainerContent) {
-            elevation = 0f
-            radius = 0f
-        }
     }
 }

@@ -57,9 +57,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$app_compat_version"
     implementation "androidx.constraintlayout:constraintlayout:${constraint_version}"
 
-    // Views
-
-
     // Kotlin - KTX
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
