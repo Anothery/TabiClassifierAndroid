@@ -8,6 +8,7 @@ import com.sudzusama.vkimageclassifier.databinding.ActivityMainBinding
 import com.sudzusama.vkimageclassifier.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding

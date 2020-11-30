@@ -1,16 +1,15 @@
 package com.sudzusama.vkimageclassifier.ui.groups
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.GroupItemBinding
 import com.sudzusama.vkimageclassifier.domain.model.Group
 
-class GroupsAdapter(
-    private val context: Context, private val onItemClicked: (Int) -> Unit
-) : RecyclerView.Adapter<GroupsAdapter.ViewHolder>() {
+class GroupsAdapter(private val onItemClicked: (Int) -> Unit) :
+    RecyclerView.Adapter<GroupsAdapter.ViewHolder>() {
 
     private var groups: List<Group> = listOf()
 
@@ -29,14 +28,30 @@ class GroupsAdapter(
 
     override fun getItemCount(): Int = groups.size
 
+    override fun onViewRecycled(holder: ViewHolder) {
+        holder.recycle()
+        super.onViewRecycled(holder)
+    }
+
     inner class ViewHolder(private val binding: GroupItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(group: Group) {
             binding.root.setOnClickListener { onItemClicked(group.id) }
             binding.tvGroupName.text = group.name
             binding.tvGroupType.text = group.activity
-            Glide.with(context).load(group.photo200).into(binding.ivGroupAvatar)
+
+            binding.ivGroupAvatar.apply {
+                Glide.with(this.context)
+                    .load(group.photo200)
+                    .error(R.drawable.group_stub_avatar)
+                    .into(this)
+            }
+
+        }
+
+        fun recycle() {
+            binding.ivGroupAvatar.apply { Glide.with(this.context).clear(this) }
         }
     }
-
 }

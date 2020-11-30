@@ -21,13 +21,14 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class AuthFragment : Fragment() {
 
-    private lateinit var binding: FragmentAuthBinding
+    private var _binding: FragmentAuthBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentAuthBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentAuthBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -65,6 +66,11 @@ class AuthFragment : Fragment() {
         if (data == null || !VK.onActivityResult(requestCode, resultCode, data, callback)) {
             super.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
 }

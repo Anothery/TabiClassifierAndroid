@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#99ffffff</color>
     <color name="colorSecondary">#383838</color>
     <color name="colorOnSecondary">#FFFFFF</color>
-    <color name="colorOnPrimary">#7b8084</color>
+    <color name="colorOnPrimary">#383838</color>
     <color name="colorRipple">#cccccc</color>
     <color name="colorStatusBar">#DEFFFFFF</color>
     <color name="colorOnPrimaryDisabled">#aaaaaa</color>

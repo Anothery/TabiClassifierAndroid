@@ -18,15 +18,17 @@ import kotlin.math.round
 
 @AndroidEntryPoint
 class GroupsFragment : Fragment() {
-    private lateinit var binding: FragmentGroupsBinding
+    private var _binding: FragmentGroupsBinding? = null
+    private val binding get() = _binding!!
+
     private val viewModel: GroupsViewModel by viewModels()
-    private lateinit var adapter: GroupsAdapter
+    private val adapter = GroupsAdapter { viewModel.onGroupClicked(it) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentGroupsBinding.inflate(inflater, container, false)
+        _binding = FragmentGroupsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -127,8 +129,13 @@ class GroupsFragment : Fragment() {
     }
 
     private fun initGroupsList() {
-        adapter = GroupsAdapter(requireContext()) { viewModel.onGroupClicked(it) }
         binding.rvGroups.layoutManager = LinearLayoutManager(activity)
         binding.rvGroups.adapter = this.adapter
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.rvGroups.adapter = null
+        _binding = null
     }
 }
