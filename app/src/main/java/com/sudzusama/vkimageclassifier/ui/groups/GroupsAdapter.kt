@@ -3,12 +3,15 @@ package com.sudzusama.vkimageclassifier.ui.groups
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.GroupItemBinding
 import com.sudzusama.vkimageclassifier.domain.model.Group
 
-class GroupsAdapter(private val onItemClicked: (Int) -> Unit) :
+class GroupsAdapter(
+    private val glide: RequestManager,
+    private val onItemClicked: (Int) -> Unit
+) :
     RecyclerView.Adapter<GroupsAdapter.ViewHolder>() {
 
     private var groups: List<Group> = listOf()
@@ -42,16 +45,15 @@ class GroupsAdapter(private val onItemClicked: (Int) -> Unit) :
             binding.tvGroupType.text = group.activity
 
             binding.ivGroupAvatar.apply {
-                Glide.with(this.context)
+                glide
                     .load(group.photo200)
                     .error(R.drawable.group_stub_avatar)
                     .into(this)
             }
-
         }
 
         fun recycle() {
-            binding.ivGroupAvatar.apply { Glide.with(this.context).clear(this) }
+            binding.ivGroupAvatar.apply { glide.clear(this) }
         }
     }
 }

@@ -11,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentGroupsBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +23,7 @@ class GroupsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: GroupsViewModel by viewModels()
-    private val adapter = GroupsAdapter { viewModel.onGroupClicked(it) }
+    private var adapter: GroupsAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +42,7 @@ class GroupsFragment : Fragment() {
         initGroupsList()
 
         viewModel.groups.observe(viewLifecycleOwner, {
-            adapter.setGroups(it)
+            adapter?.setGroups(it)
         })
 
         viewModel.onCreate()
@@ -129,6 +130,7 @@ class GroupsFragment : Fragment() {
     }
 
     private fun initGroupsList() {
+        adapter = GroupsAdapter(Glide.with(this)) { viewModel.onGroupClicked(it) }
         binding.rvGroups.layoutManager = LinearLayoutManager(activity)
         binding.rvGroups.adapter = this.adapter
     }
