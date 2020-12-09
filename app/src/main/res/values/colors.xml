@@ -6,6 +6,6 @@
     <color name="colorOnSecondary">#FFFFFF</color>
     <color name="colorOnPrimary">#383838</color>
     <color name="colorRipple">#cccccc</color>
-    <color name="colorStatusBar">#DEFFFFFF</color>
+    <color name="colorStatusBar">#ffffff</color>
     <color name="colorOnPrimaryDisabled">#aaaaaa</color>
 </resources>

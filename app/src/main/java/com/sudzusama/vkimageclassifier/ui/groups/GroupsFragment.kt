@@ -97,11 +97,8 @@ class GroupsFragment : Fragment() {
 
     private fun toogleDrawer() {
         with(binding.drawerLayout) {
-            if (this.isDrawerOpen(GravityCompat.START)) {
-                this.closeDrawer(GravityCompat.START)
-            } else {
-                this.openDrawer(GravityCompat.START)
-            }
+            if (isDrawerOpen(GravityCompat.START)) closeDrawer(GravityCompat.START)
+            else openDrawer(GravityCompat.START)
         }
     }
 
@@ -114,10 +111,13 @@ class GroupsFragment : Fragment() {
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 val appBarHeight = binding.actionBar.height
-                binding.rvGroups.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                binding.rvGroups.translationY = -1f * appBarHeight
-                binding.rvGroups.layoutParams.height = binding.rvGroups.height + appBarHeight
-                binding.rvGroups.update(top = appBarHeight)
+                binding.rvGroups.also {
+                    it.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    it.translationY = -1f * appBarHeight
+                    it.layoutParams.height = binding.rvGroups.height + appBarHeight
+                    it.updatePadding(top = appBarHeight)
+                    it.clipToPadding = false
+                }
             }
         })
 
