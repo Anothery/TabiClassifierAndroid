@@ -10,17 +10,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
             android:orientation="vertical">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_groups"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
             <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/action_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:fitsSystemWindows="true"
-                app:elevation="0dp">
+                app:elevation="0dp"
+                app:layout_collapseMode="pin">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -29,6 +37,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="12dp"
+                    app:cardBackgroundColor="@color/colorPrimary"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="3dp"
                     app:cardPreventCornerOverlap="false"
@@ -62,12 +71,7 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_groups"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </com.google.android.material.card.MaterialCardView>
 

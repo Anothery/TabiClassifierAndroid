@@ -8,10 +8,10 @@
         <item name="android:windowBackground">@color/colorPrimary</item>
         <item name="android:statusBarColor">@color/colorStatusBar</item>
         <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="colorControlNormal">@color/colorOnPrimary</item>
     </style>
 
     <style name="AppTheme" parent="BaseTheme" />
-
 
     <style name="AppTheme.AccentButton" parent="Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/accent_button_bg</item>
@@ -34,9 +34,7 @@
         <item name="iconTint">@color/colorSecondary</item>
     </style>
 
-    <style name="AppTheme.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
-
-    </style>
+    <style name="AppTheme.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary" />
 
     <style name="AppTheme.TextViewButton">
         <item name="android:clickable">true</item>

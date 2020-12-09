@@ -5,9 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,41 +55,19 @@ class GroupsFragment : Fragment() {
         }
     }
 
+
     private fun initDrawer() {
         binding.drawerLayout.apply {
             setScrimColor(Color.TRANSPARENT)
             drawerElevation = 0f
 
             val toggle = object : ActionBarDrawerToggle(
-                activity,
-                binding.drawerLayout, binding.innerToolbar,
-                R.string.groups_drawer_open,
-                R.string.groups_drawer_close
+                activity, binding.drawerLayout, binding.innerToolbar,
+                R.string.groups_drawer_open, R.string.groups_drawer_close
             ) {
                 private val scaleFactor = 8f
                 private val maxElevation = 25f
                 private val maxRadius = 50f
-
-                override fun onDrawerStateChanged(newState: Int) {
-                    super.onDrawerStateChanged(newState)
-                    if (newState == DrawerLayout.STATE_SETTLING) {
-
-                        if (!binding.drawerLayout.isDrawerOpen(GravityCompat.START)) { // is opening
-
-                            this.isDrawerIndicatorEnabled = false
-                            binding.innerToolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-                            this.isDrawerIndicatorEnabled = true
-                        }
-                    }
-                }
-
-                override fun onDrawerClosed(drawerView: View) {
-                    super.onDrawerClosed(drawerView)
-
-                    this.isDrawerIndicatorEnabled = false
-                    binding.innerToolbar.setNavigationIcon(R.drawable.three_bars)
-                    this.isDrawerIndicatorEnabled = true
-                }
 
                 override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
                     super.onDrawerSlide(drawerView, slideOffset)
@@ -98,20 +77,19 @@ class GroupsFragment : Fragment() {
                         translationX = slideX
                         scaleX = 1 - (slideOffset / scaleFactor)
                         scaleY = 1 - (slideOffset / scaleFactor)
-                        elevation = round(maxElevation * slideOffset)
+                        elevation = maxElevation * slideOffset
                         radius = round(maxRadius * slideOffset)
                     }
                 }
             }
 
             addDrawerListener(toggle)
+            toggle.syncState()
         }
     }
 
     private fun initToolbar() {
         with(binding.innerToolbar) {
-            title = null
-            setNavigationIcon(R.drawable.three_bars)
             setNavigationOnClickListener { toogleDrawer() }
         }
     }
@@ -123,8 +101,6 @@ class GroupsFragment : Fragment() {
                 this.closeDrawer(GravityCompat.START)
             } else {
                 this.openDrawer(GravityCompat.START)
-                binding.innerToolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-
             }
         }
     }
@@ -133,6 +109,18 @@ class GroupsFragment : Fragment() {
         adapter = GroupsAdapter(Glide.with(this)) { viewModel.onGroupClicked(it) }
         binding.rvGroups.layoutManager = LinearLayoutManager(activity)
         binding.rvGroups.adapter = this.adapter
+
+        binding.rvGroups.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val appBarHeight = binding.actionBar.height
+                binding.rvGroups.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                binding.rvGroups.translationY = -1f * appBarHeight
+                binding.rvGroups.layoutParams.height = binding.rvGroups.height + appBarHeight
+                binding.rvGroups.update(top = appBarHeight)
+            }
+        })
+
     }
 
     override fun onDestroyView() {
