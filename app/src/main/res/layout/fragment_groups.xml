@@ -17,7 +17,6 @@
             android:fitsSystemWindows="true"
             android:orientation="vertical">
 
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_groups"
                 android:layout_width="match_parent"
@@ -59,13 +58,17 @@
                         app:contentInsetRight="0dp"
                         app:contentInsetStart="0dp">
 
-                        <EditText
+                        <SearchView
+                            android:id="@+id/svGroups"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginStart="8dp"
-                            android:background="@null"
-                            android:hint="@string/groups"
-                            android:lines="1" />
+                            android:closeIcon="@drawable/ic_close"
+                            android:iconifiedByDefault="false"
+                            android:paddingStart="-16dp"
+                            android:queryBackground="@null"
+                            android:queryHint="@string/groups"
+                            android:searchIcon="@null" />
+
                     </com.google.android.material.appbar.MaterialToolbar>
 
 
