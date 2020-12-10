@@ -2,6 +2,7 @@ package com.sudzusama.vkimageclassifier.ui.groups
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.sudzusama.vkimageclassifier.R
@@ -14,11 +15,13 @@ class GroupsAdapter(
 ) :
     RecyclerView.Adapter<GroupsAdapter.ViewHolder>() {
 
-    private var groups: List<Group> = listOf()
+    private var groups: ArrayList<Group> = arrayListOf()
 
-    fun setGroups(list: List<Group>) {
-        groups = list
-        notifyDataSetChanged()
+    fun setGroups(newList: List<Group>) {
+        val diffResult = DiffUtil.calculateDiff(GroupsDiffCallback(groups, newList))
+        groups.clear()
+        groups.addAll(newList)
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupsAdapter.ViewHolder {

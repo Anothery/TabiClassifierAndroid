@@ -50,13 +50,12 @@
                         style="AppTheme.Toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
                         android:orientation="horizontal"
                         app:contentInsetEnd="0dp"
                         app:contentInsetLeft="0dp"
                         app:contentInsetRight="0dp"
-                        app:contentInsetStart="0dp">
+                        app:contentInsetStart="0dp"
+                        app:contentInsetStartWithNavigation="0dp">
 
                         <SearchView
                             android:id="@+id/svGroups"
@@ -68,9 +67,7 @@
                             android:queryBackground="@null"
                             android:queryHint="@string/groups"
                             android:searchIcon="@null" />
-
                     </com.google.android.material.appbar.MaterialToolbar>
-
 
                 </com.google.android.material.card.MaterialCardView>
 

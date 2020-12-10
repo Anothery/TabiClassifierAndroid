@@ -5,17 +5,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.core.view.updatePadding
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentGroupsBinding
+import com.sudzusama.vkimageclassifier.utils.ext.getQueryTextChangeStateFlow
+import com.sudzusama.vkimageclassifier.utils.ext.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import kotlin.math.round
 
 @AndroidEntryPoint
@@ -37,10 +48,10 @@ class GroupsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initToolbar()
         initDrawer()
         initNavLeftMenu()
         initGroupsList()
+        initSearchBar()
 
         viewModel.groups.observe(viewLifecycleOwner, {
             adapter?.setGroups(it)
@@ -49,12 +60,30 @@ class GroupsFragment : Fragment() {
         viewModel.onCreate()
     }
 
+    @FlowPreview
+    private fun initSearchBar() {
+        lifecycleScope.launch {
+            binding.svGroups.getQueryTextChangeStateFlow()
+                .debounce(200)
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
+                .collect { text ->
+                    val list = viewModel.groups.value ?: listOf()
+                    if (text.isEmpty()) {
+                        adapter?.setGroups(list)
+                    } else {
+                        adapter?.setGroups(list.filter { it.name.contains(text, true) })
+                    }
+                    binding.rvGroups.smoothScrollToPosition(0)
+                }
+        }
+    }
+
     private fun initNavLeftMenu() {
         binding.btnSignOut.setOnClickListener {
             viewModel.onSignOutItemClicked()
         }
     }
-
 
     private fun initDrawer() {
         binding.drawerLayout.apply {
@@ -68,6 +97,13 @@ class GroupsFragment : Fragment() {
                 private val scaleFactor = 8f
                 private val maxElevation = 25f
                 private val maxRadius = 50f
+
+                override fun onDrawerStateChanged(state: Int) {
+                    super.onDrawerStateChanged(state)
+                    if (state == DrawerLayout.STATE_SETTLING && !isDrawerOpen(GravityCompat.START)) {
+                        activity?.hideKeyboard()
+                    }
+                }
 
                 override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
                     super.onDrawerSlide(drawerView, slideOffset)
@@ -83,22 +119,10 @@ class GroupsFragment : Fragment() {
                 }
             }
 
+            toggle.setToolbarNavigationClickListener { activity?.hideKeyboard() }
+
             addDrawerListener(toggle)
             toggle.syncState()
-        }
-    }
-
-    private fun initToolbar() {
-        with(binding.innerToolbar) {
-            setNavigationOnClickListener { toogleDrawer() }
-        }
-    }
-
-
-    private fun toogleDrawer() {
-        with(binding.drawerLayout) {
-            if (isDrawerOpen(GravityCompat.START)) closeDrawer(GravityCompat.START)
-            else openDrawer(GravityCompat.START)
         }
     }
 
@@ -108,7 +132,7 @@ class GroupsFragment : Fragment() {
         binding.rvGroups.adapter = this.adapter
 
         binding.rvGroups.viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
+            OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 val appBarHeight = binding.actionBar.height
                 binding.rvGroups.also {
