@@ -62,7 +62,7 @@ class GroupsFragment : Fragment() {
 
     @FlowPreview
     private fun initSearchBar() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             binding.svGroups.getQueryTextChangeStateFlow()
                 .debounce(200)
                 .distinctUntilChanged()
