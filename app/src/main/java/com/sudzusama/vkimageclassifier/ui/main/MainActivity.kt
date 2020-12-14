@@ -21,14 +21,12 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
 
         viewModel.toLoginFlow.observe(this, {
-            binding.navHostFragment.findNavController().navigate(R.id.auth_nav_graph)
+            binding.navHostFragment.findNavController().navigate(R.id.global_to_auth_nav_graph)
         })
 
         viewModel.toMainFlow.observe(this, {
-            binding.navHostFragment.findNavController().navigate(R.id.main_nav_graph)
+            binding.navHostFragment.findNavController().navigate(R.id.global_to_main_nav_graph)
         })
-
-        viewModel.onCreate()
     }
 
 

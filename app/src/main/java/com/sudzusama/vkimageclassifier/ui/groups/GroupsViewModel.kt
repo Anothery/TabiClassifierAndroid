@@ -26,11 +26,10 @@ class GroupsViewModel @ViewModelInject constructor(
         onUserLogout()
     }
 
-    override fun onCreate() {
+    init {
         viewModelScope.launch {
             val groupsResult = groupsInteractor.getGroups()
             _groups.value = groupsResult
         }
     }
-
 }

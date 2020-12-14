@@ -14,8 +14,6 @@ class AuthViewModel @ViewModelInject constructor(private val authInteractor: Aut
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> = _errorMessage
 
-    override fun onCreate() {}
-
     fun onLoginSuccess(token: VKAccessToken) {
         authInteractor.saveSession(token.accessToken, token.userId.toString())
     }

@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
-import com.vk.api.sdk.utils.VKUtils
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -17,11 +16,11 @@ class MainViewModel @ViewModelInject constructor(authInteractor: AuthInteractor)
     val toLoginFlow: LiveData<Boolean> get() = _toLoginFlow
 
     private val _toMainFlow = MutableLiveData<Boolean>()
-    val toMainFlow get() = _toMainFlow
+    val toMainFlow: LiveData<Boolean> get() = _toMainFlow
 
     private val loginState = authInteractor.getLoginStateFlow()
 
-    override fun onCreate() {
+    init {
         viewModelScope.launch {
             loginState.collect {
                 when (it) {

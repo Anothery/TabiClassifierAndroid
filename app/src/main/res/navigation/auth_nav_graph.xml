@@ -6,12 +6,21 @@
 
     <include app:graph="@navigation/main_nav_graph" />
 
+    <action
+        android:id="@+id/global_to_auth_nav_graph"
+        app:destination="@id/auth_nav_graph"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/auth_nav_graph" />
+
+    <action
+        android:id="@+id/global_to_main_nav_graph"
+        app:destination="@id/main_nav_graph"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/auth_nav_graph"
+        app:popUpToInclusive="true" />
+
     <fragment
         android:id="@+id/authFragment"
         android:name="com.sudzusama.vkimageclassifier.ui.auth.AuthFragment"
-        android:label="AuthFragment">
-        <action
-            android:id="@+id/action_authFragment_to_main_nav_graph"
-            app:destination="@id/main_nav_graph" />
-    </fragment>
+        android:label="AuthFragment" />
 </navigation>

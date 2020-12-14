@@ -56,8 +56,6 @@ class GroupsFragment : Fragment() {
         viewModel.groups.observe(viewLifecycleOwner, {
             adapter?.setGroups(it)
         })
-
-        viewModel.onCreate()
     }
 
     @FlowPreview
