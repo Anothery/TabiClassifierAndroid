@@ -1,9 +1,9 @@
 package com.sudzusama.vkimageclassifier.ui.groups
 
 import androidx.recyclerview.widget.DiffUtil
-import com.sudzusama.vkimageclassifier.domain.model.Group
+import com.sudzusama.vkimageclassifier.domain.model.GroupShort
 
-class GroupsDiffCallback(private val oldList: List<Group>, private val newList: List<Group>) :
+class GroupsDiffCallback(private val oldList: List<GroupShort>, private val newList: List<GroupShort>) :
     DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size
 

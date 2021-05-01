@@ -7,20 +7,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.GroupItemBinding
-import com.sudzusama.vkimageclassifier.domain.model.Group
+import com.sudzusama.vkimageclassifier.domain.model.GroupShort
 
 class GroupsAdapter(
     private val glide: RequestManager,
-    private val onItemClicked: (Int) -> Unit
+    private val onItemClicked: (Long) -> Unit
 ) :
     RecyclerView.Adapter<GroupsAdapter.ViewHolder>() {
 
-    private var groups: ArrayList<Group> = arrayListOf()
+    private var groupShorts: ArrayList<GroupShort> = arrayListOf()
 
-    fun setGroups(newList: List<Group>) {
-        val diffResult = DiffUtil.calculateDiff(GroupsDiffCallback(groups, newList))
-        groups.clear()
-        groups.addAll(newList)
+    fun setGroups(newList: List<GroupShort>) {
+        val diffResult = DiffUtil.calculateDiff(GroupsDiffCallback(groupShorts, newList))
+        groupShorts.clear()
+        groupShorts.addAll(newList)
         diffResult.dispatchUpdatesTo(this)
     }
 
@@ -30,9 +30,9 @@ class GroupsAdapter(
     }
 
     override fun onBindViewHolder(holder: GroupsAdapter.ViewHolder, position: Int) =
-        holder.bind(groups[position])
+        holder.bind(groupShorts[position])
 
-    override fun getItemCount(): Int = groups.size
+    override fun getItemCount(): Int = groupShorts.size
 
     override fun onViewRecycled(holder: ViewHolder) {
         holder.recycle()
@@ -42,14 +42,14 @@ class GroupsAdapter(
     inner class ViewHolder(private val binding: GroupItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(group: Group) {
-            binding.root.setOnClickListener { onItemClicked(group.id) }
-            binding.tvGroupName.text = group.name
-            binding.tvGroupType.text = group.activity
+        fun bind(groupShort: GroupShort) {
+            binding.root.setOnClickListener { onItemClicked(groupShort.id) }
+            binding.tvGroupName.text = groupShort.name
+            binding.tvGroupType.text = groupShort.activity
 
             binding.ivGroupAvatar.apply {
                 glide
-                    .load(group.photo200)
+                    .load(groupShort.photo200)
                     .error(R.drawable.group_stub_avatar)
                     .into(this)
             }

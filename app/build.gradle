@@ -56,6 +56,8 @@ dependencies {
     // Core
     implementation "androidx.appcompat:appcompat:$app_compat_version"
     implementation "androidx.constraintlayout:constraintlayout:${constraint_version}"
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.4.4'
+
 
     // Kotlin - KTX
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -68,6 +70,7 @@ dependencies {
     // Dagger Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02"
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     kapt "androidx.hilt:hilt-compiler:$hilt_compiler_version"
 

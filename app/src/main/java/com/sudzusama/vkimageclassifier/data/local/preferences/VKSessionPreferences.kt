@@ -11,11 +11,11 @@ class VKSessionPreferences @Inject constructor(private val preferences: SharedPr
     }
 
     fun getToken(): String? = preferences.getString(AUTH_TOKEN, "")
-    fun getUserId(): String? = preferences.getString(USER_ID, "")
+    fun getUserId(): Long = preferences.getLong(USER_ID, -1)
 
-    fun saveSession(token: String, userId: String) {
+    fun saveSession(token: String, userId: Long) {
         preferences.edit { putString(AUTH_TOKEN, token) }
-        preferences.edit { putString(USER_ID, userId) }
+        preferences.edit { putLong(USER_ID, userId) }
     }
 
     fun clearSession() {

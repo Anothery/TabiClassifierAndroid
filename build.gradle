@@ -37,7 +37,7 @@ buildscript {
         vk_sdk_version = '2.4.0'
 
         // Material
-        material_version = '1.2.1'
+        material_version = '1.3.0'
 
         // Tests
         junit_version = "4.13"
@@ -50,7 +50,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.1.1"
+        classpath 'com.android.tools.build:gradle:4.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"

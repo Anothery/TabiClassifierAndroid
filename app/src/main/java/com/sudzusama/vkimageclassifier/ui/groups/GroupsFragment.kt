@@ -2,24 +2,25 @@ package com.sudzusama.vkimageclassifier.ui.groups
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.ViewTreeObserver
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
-import androidx.core.view.updatePadding
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentGroupsBinding
 import com.sudzusama.vkimageclassifier.utils.ext.getQueryTextChangeStateFlow
 import com.sudzusama.vkimageclassifier.utils.ext.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
@@ -30,33 +31,44 @@ import kotlinx.coroutines.launch
 import kotlin.math.round
 
 @AndroidEntryPoint
-class GroupsFragment : Fragment() {
-    private var _binding: FragmentGroupsBinding? = null
-    private val binding get() = _binding!!
+class GroupsFragment : Fragment(R.layout.fragment_groups) {
+    private val binding: FragmentGroupsBinding by viewBinding(FragmentGroupsBinding::bind)
 
     private val viewModel: GroupsViewModel by viewModels()
     private var adapter: GroupsAdapter? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentGroupsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                binding.marginView.layoutParams = binding.marginView.layoutParams.apply {
+                    height = binding.actionBar.height
+                }
+            }
+        })
 
         initDrawer()
         initNavLeftMenu()
         initGroupsList()
         initSearchBar()
 
-        viewModel.groups.observe(viewLifecycleOwner, {
+
+
+        viewModel.groups.observe(viewLifecycleOwner) {
             adapter?.setGroups(it)
-        })
+        }
+
+        viewModel.showGroupDetail.observe(viewLifecycleOwner) { showGroupDetail(it) }
     }
+
+    private fun showGroupDetail(id: Long) {
+        activity?.navHostFragment?.findNavController()
+            ?.navigate(R.id.action_groupsFragment_to_groupDetailFragment, bundleOf("groupId" to id))
+    }
+
 
     @FlowPreview
     private fun initSearchBar() {
@@ -124,30 +136,16 @@ class GroupsFragment : Fragment() {
         }
     }
 
+
     private fun initGroupsList() {
         adapter = GroupsAdapter(Glide.with(this)) { viewModel.onGroupClicked(it) }
         binding.rvGroups.layoutManager = LinearLayoutManager(activity)
         binding.rvGroups.adapter = this.adapter
-
-        binding.rvGroups.viewTreeObserver.addOnGlobalLayoutListener(object :
-            OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val appBarHeight = binding.actionBar.height
-                binding.rvGroups.also {
-                    it.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    it.translationY = -1f * appBarHeight
-                    it.layoutParams.height = binding.rvGroups.height + appBarHeight
-                    it.updatePadding(top = appBarHeight)
-                    it.clipToPadding = false
-                }
-            }
-        })
 
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         binding.rvGroups.adapter = null
-        _binding = null
     }
 }

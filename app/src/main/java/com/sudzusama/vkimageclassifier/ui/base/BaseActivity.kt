@@ -4,8 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.sudzusama.vkimageclassifier.R
 
-abstract class BaseActivity : AppCompatActivity() {
-
+abstract class BaseActivity(resId: Int) : AppCompatActivity(resId) {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

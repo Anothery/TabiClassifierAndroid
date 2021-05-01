@@ -9,7 +9,7 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
 
     fun getLoginStateFlow() = authRepository.getLoginStateFlow()
 
-    fun saveSession(token: String, userId: String) {
+    fun saveSession(token: String, userId: Long) {
         authRepository.saveSession(token, userId)
     }
 
@@ -21,8 +21,6 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
     }
 
     fun logout() {
-
         authRepository.logout()
     }
-
 }

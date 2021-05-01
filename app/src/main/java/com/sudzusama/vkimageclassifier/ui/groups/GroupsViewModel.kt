@@ -4,10 +4,11 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.sudzusama.vkimageclassifier.domain.model.Group
+import com.sudzusama.vkimageclassifier.domain.model.GroupShort
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.domain.usecase.GroupsInteractor
 import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
+import com.sudzusama.vkimageclassifier.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 class GroupsViewModel @ViewModelInject constructor(
@@ -15,11 +16,15 @@ class GroupsViewModel @ViewModelInject constructor(
     authInteractor: AuthInteractor
 ) : BaseViewModel(authInteractor) {
 
-    private val _groups = MutableLiveData<List<Group>>()
-    val groups: LiveData<List<Group>> get() = _groups
+    private val _groups = MutableLiveData<List<GroupShort>>()
+    val groups: LiveData<List<GroupShort>> get() = _groups
 
-    fun onGroupClicked(id: Int) {
-        // TODO onGroupClicked
+    private val _showGroupDetail = SingleLiveEvent<Long>()
+    val showGroupDetail: LiveData<Long> get() = _showGroupDetail
+
+
+    fun onGroupClicked(id: Long) {
+        _showGroupDetail.value = id
     }
 
     fun onSignOutItemClicked() {

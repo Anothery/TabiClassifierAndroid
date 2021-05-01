@@ -1,7 +1,7 @@
 package com.sudzusama.vkimageclassifier.domain.model
 
-data class Group(
-    val id: Int,
+data class GroupShort(
+    val id: Long,
     val name: String,
     val type: String,
     val adminLevel: Int?,
