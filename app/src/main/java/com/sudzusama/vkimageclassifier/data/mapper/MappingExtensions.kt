@@ -1,9 +1,12 @@
 package com.sudzusama.vkimageclassifier.data.mapper
 
 import com.sudzusama.vkimageclassifier.data.response.GroupDetailResponse
+import com.sudzusama.vkimageclassifier.data.response.GroupWallResponse
 import com.sudzusama.vkimageclassifier.data.response.GroupsListResponse
 import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
 import com.sudzusama.vkimageclassifier.domain.model.GroupShort
+import com.sudzusama.vkimageclassifier.domain.model.WallImageItem
+import com.sudzusama.vkimageclassifier.domain.model.WallItem
 
 fun GroupsListResponse.mapToDomain(): List<GroupShort> = this.response.groups.map {
     GroupShort(
@@ -39,3 +42,19 @@ fun GroupDetailResponse.mapToDomain(): GroupDetail = with(this.response[0]) {
         this.type
     )
 }
+
+fun GroupWallResponse.mapToDomain(): List<WallItem> = this.response.items.map { response ->
+    WallItem(
+        response.id,
+        response.date,
+        response.attachments.filter { it.type == "photo" }
+            .map {
+                WallImageItem(
+                    it.photo.id,
+                    it.photo.sizes.filter { resized -> resized.type == "r" }[0].height,
+                    it.photo.sizes.filter { resized -> resized.type == "r" }[0].width,
+                    it.photo.sizes.filter { resized -> resized.type == "r" }[0].url
+                )
+            })
+}
+

@@ -2,6 +2,7 @@ package com.sudzusama.vkimageclassifier.domain.usecase
 
 import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
 import com.sudzusama.vkimageclassifier.domain.model.GroupShort
+import com.sudzusama.vkimageclassifier.domain.model.WallItem
 import com.sudzusama.vkimageclassifier.domain.repository.GroupsRepository
 import javax.inject.Inject
 
@@ -10,7 +11,7 @@ class GroupsInteractor @Inject constructor(
     private val groupsRepository: GroupsRepository
 ) {
     companion object {
-        private const val API_VERSION = "5.69"
+        private const val API_VERSION = "5.131"
         private const val EXTENDED = 1
     }
 
@@ -19,9 +20,12 @@ class GroupsInteractor @Inject constructor(
         return groupsRepository.getGroups(API_VERSION, authInteractor.getUserId(), EXTENDED, fields)
     }
 
-
     suspend fun getGroupById(id: Long): GroupDetail {
         val fields = listOf("description", "can_post", "ban_info", "members_count")
         return groupsRepository.getGroupById(API_VERSION, id, fields)
+    }
+
+    suspend fun getGroupWall(id: Long, offset: Int, count: Int): List<WallItem> {
+        return groupsRepository.getWallById(API_VERSION, -id , offset, count)
     }
 }

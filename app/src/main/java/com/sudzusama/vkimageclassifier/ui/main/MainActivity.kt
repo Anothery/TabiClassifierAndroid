@@ -18,7 +18,6 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         viewModel.toLoginFlow.observe(this, {
             binding.navHostFragment.findNavController().navigate(R.id.global_to_auth_nav_graph)
 

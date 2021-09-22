@@ -4,6 +4,7 @@ import com.sudzusama.vkimageclassifier.data.mapper.mapToDomain
 import com.sudzusama.vkimageclassifier.data.network.vk.GroupsApi
 import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
 import com.sudzusama.vkimageclassifier.domain.model.GroupShort
+import com.sudzusama.vkimageclassifier.domain.model.WallItem
 import com.sudzusama.vkimageclassifier.domain.repository.GroupsRepository
 import javax.inject.Inject
 
@@ -27,5 +28,15 @@ class VkGroupsRepository @Inject constructor(
     ): GroupDetail {
         val group = groupsApi.getGroupById(version, groupId, fields.joinToString(","))
         return group.mapToDomain()
+    }
+
+    override suspend fun getWallById(
+        version: String,
+        groupId: Long,
+        offset: Int,
+        count: Int,
+    ): List<WallItem> {
+        val wall = groupsApi.getWallById(version, groupId, offset, count)
+        return wall.mapToDomain()
     }
 }

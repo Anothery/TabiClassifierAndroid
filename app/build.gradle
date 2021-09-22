@@ -47,7 +47,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
 }
+
 
 dependencies {
     // Jar
@@ -57,7 +59,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$app_compat_version"
     implementation "androidx.constraintlayout:constraintlayout:${constraint_version}"
     implementation 'com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.4.4'
-
 
     // Kotlin - KTX
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -85,11 +86,15 @@ dependencies {
     annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
     implementation "de.hdodenhof:circleimageview:$circleimageview_version"
 
-
     // Networking
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.5.0'
+
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+
 
     // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
 }
