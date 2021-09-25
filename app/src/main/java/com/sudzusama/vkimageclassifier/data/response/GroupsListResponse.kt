@@ -16,7 +16,7 @@ data class GroupsListResponse(
 
     @Serializable
     data class Group(
-        @SerialName("id") val id: Long,
+        @SerialName("id") val id: Int,
         @SerialName("name") val name: String,
         @SerialName("screen_name") val screenName: String? = null,
         @SerialName("is_closed") val isClosed: Int,

@@ -22,7 +22,6 @@ buildscript {
 
         // Image
         glide_version = "4.11.0"
-        circleimageview_version = "3.1.0"
 
         // Networking
         retrofit_version = "2.9.0"

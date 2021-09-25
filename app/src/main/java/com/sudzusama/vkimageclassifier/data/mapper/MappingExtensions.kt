@@ -7,6 +7,7 @@ import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
 import com.sudzusama.vkimageclassifier.domain.model.GroupShort
 import com.sudzusama.vkimageclassifier.domain.model.WallImageItem
 import com.sudzusama.vkimageclassifier.domain.model.WallItem
+import kotlin.math.abs
 
 fun GroupsListResponse.mapToDomain(): List<GroupShort> = this.response.groups.map {
     GroupShort(
@@ -28,33 +29,45 @@ fun GroupsListResponse.mapToDomain(): List<GroupShort> = this.response.groups.ma
 
 fun GroupDetailResponse.mapToDomain(): GroupDetail = with(this.response[0]) {
     return@with GroupDetail(
-        this.description,
         this.id,
-        this.isAdmin,
-        this.isAdvertiser,
-        this.isClosed,
-        this.isMember,
         this.name,
-        this.photo100,
-        this.photo200,
         this.photo50,
-        this.screenName,
-        this.type
+        this.photo100,
+        this.photo200
     )
 }
 
-fun GroupWallResponse.mapToDomain(): List<WallItem> = this.response.items.map { response ->
-    WallItem(
-        response.id,
-        response.date,
-        response.attachments.filter { it.type == "photo" }
-            .map {
-                WallImageItem(
-                    it.photo.id,
-                    it.photo.sizes.filter { resized -> resized.type == "r" }[0].height,
-                    it.photo.sizes.filter { resized -> resized.type == "r" }[0].width,
-                    it.photo.sizes.filter { resized -> resized.type == "r" }[0].url
-                )
-            })
-}
+fun GroupWallResponse.mapToDomain(): List<WallItem> =
+    this.response.items.map { response ->
+        var posterName = ""
+        var posterThumbnail = ""
+
+
+        this.response.groups.filter { abs(it.id) == abs(response.fromId) }.getOrNull(0)?.let {
+            posterName = it.name
+            posterThumbnail = it.photo50
+        } ?: this.response.profiles.filter { abs(it.id) == abs(response.fromId) }.getOrNull(0)
+            ?.let {
+                posterName = "${it.firstName} ${it.lastName}"
+                posterThumbnail = it.photo50
+            }
+        WallItem(
+            response.id,
+            posterName,
+            posterThumbnail,
+            response.date,
+            response.likes.userLikes,
+            response.likes.count,
+            response.attachments.filter { it.type == "photo" }
+                .map {
+                    WallImageItem(
+                        it.photo.id,
+                        it.photo.sizes.filter { resized -> resized.type == "r" }[0].height,
+                        it.photo.sizes.filter { resized -> resized.type == "r" }[0].width,
+                        it.photo.sizes.filter { resized -> resized.type == "r" }[0].url
+                    )
+                })
+    }
+
+
 

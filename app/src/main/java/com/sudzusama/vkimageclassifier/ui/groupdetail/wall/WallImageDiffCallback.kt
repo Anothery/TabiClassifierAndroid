@@ -1,4 +1,4 @@
-package com.sudzusama.vkimageclassifier.ui.groupdetail
+package com.sudzusama.vkimageclassifier.ui.groupdetail.wall
 
 import androidx.recyclerview.widget.DiffUtil
 import com.sudzusama.vkimageclassifier.domain.model.WallImageItem

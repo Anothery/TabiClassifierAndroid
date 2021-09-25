@@ -7,16 +7,26 @@ import com.sudzusama.vkimageclassifier.domain.model.WallItem
 interface GroupsRepository {
     suspend fun getGroups(
         version: String,
-        userId: Long,
+        userId: Int,
         extended: Int,
+        filter: String?,
         fields: List<String>
     ): List<GroupShort>
 
     suspend fun getGroupById(
         version: String,
-        groupId: Long,
+        groupId: Int,
         fields: List<String>
     ): GroupDetail
 
-    suspend fun getWallById(version: String, groupId: Long, offset: Int, count: Int): List<WallItem>
+    suspend fun likeAnItem(version: String, ownerId: Int, itemId: Int, type: String)
+    suspend fun removeLikeFromItem(version: String, ownerId: Int, itemId: Int, type: String)
+    suspend fun getWallById(
+        version: String,
+        groupId: Int,
+        offset: Int,
+        count: Int,
+        extended: Int?,
+        fields: List<String>?
+    ): List<WallItem>
 }

@@ -21,15 +21,30 @@ class GroupDetailViewModel @ViewModelInject constructor(
     private val _wallItems = MutableLiveData<List<WallItem>>()
     val wallItems: LiveData<List<WallItem>> get() = _wallItems
 
-    fun getGroupById(id: Long) {
+    fun getGroupById(id: Int) {
         viewModelScope.launch {
             _details.value = groupsInteractor.getGroupById(id)
         }
     }
 
-    fun getWallItems(id: Long, offset: Int, count: Int) {
+    fun getWallItems(id: Int, offset: Int) {
         viewModelScope.launch {
-            _wallItems.value = groupsInteractor.getGroupWall(id, offset, count)
+            _wallItems.value = groupsInteractor.getGroupWall(id, offset)
+        }
+    }
+
+    fun onPostLiked(itemId: Int, isLiked: Boolean) {
+        viewModelScope.launch {
+            if (isLiked) {
+                _details.value?.let { group ->
+                    groupsInteractor.removeLikeFromItem(-group.id, itemId, GroupsInteractor.LIKE_TYPE_POST)
+                }
+            } else {
+                _details.value?.let { group ->
+                    groupsInteractor.likeAnItem(-group.id, itemId, GroupsInteractor.LIKE_TYPE_POST)
+                }
+            }
+
         }
     }
 }

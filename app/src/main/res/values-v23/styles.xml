@@ -5,4 +5,9 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:textColorSecondary">@color/colorOnPrimary</item>
     </style>
+
+    <style name="AppTheme.SelectableRoundButton">
+        <item name="android:foreground">?android:selectableItemBackgroundBorderless</item>
+        <item name="android:clickable">true</item>
+    </style>
 </resources>

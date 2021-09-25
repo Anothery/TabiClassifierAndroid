@@ -1,7 +1,7 @@
 package com.sudzusama.vkimageclassifier.domain.model
 
 data class GroupShort(
-    val id: Long,
+    val id: Int,
     val name: String,
     val type: String,
     val adminLevel: Int?,

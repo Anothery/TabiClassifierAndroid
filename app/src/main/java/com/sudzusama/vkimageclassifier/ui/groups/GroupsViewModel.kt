@@ -19,11 +19,11 @@ class GroupsViewModel @ViewModelInject constructor(
     private val _groups = MutableLiveData<List<GroupShort>>()
     val groups: LiveData<List<GroupShort>> get() = _groups
 
-    private val _showGroupDetail = SingleLiveEvent<Long>()
-    val showGroupDetail: LiveData<Long> get() = _showGroupDetail
+    private val _showGroupDetail = SingleLiveEvent<Int>()
+    val showGroupDetail: LiveData<Int> get() = _showGroupDetail
 
 
-    fun onGroupClicked(id: Long) {
+    fun onGroupClicked(id: Int) {
         _showGroupDetail.value = id
     }
 

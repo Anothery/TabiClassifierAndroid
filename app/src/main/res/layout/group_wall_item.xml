@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,12 +10,26 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical"
-        android:padding="8dp">
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
+
+        <ImageView
+            android:id="@+id/iv_poster_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true" />
 
         <TextView
+            android:id="@+id/tv_poster_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Header" />
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="16sp"
+            tools:text="Poster name" />
 
         <View
             android:layout_width="0dp"
@@ -26,24 +41,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textColor="@color/colorOnPrimaryDisabled"
             tools:text="01.01.2001" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_wall_item_images"
         android:layout_width="match_parent"
+        android:nestedScrollingEnabled="false"
         android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="center_vertical"
-        android:padding="8dp">
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/iv_like"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/action_btn_ripple"
+            android:padding="8dp"
+            android:src="@drawable/outline_favorite_border_24"
+            app:tint="@color/colorOnPrimary" />
 
         <TextView
+            android:id="@+id/tv_like_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Footer" />
+            android:ellipsize="end"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="16sp"
+            tools:text="666" />
     </LinearLayout>
 </LinearLayout>

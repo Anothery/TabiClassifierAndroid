@@ -1,6 +1,7 @@
 package com.sudzusama.vkimageclassifier.ui.groups
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +12,7 @@ import com.sudzusama.vkimageclassifier.domain.model.GroupShort
 
 class GroupsAdapter(
     private val glide: RequestManager,
-    private val onItemClicked: (Long) -> Unit
+    private val onItemClicked: (Int) -> Unit
 ) :
     RecyclerView.Adapter<GroupsAdapter.ViewHolder>() {
 
@@ -47,10 +48,17 @@ class GroupsAdapter(
             binding.tvGroupName.text = groupShort.name
             binding.tvGroupType.text = groupShort.activity
 
+            if (groupShort.isAdmin != 0) {
+                binding.ivAdminPrivilege.visibility = View.VISIBLE
+            } else {
+                binding.ivAdminPrivilege.visibility = View.INVISIBLE
+            }
+
             binding.ivGroupAvatar.apply {
                 glide
                     .load(groupShort.photo200)
                     .error(R.drawable.group_stub_avatar)
+                    .circleCrop()
                     .into(this)
             }
         }

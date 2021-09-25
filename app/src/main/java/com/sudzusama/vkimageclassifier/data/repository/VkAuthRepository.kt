@@ -29,8 +29,8 @@ class VkAuthRepository @Inject constructor(private val vkSessionPreferences: VKS
     }
 
     override fun getToken(): String? = vkSessionPreferences.getToken()
-    override fun getUserId(): Long = vkSessionPreferences.getUserId()
-    override fun saveSession(token: String, userId: Long) {
+    override fun getUserId(): Int = vkSessionPreferences.getUserId()
+    override fun saveSession(token: String, userId: Int) {
         vkSessionPreferences.saveSession(token, userId)
         updateLoginState()
     }

@@ -56,12 +56,12 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
         initGroupsList()
         initSearchBar()
 
-        viewModel.groups.observe(viewLifecycleOwner, Observer { adapter?.setGroups(it) })
+        viewModel.groups.observe(viewLifecycleOwner, { adapter?.setGroups(it) })
 
-        viewModel.showGroupDetail.observe(viewLifecycleOwner, Observer { showGroupDetail(it) })
+        viewModel.showGroupDetail.observe(viewLifecycleOwner, { showGroupDetail(it) })
     }
 
-    private fun showGroupDetail(id: Long) {
+    private fun showGroupDetail(id: Int) {
         activity?.navHostFragment?.findNavController()
             ?.navigate(R.id.action_groupsFragment_to_groupDetailFragment, bundleOf("groupId" to id))
     }

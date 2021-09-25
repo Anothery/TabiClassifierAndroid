@@ -34,6 +34,11 @@
         <item name="iconTint">@color/colorSecondary</item>
     </style>
 
+    <style name="AppTheme.SelectableRoundButton">
+        <item name="android:foreground">?android:selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+    </style>
+
     <style name="AppTheme.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary" />
 
     <style name="AppTheme.TextViewButton">

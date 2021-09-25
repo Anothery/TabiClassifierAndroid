@@ -1,4 +1,4 @@
-package com.sudzusama.vkimageclassifier.ui.groupdetail
+package com.sudzusama.vkimageclassifier.ui.groupdetail.wall
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.GroupWallImageBinding
 import com.sudzusama.vkimageclassifier.domain.model.WallImageItem
 
 
-class WallImageAdapter(private val glide: RequestManager) :
-    RecyclerView.Adapter<WallImageAdapter.ViewHolder>() {
+class PostImageAdapter(
+    private val glide: RequestManager
+) : RecyclerView.Adapter<PostImageAdapter.ViewHolder>() {
 
     companion object {
         const val VIEW_TYPE_FULL = 0
@@ -22,7 +22,6 @@ class WallImageAdapter(private val glide: RequestManager) :
     }
 
     private val images = arrayListOf<WallImageItem>()
-
 
     fun setImages(newList: List<WallImageItem>) {
         val diffResult = DiffUtil.calculateDiff(WallImageDiffCallback(images, newList))
@@ -34,26 +33,25 @@ class WallImageAdapter(private val glide: RequestManager) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             GroupWallImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
         binding.root.viewTreeObserver.addOnPreDrawListener(object :
             ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
-                val lp: ViewGroup.LayoutParams = binding.root.layoutParams
+                val density = parent.context.resources.displayMetrics.density
+                val heightPx = (300 * density + 0.5f).toInt()
+                val lp = binding.root.layoutParams
                 if (lp is StaggeredGridLayoutManager.LayoutParams) {
-                    val sglp = lp
                     when (viewType) {
-                        VIEW_TYPE_FULL -> sglp.apply {
-                            width = parent.width
-                            height = 600
+                        VIEW_TYPE_FULL -> lp.apply {
                             isFullSpan = true
+                            width = parent.width
+                            height = heightPx
                         }
-                        VIEW_TYPE_HALF -> sglp.apply {
+                        VIEW_TYPE_HALF -> lp.apply {
                             isFullSpan = false
                             width = parent.width / 2
-                            height = 500
+                            height = heightPx
                         }
                     }
-                    binding.root.layoutParams = sglp
                     val lm = (parent as RecyclerView).layoutManager as StaggeredGridLayoutManager?
                     lm?.invalidateSpanAssignments()
                 }
@@ -67,8 +65,8 @@ class WallImageAdapter(private val glide: RequestManager) :
 
     override fun getItemViewType(position: Int): Int {
         if (images.size == 2) return VIEW_TYPE_HALF
-
         if (position == images.size - 1 && position % 3 == 1) return VIEW_TYPE_FULL
+
         return when (position % 3) {
             0 -> VIEW_TYPE_FULL
             else -> VIEW_TYPE_HALF
@@ -86,9 +84,21 @@ class WallImageAdapter(private val glide: RequestManager) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(image: WallImageItem, position: Int) {
+            binding.root.viewTreeObserver.addOnPreDrawListener(object :
+                ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    if (images.size == 1) {
+                        val ratio = 1f * image.height / image.width
+                        binding.root.layoutParams = binding.root.layoutParams.apply {
+                            height = (width * ratio).toInt()
+                        }
+                    }
+                    binding.root.viewTreeObserver.removeOnPreDrawListener(this)
+                    return true
+                }
+            })
             glide.load(image.url)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .error(R.drawable.group_stub_avatar)
                 .into(binding.ivWallImage)
         }
     }

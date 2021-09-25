@@ -13,17 +13,19 @@ class VkGroupsRepository @Inject constructor(
 ) : GroupsRepository {
     override suspend fun getGroups(
         version: String,
-        userId: Long,
+        userId: Int,
         extended: Int,
+        filter: String?,
         fields: List<String>
     ): List<GroupShort> {
-        val groups = groupsApi.getGroups(version, userId, extended, fields.joinToString(","))
+        val groups =
+            groupsApi.getGroups(version, userId, extended, filter, fields.joinToString(","))
         return groups.mapToDomain()
     }
 
     override suspend fun getGroupById(
         version: String,
-        groupId: Long,
+        groupId: Int,
         fields: List<String>
     ): GroupDetail {
         val group = groupsApi.getGroupById(version, groupId, fields.joinToString(","))
@@ -32,11 +34,39 @@ class VkGroupsRepository @Inject constructor(
 
     override suspend fun getWallById(
         version: String,
-        groupId: Long,
+        groupId: Int,
         offset: Int,
         count: Int,
+        extended: Int?,
+        fields: List<String>?
     ): List<WallItem> {
-        val wall = groupsApi.getWallById(version, groupId, offset, count)
+        val wall = groupsApi.getWallById(
+            version,
+            groupId,
+            offset,
+            count,
+            extended,
+            fields?.joinToString(",")
+        )
         return wall.mapToDomain()
+    }
+
+    override suspend fun likeAnItem(
+        version: String,
+        ownerId: Int,
+        itemId: Int,
+        type: String
+    ) {
+        groupsApi.likeAnItem(version, ownerId, itemId, type)
+    }
+
+
+    override suspend fun removeLikeFromItem(
+        version: String,
+        ownerId: Int,
+        itemId: Int,
+        type: String
+    ) {
+        groupsApi.removeLikeFromItem(version, ownerId, itemId, type)
     }
 }
