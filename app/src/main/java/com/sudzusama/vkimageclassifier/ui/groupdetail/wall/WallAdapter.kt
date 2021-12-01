@@ -63,7 +63,9 @@ class WallAdapter(
                 }
             }
         })
-        return WallItemViewHolder(binding)
+        val adapter = PostImageAdapter(glide)
+        binding.rvWallItemImages.adapter = adapter
+        return WallItemViewHolder(binding, adapter)
 
     }
 
@@ -73,10 +75,8 @@ class WallAdapter(
         holder.bind(posts[position])
     }
 
-    inner class WallItemViewHolder(private val binding: GroupWallItemBinding) :
+    inner class WallItemViewHolder(private val binding: GroupWallItemBinding, private val adapter: PostImageAdapter) :
         RecyclerView.ViewHolder(binding.root) {
-
-        private lateinit var adapter: PostImageAdapter
 
         fun bind(wallItem: WallItem) {
             binding.tvDate.text =
@@ -107,8 +107,6 @@ class WallAdapter(
                 binding.tvLikeCount.text = "${wallItem.likesCount}"
             }
 
-            adapter = PostImageAdapter(glide)
-            binding.rvWallItemImages.adapter = adapter
             adapter.setImages(wallItem.images)
         }
     }

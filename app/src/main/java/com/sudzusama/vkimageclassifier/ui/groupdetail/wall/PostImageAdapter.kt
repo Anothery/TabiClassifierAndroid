@@ -2,7 +2,7 @@ package com.sudzusama.vkimageclassifier.ui.groupdetail.wall
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.ViewTreeObserver.OnPreDrawListener
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -33,8 +33,7 @@ class PostImageAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             GroupWallImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        binding.root.viewTreeObserver.addOnPreDrawListener(object :
-            ViewTreeObserver.OnPreDrawListener {
+        binding.root.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
             override fun onPreDraw(): Boolean {
                 val density = parent.context.resources.displayMetrics.density
                 val heightPx = (300 * density + 0.5f).toInt()
@@ -73,19 +72,17 @@ class PostImageAdapter(
         }
     }
 
-
     override fun getItemCount() = images.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(images[position], position)
+        holder.bind(images[position])
     }
 
     inner class ViewHolder(private val binding: GroupWallImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(image: WallImageItem, position: Int) {
-            binding.root.viewTreeObserver.addOnPreDrawListener(object :
-                ViewTreeObserver.OnPreDrawListener {
+        fun bind(image: WallImageItem) {
+            binding.root.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
                     if (images.size == 1) {
                         val ratio = 1f * image.height / image.width
