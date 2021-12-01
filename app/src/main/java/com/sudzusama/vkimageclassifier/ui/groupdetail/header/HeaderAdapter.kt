@@ -39,7 +39,7 @@ class HeaderAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(header: GroupDetail) {
             binding.tvGroupName.text = header.name
-            glide.load(header.photo100)
+            glide.load(header.photo200)
                 .error(R.drawable.group_stub_avatar)
                 .circleCrop()
                 .into(binding.ivGroupAvatar)

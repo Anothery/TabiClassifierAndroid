@@ -46,7 +46,7 @@ class GroupsInteractor @Inject constructor(
 
     suspend fun getGroupWall(id: Int, offset: Int): List<WallItem> {
         val count = 10
-        val fields = listOf("photo_50", "name")
+        val fields = listOf( "photo_50", "name")
         val extended = 1
         return groupsRepository.getWallById(API_VERSION, -id, offset, count, extended, fields)
     }

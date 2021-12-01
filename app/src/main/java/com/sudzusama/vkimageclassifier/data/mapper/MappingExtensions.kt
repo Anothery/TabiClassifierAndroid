@@ -44,6 +44,7 @@ fun GroupWallResponse.mapToDomain(): List<WallItem> =
 
 
         this.response.groups.filter { abs(it.id) == abs(response.fromId) }.getOrNull(0)?.let {
+            it.photo50
             posterName = it.name
             posterThumbnail = it.photo50
         } ?: this.response.profiles.filter { abs(it.id) == abs(response.fromId) }.getOrNull(0)
