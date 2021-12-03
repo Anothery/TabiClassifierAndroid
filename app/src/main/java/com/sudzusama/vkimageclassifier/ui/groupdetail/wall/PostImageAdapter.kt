@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.sudzusama.vkimageclassifier.databinding.GroupWallImageBinding
 import com.sudzusama.vkimageclassifier.domain.model.WallImageItem
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetail
@@ -120,6 +121,7 @@ class PostImageAdapter(
             })
             glide.load(image.url)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transition(DrawableTransitionOptions.withCrossFade(500))
                 .into(binding.ivWallImage)
         }
     }
