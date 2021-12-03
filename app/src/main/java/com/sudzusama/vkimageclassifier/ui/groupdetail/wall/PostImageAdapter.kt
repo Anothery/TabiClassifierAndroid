@@ -10,14 +10,20 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.sudzusama.vkimageclassifier.databinding.GroupWallImageBinding
 import com.sudzusama.vkimageclassifier.domain.model.WallImageItem
+import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetail
 
 
 class PostImageAdapter(
     private val glide: RequestManager,
-    private val onImageClicked: (String, Int, Int, Int, Int) -> Unit
-) : RecyclerView.Adapter<PostImageAdapter.ViewHolder>() {
+    private val onImageClicked: (List<ImageDetail>, Int) -> Unit
+) : RecyclerView.Adapter<PostImageAdapter.PostImageViewHolder>() {
 
-    private var clickedId: Int? = null
+    private var currentRecyclerView: RecyclerView? = null
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        currentRecyclerView = recyclerView
+    }
 
     companion object {
         const val VIEW_TYPE_FULL = 0
@@ -33,7 +39,7 @@ class PostImageAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostImageViewHolder {
         val binding =
             GroupWallImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         binding.root.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
@@ -62,7 +68,7 @@ class PostImageAdapter(
             }
 
         })
-        return ViewHolder(binding)
+        return PostImageViewHolder(binding)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -77,29 +83,29 @@ class PostImageAdapter(
 
     override fun getItemCount() = images.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(images[position])
+    override fun onBindViewHolder(holder: PostImageViewHolder, position: Int) {
+        holder.bind(images[position], position)
     }
 
-    inner class ViewHolder(private val binding: GroupWallImageBinding) :
+    inner class PostImageViewHolder(private val binding: GroupWallImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(image: WallImageItem) {
-            clickedId = image.id
-
+        fun bind(image: WallImageItem, position: Int) {
             binding.ivWallImage.setOnClickListener {
+                val imagesList = mutableListOf<ImageDetail>()
+                currentRecyclerView?.let { rv ->
+                    for (i in 0 until itemCount) {
+                        val holder = rv.getChildViewHolder(rv.getChildAt(i)) as PostImageViewHolder
+                        with(holder.binding.ivWallImage) {
+                            val xy = IntArray(2).apply { getLocationOnScreen(this) }
+                            imagesList.add(ImageDetail(images[i].url, width, height, xy[0], xy[1]))
+                        }
+                    }
+                }
 
-                val location = IntArray(2)
-                binding.ivWallImage.getLocationOnScreen(location)
-
-                onImageClicked(
-                    image.url,
-                    binding.ivWallImage.width,
-                    binding.ivWallImage.height,
-                    location[0],
-                    location[1]
-                )
+                onImageClicked(imagesList, position)
             }
+
             binding.root.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
                     if (images.size == 1) {

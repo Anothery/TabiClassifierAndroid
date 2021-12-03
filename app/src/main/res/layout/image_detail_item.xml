@@ -5,19 +5,16 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:focusable="true"
-    android:gravity="center"
-    tools:context=".ui.imagedetail.ImageDetailFragment">
+    android:gravity="center">
 
     <View
         android:id="@+id/blackScreen"
-        android:alpha="0"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black" />
 
-    <ImageView
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/iv_image"
-        android:alpha="0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />

@@ -56,7 +56,10 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
 
         viewModel.groups.observe(viewLifecycleOwner, { adapter?.setGroups(it) })
 
-        viewModel.showGroupDetail.observe(viewLifecycleOwner, { showGroupDetail(it) })
+        viewModel.showGroupDetail.observe(viewLifecycleOwner, {
+            showGroupDetail(it)
+            context?.hideKeyboard(view)
+        })
     }
 
     private fun showGroupDetail(id: Int) {
@@ -106,7 +109,7 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
                 override fun onDrawerStateChanged(state: Int) {
                     super.onDrawerStateChanged(state)
                     if (state == DrawerLayout.STATE_SETTLING && !isDrawerOpen(GravityCompat.START)) {
-                        activity?.hideKeyboard()
+                        view?.let { context?.hideKeyboard(it) }
                     }
                 }
 
@@ -124,7 +127,7 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
                 }
             }
 
-            toggle.setToolbarNavigationClickListener { activity?.hideKeyboard() }
+            toggle.setToolbarNavigationClickListener { view?.let { context?.hideKeyboard(it) } }
 
             addDrawerListener(toggle)
             toggle.syncState()

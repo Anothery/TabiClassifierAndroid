@@ -2,6 +2,8 @@ package com.sudzusama.vkimageclassifier.utils.ext
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -28,19 +30,23 @@ fun SearchView.getQueryTextChangeStateFlow(): StateFlow<String> {
     return query
 }
 
-fun Activity.hideKeyboard() {
-    hideKeyboard(currentFocus ?: View(this))
-}
-
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
-fun Activity.showShortMessage(text: String) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+fun View.removeGravity() =
+    this.updateLayoutParams<FrameLayout.LayoutParams> { gravity = Gravity.NO_GRAVITY }
 
-
-fun Fragment.showShortMessage(text: String) = activity?.showShortMessage(text)
-
-fun View.removeGravity() = this.updateLayoutParams<FrameLayout.LayoutParams> { gravity = Gravity.NO_GRAVITY }
 fun View.addGravity(g: Int) = this.updateLayoutParams<FrameLayout.LayoutParams> { gravity = g }
+
+fun Context.getStatusBarHeight(): Int {
+    var result = 0
+    val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+        result = resources.getDimensionPixelSize(resourceId)
+    }
+    return result
+}
+
+fun Int.toDp(context: Context): Int = (this / context.resources.displayMetrics.density).toInt()

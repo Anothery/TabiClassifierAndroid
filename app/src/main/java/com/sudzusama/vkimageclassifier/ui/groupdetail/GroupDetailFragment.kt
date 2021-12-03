@@ -19,7 +19,7 @@ import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentGroupDetailBinding
 import com.sudzusama.vkimageclassifier.ui.groupdetail.header.HeaderAdapter
 import com.sudzusama.vkimageclassifier.ui.groupdetail.wall.WallAdapter
-import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetailFragment
+import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetailParentFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -69,10 +69,10 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
         wallAdapter = WallAdapter(
             Glide.with(this),
             viewModel::onPostLiked
-        ) { url, w, h, x, y ->
-            val detailsFragment = ImageDetailFragment.newInstance(url, w, h, x, y)
+        ) { images, pos ->
+            val detailsFragment = ImageDetailParentFragment.newInstance(images, pos)
             requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.navHostFragment, detailsFragment, ImageDetailFragment.TAG)
+                .add(R.id.navHostFragment, detailsFragment, ImageDetailParentFragment.TAG)
                 .commit()
         }
         headerAdapter = HeaderAdapter(Glide.with(this))

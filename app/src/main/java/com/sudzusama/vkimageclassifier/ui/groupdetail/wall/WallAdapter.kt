@@ -11,14 +11,14 @@ import com.bumptech.glide.RequestManager
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.GroupWallItemBinding
 import com.sudzusama.vkimageclassifier.domain.model.WallItem
+import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetail
 import java.text.SimpleDateFormat
 import java.util.*
 
 class WallAdapter(
     private val glide: RequestManager,
     private val onPostLiked: (Int, Boolean) -> Unit,
-    private val onImageClicked: (String, Int, Int, Int, Int) -> Unit
-) :
+    private val onImageClicked: (List<ImageDetail>, Int) -> Unit) :
     RecyclerView.Adapter<WallAdapter.WallItemViewHolder>() {
     private val posts = arrayListOf<WallItem>()
 
