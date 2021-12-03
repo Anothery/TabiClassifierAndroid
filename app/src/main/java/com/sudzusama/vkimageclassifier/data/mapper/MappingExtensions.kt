@@ -33,7 +33,8 @@ fun GroupDetailResponse.mapToDomain(): GroupDetail = with(this.response[0]) {
         this.name,
         this.photo50,
         this.photo100,
-        this.photo200
+        this.photo200,
+        this.isAdmin != 0
     )
 }
 

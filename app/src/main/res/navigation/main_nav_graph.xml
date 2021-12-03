@@ -20,5 +20,18 @@
     <fragment
         android:id="@+id/groupDetailFragment"
         android:name="com.sudzusama.vkimageclassifier.ui.groupdetail.GroupDetailFragment"
-        android:label="GroupDetailFragment" />
+        android:label="GroupDetailFragment">
+        <action
+            android:id="@+id/itemToImageDetailFragment"
+            app:destination="@id/imageDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/imageDetailFragment"
+        android:name="com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetailFragment"
+        android:label="ImageDetailFragment">
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
 </navigation>

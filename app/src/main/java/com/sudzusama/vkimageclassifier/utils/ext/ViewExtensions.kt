@@ -2,10 +2,13 @@ package com.sudzusama.vkimageclassifier.utils.ext
 
 import android.app.Activity
 import android.content.Context
+import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,3 +41,6 @@ fun Activity.showShortMessage(text: String) = Toast.makeText(this, text, Toast.L
 
 
 fun Fragment.showShortMessage(text: String) = activity?.showShortMessage(text)
+
+fun View.removeGravity() = this.updateLayoutParams<FrameLayout.LayoutParams> { gravity = Gravity.NO_GRAVITY }
+fun View.addGravity(g: Int) = this.updateLayoutParams<FrameLayout.LayoutParams> { gravity = g }

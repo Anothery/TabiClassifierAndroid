@@ -13,8 +13,11 @@ import com.sudzusama.vkimageclassifier.domain.model.WallImageItem
 
 
 class PostImageAdapter(
-    private val glide: RequestManager
+    private val glide: RequestManager,
+    private val onImageClicked: (String, Int, Int, Int, Int) -> Unit
 ) : RecyclerView.Adapter<PostImageAdapter.ViewHolder>() {
+
+    private var clickedId: Int? = null
 
     companion object {
         const val VIEW_TYPE_FULL = 0
@@ -82,6 +85,21 @@ class PostImageAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(image: WallImageItem) {
+            clickedId = image.id
+
+            binding.ivWallImage.setOnClickListener {
+
+                val location = IntArray(2)
+                binding.ivWallImage.getLocationOnScreen(location)
+
+                onImageClicked(
+                    image.url,
+                    binding.ivWallImage.width,
+                    binding.ivWallImage.height,
+                    location[0],
+                    location[1]
+                )
+            }
             binding.root.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
                     if (images.size == 1) {

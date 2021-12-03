@@ -1,12 +1,17 @@
 package com.sudzusama.vkimageclassifier.ui.main
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.ActivityMainBinding
 import com.sudzusama.vkimageclassifier.ui.base.BaseActivity
+import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetailFragment
+import com.sudzusama.vkimageclassifier.utils.OnBackPressedListener
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -25,6 +30,14 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
         viewModel.toMainFlow.observe(this, {
             binding.navHostFragment.findNavController().navigate(R.id.global_to_main_nav_graph)
         })
+    }
+
+    override fun onBackPressed() {
+        val detailsFragment =
+            (supportFragmentManager.findFragmentByTag(ImageDetailFragment.TAG) as? ImageDetailFragment)
+        detailsFragment?.let {
+            if (it.isVisible) (it as? OnBackPressedListener)?.onBackPressed()
+        } ?: super.onBackPressed()
     }
 
 

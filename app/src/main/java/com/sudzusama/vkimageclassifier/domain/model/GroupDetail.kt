@@ -5,5 +5,6 @@ data class GroupDetail(
     val name: String,
     val photo50: String,
     val photo100: String,
-    val photo200: String
+    val photo200: String,
+    val isAdmin: Boolean
 )

@@ -16,7 +16,8 @@ import java.util.*
 
 class WallAdapter(
     private val glide: RequestManager,
-    private val onPostLiked: (Int, Boolean) -> Unit
+    private val onPostLiked: (Int, Boolean) -> Unit,
+    private val onImageClicked: (String, Int, Int, Int, Int) -> Unit
 ) :
     RecyclerView.Adapter<WallAdapter.WallItemViewHolder>() {
     private val posts = arrayListOf<WallItem>()
@@ -63,7 +64,7 @@ class WallAdapter(
                 }
             }
         })
-        val adapter = PostImageAdapter(glide)
+        val adapter = PostImageAdapter(glide, onImageClicked)
         binding.rvWallItemImages.adapter = adapter
         return WallItemViewHolder(binding, adapter)
 
@@ -75,7 +76,10 @@ class WallAdapter(
         holder.bind(posts[position])
     }
 
-    inner class WallItemViewHolder(private val binding: GroupWallItemBinding, private val adapter: PostImageAdapter) :
+    inner class WallItemViewHolder(
+        private val binding: GroupWallItemBinding,
+        private val adapter: PostImageAdapter
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(wallItem: WallItem) {

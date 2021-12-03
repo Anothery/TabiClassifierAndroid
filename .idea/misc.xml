@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_group_detail.xml" value="0.25" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_groups.xml" value="0.1" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_image_detail.xml" value="0.20833333333333334" />
       </map>
     </option>
   </component>

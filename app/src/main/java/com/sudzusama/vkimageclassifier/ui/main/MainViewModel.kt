@@ -1,15 +1,17 @@
 package com.sudzusama.vkimageclassifier.ui.main
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel @ViewModelInject constructor(authInteractor: AuthInteractor) :
+@HiltViewModel
+class MainViewModel @Inject constructor(authInteractor: AuthInteractor) :
     BaseViewModel(authInteractor) {
 
     private val _toLoginFlow = MutableLiveData<Boolean>()

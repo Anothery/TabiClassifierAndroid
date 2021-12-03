@@ -1,6 +1,5 @@
 package com.sudzusama.vkimageclassifier.ui.groupdetail
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,9 +8,12 @@ import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
 import com.sudzusama.vkimageclassifier.domain.model.WallItem
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.domain.usecase.GroupsInteractor
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GroupDetailViewModel @ViewModelInject constructor(
+@HiltViewModel
+class GroupDetailViewModel @Inject constructor(
     private val groupsInteractor: GroupsInteractor,
     authInteractor: AuthInteractor
 ) : ViewModel() {
@@ -37,7 +39,11 @@ class GroupDetailViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             if (isLiked) {
                 _details.value?.let { group ->
-                    groupsInteractor.removeLikeFromItem(-group.id, itemId, GroupsInteractor.LIKE_TYPE_POST)
+                    groupsInteractor.removeLikeFromItem(
+                        -group.id,
+                        itemId,
+                        GroupsInteractor.LIKE_TYPE_POST
+                    )
                 }
             } else {
                 _details.value?.let { group ->

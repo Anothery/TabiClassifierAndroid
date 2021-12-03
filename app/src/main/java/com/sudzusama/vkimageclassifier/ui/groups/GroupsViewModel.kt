@@ -1,6 +1,5 @@
 package com.sudzusama.vkimageclassifier.ui.groups
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -9,9 +8,12 @@ import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.domain.usecase.GroupsInteractor
 import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
 import com.sudzusama.vkimageclassifier.utils.SingleLiveEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GroupsViewModel @ViewModelInject constructor(
+@HiltViewModel
+class GroupsViewModel @Inject constructor(
     private val groupsInteractor: GroupsInteractor,
     authInteractor: AuthInteractor
 ) : BaseViewModel(authInteractor) {
