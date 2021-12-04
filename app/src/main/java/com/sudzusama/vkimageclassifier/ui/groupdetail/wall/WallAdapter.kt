@@ -41,6 +41,7 @@ class WallAdapter(
 
     fun setDownloadMore(downloadMore: Boolean) {
         this.downloadMore = downloadMore
+        setWall(posts.filterNotNull())
     }
 
     fun setIsDataLoading(isLoading: Boolean) {
