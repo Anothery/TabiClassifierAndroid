@@ -2,6 +2,7 @@ package com.sudzusama.vkimageclassifier.domain.model
 
 data class WallItem(
     val id: Int,
+    val text: String,
     val posterName: String,
     val posterThumbnail: String,
     val date: Int,

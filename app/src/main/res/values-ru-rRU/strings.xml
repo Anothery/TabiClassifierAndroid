@@ -4,4 +4,5 @@
     <string name="groups">Сообщества</string>
     <string name="sign_out">Выйти из аккаунта</string>
     <string name="group_detail_empty_wall">Нет записей</string>
+    <string name="wall_item_no_content">Пост не содержит текста или изображений</string>
 </resources>

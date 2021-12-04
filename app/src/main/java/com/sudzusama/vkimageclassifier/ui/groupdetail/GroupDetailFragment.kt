@@ -85,6 +85,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
 
     private fun initDetailRecyclerView() {
         wallAdapter = WallAdapter(
+            requireContext(),
             Glide.with(this),
             viewModel::onPostLiked,
             { images, pos ->

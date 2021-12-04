@@ -55,6 +55,7 @@ fun GroupWallResponse.mapToDomain(): List<WallItem> =
             }
         WallItem(
             response.id,
+            response.text,
             posterName,
             posterThumbnail,
             response.date,
@@ -64,9 +65,12 @@ fun GroupWallResponse.mapToDomain(): List<WallItem> =
                 .map {
                     WallImageItem(
                         it.photo.id,
-                        it.photo.sizes.filter { resized -> resized.type == "r" }.getOrNull(0)?.height ?: 0,
-                        it.photo.sizes.filter { resized -> resized.type == "r" }.getOrNull(0)?.width ?: 0,
-                        it.photo.sizes.filter { resized -> resized.type == "r" }.getOrNull(0)?.url ?: ""
+                        it.photo.sizes.filter { resized -> resized.type == "r" }
+                            .getOrNull(0)?.height ?: 0,
+                        it.photo.sizes.filter { resized -> resized.type == "r" }.getOrNull(0)?.width
+                            ?: 0,
+                        it.photo.sizes.filter { resized -> resized.type == "r" }.getOrNull(0)?.url
+                            ?: ""
                     )
                 })
     }

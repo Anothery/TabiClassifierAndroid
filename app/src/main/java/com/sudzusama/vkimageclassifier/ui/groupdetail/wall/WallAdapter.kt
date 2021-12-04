@@ -1,9 +1,12 @@
 package com.sudzusama.vkimageclassifier.ui.groupdetail.wall
 
+import android.content.Context
 import android.graphics.Rect
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -13,10 +16,12 @@ import com.sudzusama.vkimageclassifier.databinding.ContentProgressBarBinding
 import com.sudzusama.vkimageclassifier.databinding.GroupWallItemBinding
 import com.sudzusama.vkimageclassifier.domain.model.WallItem
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetail
+import org.ocpsoft.prettytime.PrettyTime
 import java.text.SimpleDateFormat
 import java.util.*
 
 class WallAdapter(
+    private val context: Context,
     private val glide: RequestManager,
     private val onPostLiked: (Int, Boolean) -> Unit,
     private val onImageClicked: (List<ImageDetail>, Int) -> Unit,
@@ -28,9 +33,10 @@ class WallAdapter(
     private var isLoading = false
 
     fun setWall(newList: List<WallItem>) {
-        val list = if (!downloadMore) newList else mutableListOf<WallItem?>().apply {
-            addAll(newList); add(null)
-        }
+        val list =
+            if (!downloadMore || newList.isEmpty()) newList else mutableListOf<WallItem?>().apply {
+                addAll(newList); add(null)
+            }
         val diffResult = DiffUtil.calculateDiff(WallDiffCallback(posts, list))
         posts.clear()
         posts.addAll(list)
@@ -124,8 +130,22 @@ class WallAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(wallItem: WallItem) {
-            binding.tvDate.text =
-                SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(wallItem.date * 1000L)
+            if (wallItem.images.isEmpty() && wallItem.text.isBlank()) {
+                binding.tvText.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.colorOnPrimaryDisabled
+                    )
+                )
+                binding.tvText.text = context.resources.getString(R.string.wall_item_no_content)
+            } else {
+                binding.tvText.setTextColor(ContextCompat.getColor(context, R.color.colorOnPrimary))
+                binding.tvText.text = wallItem.text
+            }
+            val locale: Locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                context.resources.configuration.locales[0]
+            } else context.resources.configuration.locale
+            binding.tvDate.text = PrettyTime().setLocale(locale).format(Date(wallItem.date * 1000L))
             binding.tvLikeCount.text = "${if (wallItem.likesCount > 0) wallItem.likesCount else ""}"
             binding.tvPosterName.text = wallItem.posterName
             glide.load(wallItem.posterThumbnail)

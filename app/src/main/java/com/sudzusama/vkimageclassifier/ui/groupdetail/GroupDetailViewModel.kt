@@ -53,10 +53,11 @@ class GroupDetailViewModel @Inject constructor(
                 val loadedData = groupsInteractor.getGroupWall(wallId, wallItems.value?.size ?: 0)
                 if (loadedData.isEmpty()) _downloadMore.value = false
                 _wallItems.value = loadedData
-                _isLoading.value = false
                 _showStartProgress.value = false
             } catch (ex: Exception) {
                 _errorMessage.value = ex.message
+            } finally {
+                _isLoading.value = false
             }
         }
     }
@@ -68,9 +69,10 @@ class GroupDetailViewModel @Inject constructor(
             val loadedData = groupsInteractor.getGroupWall(wallId, wallItems.value?.size ?: 0)
             if (loadedData.isEmpty()) _downloadMore.value = false
             else _wallItems.value = list.apply { addAll(loadedData) }
-            _isLoading.value = false
         } catch (ex: Exception) {
             _errorMessage.value = ex.message
+        } finally {
+            _isLoading.value = false
         }
     }
 
