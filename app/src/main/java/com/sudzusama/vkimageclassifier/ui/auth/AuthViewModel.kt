@@ -13,9 +13,6 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(private val authInteractor: AuthInteractor) :
     BaseViewModel(authInteractor) {
 
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String> = _errorMessage
-
     fun onLoginSuccess(token: VKAccessToken) {
         authInteractor.saveSession(token.accessToken, token.userId)
     }

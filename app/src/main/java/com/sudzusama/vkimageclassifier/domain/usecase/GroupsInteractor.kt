@@ -33,10 +33,7 @@ class GroupsInteractor @Inject constructor(
             filter,
             fields
         )
-        return arrayListOf<GroupShort>().also {
-            it.addAll(modGroups)
-            it.addAll(nonModGroups)
-        }
+        return arrayListOf<GroupShort>().apply { addAll(modGroups); addAll(nonModGroups) }.distinctBy { it.id }
     }
 
     suspend fun getGroupById(id: Int): GroupDetail {

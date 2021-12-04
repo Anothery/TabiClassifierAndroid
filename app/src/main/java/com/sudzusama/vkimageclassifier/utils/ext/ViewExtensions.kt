@@ -30,6 +30,8 @@ fun SearchView.getQueryTextChangeStateFlow(): StateFlow<String> {
     return query
 }
 
+fun Context.shortToast(text: String) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
@@ -50,3 +52,6 @@ fun Context.getStatusBarHeight(): Int {
 }
 
 fun Int.toDp(context: Context): Int = (this / context.resources.displayMetrics.density).toInt()
+val Int.toPx get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+val Float.toPx get() = this * Resources.getSystem().displayMetrics.density
+val Float.toDp get() = this / Resources.getSystem().displayMetrics.density

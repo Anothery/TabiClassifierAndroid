@@ -3,4 +3,5 @@
     <string name="login">Войти</string>
     <string name="groups">Сообщества</string>
     <string name="sign_out">Выйти из аккаунта</string>
+    <string name="group_detail_empty_wall">Нет записей</string>
 </resources>

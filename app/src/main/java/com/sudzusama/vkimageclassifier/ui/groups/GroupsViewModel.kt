@@ -10,6 +10,7 @@ import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
 import com.sudzusama.vkimageclassifier.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,7 +25,6 @@ class GroupsViewModel @Inject constructor(
     private val _showGroupDetail = SingleLiveEvent<Int>()
     val showGroupDetail: LiveData<Int> get() = _showGroupDetail
 
-
     fun onGroupClicked(id: Int) {
         _showGroupDetail.value = id
     }
@@ -35,8 +35,12 @@ class GroupsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val groupsResult = groupsInteractor.getGroups()
-            _groups.value = groupsResult
+            try {
+                val groupsResult = groupsInteractor.getGroups()
+                _groups.value = groupsResult
+            } catch (ex: Exception) {
+                _errorMessage.value = ex.message
+            }
         }
     }
 }

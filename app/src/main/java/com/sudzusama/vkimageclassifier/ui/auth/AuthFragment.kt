@@ -29,7 +29,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         binding.btnLogin.setOnClickListener {
             activity?.let { viewModel.onLogin(it as AppCompatActivity) }
         }
-        viewModel.errorMessage.observe(viewLifecycleOwner, Observer {
+        viewModel.errorMessage.observe(viewLifecycleOwner, {
             Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
         })
     }

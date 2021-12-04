@@ -19,6 +19,7 @@ import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentGroupsBinding
 import com.sudzusama.vkimageclassifier.utils.ext.getQueryTextChangeStateFlow
 import com.sudzusama.vkimageclassifier.utils.ext.hideKeyboard
+import com.sudzusama.vkimageclassifier.utils.ext.shortToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -55,6 +56,8 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
         initSearchBar()
 
         viewModel.groups.observe(viewLifecycleOwner, { adapter?.setGroups(it) })
+
+        viewModel.errorMessage.observe(viewLifecycleOwner, { requireContext().shortToast(it) })
 
         viewModel.showGroupDetail.observe(viewLifecycleOwner, {
             showGroupDetail(it)
