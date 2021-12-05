@@ -261,6 +261,9 @@ class ImageViewPagerAdapter(
                             if (singleTouchMode) {
                                 if (startY > e.rawY + dy + hideOffsetPx || (startY < e.rawY + dy - hideOffsetPx)) {
                                     onImageDragFinished(true)
+                                    binding.ivImage.setOnTouchListener { v, e ->
+                                        binding.ivImage.attacher.onTouch(v, e)
+                                    }
                                     view.parent.requestDisallowInterceptTouchEvent(false)
                                 } else {
                                     onImageDragFinished(false)

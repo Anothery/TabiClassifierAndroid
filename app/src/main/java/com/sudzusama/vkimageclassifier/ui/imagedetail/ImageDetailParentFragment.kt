@@ -25,6 +25,7 @@ class ImageDetailParentFragment(
 ) : DialogFragment(R.layout.fragment_image_detail_parent), OnBackPressedListener {
     private val binding by viewBinding(FragmentImageDetailParentBinding::bind)
     private var adapter: ImageViewPagerAdapter? = null
+    private var isFinishing = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -78,19 +79,20 @@ class ImageDetailParentFragment(
     }
 
     private fun onSingleClickToImage() {
-        if (binding.toolbar.alpha == 1f) {
-            hideToolbar(true)
-        } else {
-            showToolbar(true)
+        if(!isFinishing) {
+            if (binding.toolbar.alpha == 1f) {
+                hideToolbar(true)
+            } else {
+                showToolbar(true)
+            }
         }
     }
 
     private fun onImageDragFinished(draggedAway: Boolean) {
         if (draggedAway) {
             restoreStatusBar()
-            adapter?.showDisappearAnimation(binding.imageViewPager.currentItem) {
-                finish()
-            }
+            isFinishing = true
+            adapter?.showDisappearAnimation(binding.imageViewPager.currentItem) { finish() }
         }
     }
 
@@ -139,6 +141,7 @@ class ImageDetailParentFragment(
         hideToolbar(true)
         restoreStatusBar()
         binding.imageViewPager.setBackgroundColor(Color.TRANSPARENT)
+        isFinishing = true
         adapter?.showDisappearAnimation(binding.imageViewPager.currentItem) {
             finish()
         }
