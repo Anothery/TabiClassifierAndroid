@@ -45,6 +45,18 @@ fun View.removeGravity() =
 
 fun View.addGravity(g: Int) = this.updateLayoutParams<FrameLayout.LayoutParams> { gravity = g }
 
+fun View.gone() {
+    this.visibility = View.GONE
+}
+
+fun View.visible() {
+    this.visibility = View.VISIBLE
+}
+
+fun View.invisible() {
+    this.visibility = View.VISIBLE
+}
+
 fun Context.getStatusBarHeight(): Int {
     var result = 0
     val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")

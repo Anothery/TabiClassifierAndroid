@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
@@ -14,7 +15,9 @@ import com.bumptech.glide.Glide
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentImageDetailParentBinding
 import com.sudzusama.vkimageclassifier.utils.OnBackPressedListener
+import com.sudzusama.vkimageclassifier.utils.ext.invisible
 import com.sudzusama.vkimageclassifier.utils.ext.toDp
+import com.sudzusama.vkimageclassifier.utils.ext.visible
 
 class ImageDetailParentFragment(
     private val images: List<ImageDetail>,
@@ -25,17 +28,18 @@ class ImageDetailParentFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter =
-            ImageViewPagerAdapter(
-                images,
-                selectedImageIndex,
-                requireContext(),
-                Glide.with(this),
-                { binding.imageViewPager.visibility = View.VISIBLE }, { }, {
-                    adapter?.showDisappearAnimation(binding.imageViewPager.currentItem) { finish() }
-                })
+        adapter = ImageViewPagerAdapter(
+            images,
+            selectedImageIndex,
+            requireContext(),
+            Glide.with(this),
+            this::onAppearingStart,
+            this::onAppearingFinished,
+            this::onImageDragStart,
+            this::onImageDragFinished,
+            this::onSingleClickToImage
+        )
 
-        binding.imageViewPager.visibility = View.INVISIBLE
         binding.imageViewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
@@ -49,6 +53,9 @@ class ImageDetailParentFragment(
             }
         })
 
+        binding.btnBack.setOnClickListener { onBackPressed() }
+
+        hideToolbar()
         binding.imageViewPager.setPageTransformer(MarginPageTransformer(24.toDp(requireContext())))
         binding.imageViewPager.adapter = adapter
 
@@ -58,13 +65,61 @@ class ImageDetailParentFragment(
         setBlackStatusBar()
     }
 
+    private fun onImageDragStart() {
+        hideToolbar(true)
+    }
+
+    private fun onAppearingStart() {
+        binding.imageViewPager.visible()
+    }
+
+    private fun onAppearingFinished() {
+        showToolbar(true)
+    }
+
+    private fun onSingleClickToImage() {
+        if (binding.toolbar.alpha == 1f) {
+            hideToolbar(true)
+        } else {
+            showToolbar(true)
+        }
+    }
+
+    private fun onImageDragFinished(draggedAway: Boolean) {
+        if (draggedAway) {
+            adapter?.showDisappearAnimation(binding.imageViewPager.currentItem) {
+                restoreStatusBar()
+                finish()
+            }
+        }
+    }
+
+    private fun showToolbar(animate: Boolean = false) {
+        if (!animate) {
+            binding.toolbar.alpha = 1f
+            return
+        }
+        binding.toolbar.translationY = -binding.toolbar.height.toFloat()
+        binding.toolbar.alpha = 0f
+        binding.toolbar.animate().alpha(1f).translationY(0f)
+    }
+
+    private fun hideToolbar(animate: Boolean = false) {
+        if (!animate) {
+            binding.toolbar.alpha = 0f
+            return
+        }
+        binding.toolbar.animate().alpha(0f).translationY(-binding.toolbar.height.toFloat())
+    }
+
     private fun setBlackStatusBar() {
         requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        requireActivity().window.statusBarColor = resources.getColor(android.R.color.black)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requireActivity().window.decorView.systemUiVisibility = 0
         }
+
+        requireActivity().window.statusBarColor = resources.getColor(android.R.color.black)
     }
 
     private fun restoreStatusBar() {
@@ -75,8 +130,18 @@ class ImageDetailParentFragment(
         }
     }
 
+
     private fun finish() {
         requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+    }
+
+    override fun onBackPressed() {
+        hideToolbar(true)
+        restoreStatusBar()
+        binding.imageViewPager.setBackgroundColor(Color.TRANSPARENT)
+        adapter?.showDisappearAnimation(binding.imageViewPager.currentItem) {
+            finish()
+        }
     }
 
     companion object {
@@ -85,13 +150,5 @@ class ImageDetailParentFragment(
         @JvmStatic
         fun newInstance(images: List<ImageDetail>, selectedImageIndex: Int) =
             ImageDetailParentFragment(images, selectedImageIndex)
-    }
-
-    override fun onBackPressed() {
-        restoreStatusBar()
-        binding.imageViewPager.setBackgroundColor(Color.TRANSPARENT)
-        adapter?.showDisappearAnimation(binding.imageViewPager.currentItem) {
-            finish()
-        }
     }
 }

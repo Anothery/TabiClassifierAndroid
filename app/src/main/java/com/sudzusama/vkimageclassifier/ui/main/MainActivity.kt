@@ -1,7 +1,6 @@
 package com.sudzusama.vkimageclassifier.ui.main
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -10,7 +9,6 @@ import com.sudzusama.vkimageclassifier.databinding.ActivityMainBinding
 import com.sudzusama.vkimageclassifier.ui.base.BaseActivity
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetailParentFragment
 import com.sudzusama.vkimageclassifier.utils.OnBackPressedListener
-import com.vk.api.sdk.utils.VKUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 

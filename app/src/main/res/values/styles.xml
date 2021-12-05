@@ -9,6 +9,10 @@
         <item name="android:statusBarColor">@color/colorStatusBar</item>
         <item name="android:textColor">@color/colorOnPrimary</item>
         <item name="colorControlNormal">@color/colorOnPrimary</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:fitsSystemWindows">false</item>
+
     </style>
 
     <style name="AppTheme" parent="BaseTheme" />

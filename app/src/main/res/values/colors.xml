@@ -8,4 +8,5 @@
     <color name="colorRipple">#cccccc</color>
     <color name="colorStatusBar">@android:color/transparent</color>
     <color name="colorOnPrimaryDisabled">#aaaaaa</color>
+    <color name="black50">#80000000</color>
 </resources>
