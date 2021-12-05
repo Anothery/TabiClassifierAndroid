@@ -8,6 +8,7 @@ import android.view.WindowManager
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.DialogFragment
 import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.sudzusama.vkimageclassifier.R
@@ -30,13 +31,24 @@ class ImageDetailParentFragment(
                 selectedImageIndex,
                 requireContext(),
                 Glide.with(this),
-                {
-                    binding.imageViewPager.visibility = View.VISIBLE
-                }, {
-                    binding.imageViewPager.setBackgroundColor(Color.BLACK)
+                { binding.imageViewPager.visibility = View.VISIBLE }, { }, {
+                    adapter?.showDisappearAnimation(binding.imageViewPager.currentItem) { finish() }
                 })
 
         binding.imageViewPager.visibility = View.INVISIBLE
+        binding.imageViewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+                if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                    binding.imageViewPager.setBackgroundColor(Color.TRANSPARENT)
+                } else {
+                    binding.imageViewPager.setBackgroundColor(Color.BLACK)
+
+                }
+            }
+        })
+
         binding.imageViewPager.setPageTransformer(MarginPageTransformer(24.toDp(requireContext())))
         binding.imageViewPager.adapter = adapter
 
@@ -63,6 +75,10 @@ class ImageDetailParentFragment(
         }
     }
 
+    private fun finish() {
+        requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+    }
+
     companion object {
         const val TAG = "ImageDetailsParentFragment"
 
@@ -75,7 +91,7 @@ class ImageDetailParentFragment(
         restoreStatusBar()
         binding.imageViewPager.setBackgroundColor(Color.TRANSPARENT)
         adapter?.showDisappearAnimation(binding.imageViewPager.currentItem) {
-            requireActivity().supportFragmentManager.beginTransaction().remove(this).commit()
+            finish()
         }
     }
 }

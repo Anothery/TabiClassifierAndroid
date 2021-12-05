@@ -105,7 +105,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.5.0'
 
     // Time utils
-    implementation 'joda-time:joda-time:2.10.13'
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.4.Final'
 
     // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
