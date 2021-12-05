@@ -223,7 +223,7 @@ class ImageViewPagerAdapter(
                             lastTimeClickMs = currentTime
                             if (diff <= DOUBLE_CLICK_DELTA_MS) {
                                 lastTimeClickMs = 0L
-                                if(multiTouchMode && binding.ivImage.scale == binding.ivImage.minimumScale) {
+                                if (multiTouchMode && binding.ivImage.scale == binding.ivImage.minimumScale) {
                                     multiTouchMode = false
                                 }
                                 if (!multiTouchMode && !singleTouchMode) {

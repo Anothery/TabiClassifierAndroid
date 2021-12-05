@@ -32,6 +32,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_groups"
                         android:layout_width="match_parent"
+                        android:scrollbars="none"
                         android:layout_height="match_parent"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 

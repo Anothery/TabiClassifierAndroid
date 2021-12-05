@@ -87,8 +87,8 @@ class ImageDetailParentFragment(
 
     private fun onImageDragFinished(draggedAway: Boolean) {
         if (draggedAway) {
+            restoreStatusBar()
             adapter?.showDisappearAnimation(binding.imageViewPager.currentItem) {
-                restoreStatusBar()
                 finish()
             }
         }
