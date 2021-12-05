@@ -113,6 +113,7 @@ class ImageViewPagerAdapter(
 
                             if (binding.ivImage.scale == binding.ivImage.minimumScale && multiTouchMode) {
                                 setImageCenteredWithWrapContent()
+                                view.parent.requestDisallowInterceptTouchEvent(false)
                                 singleTouchMode = false
                                 multiTouchMode = false
                             }
@@ -126,7 +127,9 @@ class ImageViewPagerAdapter(
                                 if (singleTouchMode) {
                                     if (startY > e.rawY + dy + shadowOffsetMaxPx || (startY < e.rawY + dy - shadowOffsetMaxPx)) {
                                         onSwipedAway()
+                                        view.parent.requestDisallowInterceptTouchEvent(false)
                                     } else {
+                                        view.parent.requestDisallowInterceptTouchEvent(false)
                                         singleTouchMode = false
                                         startY = 0f
                                         changedY = 0f
@@ -139,7 +142,6 @@ class ImageViewPagerAdapter(
                                 }
                             }
                             MotionEvent.ACTION_DOWN -> {
-                                view.parent.requestDisallowInterceptTouchEvent(true)
                                 dy = view.y - e.rawY
                                 startY = view.y
                                 changedY = startY
@@ -151,6 +153,7 @@ class ImageViewPagerAdapter(
                                     if (changedY < startY - pauseOffsetPx) pauseOffsetPx =
                                         -pauseOffsetPx
                                     singleTouchMode = true
+                                    view.parent.requestDisallowInterceptTouchEvent(true)
                                 } else changedY = e.rawY + dy
 
                                 if (singleTouchMode) {
