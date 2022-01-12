@@ -3,12 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/drawable/gallery_on_sheet_bg.xml" value="0.1765625" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/drawable/ic_create_black_24dp.xml" value="0.3769230769230769" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/drawable/ronded_dialog.xml" value="0.22447916666666667" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/drawable/rounded_darker_stub.xml" value="0.20729166666666668" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/drawable/rounded_stub.xml" value="0.3769230769230769" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/drawable/selectable_item_bg.xml" value="0.3828125" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/content_progress_bar.xml" value="0.3269927536231884" />
-        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_group_detail.xml" value="0.25" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_create_post.xml" value="0.33" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_group_detail.xml" value="0.2" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_groups.xml" value="0.1" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_image_detail.xml" value="0.20833333333333334" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_image_detail_parent.xml" value="0.2" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/gallery_item.xml" value="0.25" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/group_detail_info.xml" value="0.12318840579710146" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/group_item.xml" value="0.11956521739130435" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/group_wall_image.xml" value="0.11956521739130435" />

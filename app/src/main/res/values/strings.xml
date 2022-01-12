@@ -7,4 +7,7 @@
     <string name="sign_out">Sign out</string>
     <string name="group_detail_empty_wall">Wall is empty</string>
     <string name="wall_item_no_content">Post does not contain text or images</string>
+    <string name="fab_create_post">Create post</string>
+    <string name="create_post">Create post</string>
+    <string name="add_at_least_one_image">Add at least one picture</string>
 </resources>

@@ -88,7 +88,7 @@ class PostImageAdapter(
         holder.bind(images[position], position)
     }
 
-    inner class PostImageViewHolder(private val binding: GroupWallImageBinding) :
+    inner class PostImageViewHolder(val binding: GroupWallImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(image: WallImageItem, position: Int) {

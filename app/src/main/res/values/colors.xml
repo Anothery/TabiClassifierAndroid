@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#ffffff</color>
-    <color name="colorPrimaryDark">#99ffffff</color>
+    <color name="colorPrimaryDark">#0D000000</color>
     <color name="colorSecondary">#383838</color>
     <color name="colorOnSecondary">#FFFFFF</color>
     <color name="colorOnPrimary">#383838</color>
@@ -9,4 +9,5 @@
     <color name="colorStatusBar">@android:color/transparent</color>
     <color name="colorOnPrimaryDisabled">#aaaaaa</color>
     <color name="black50">#80000000</color>
+    <color name="colorDisabledStub">#f8f7f5</color>
 </resources>

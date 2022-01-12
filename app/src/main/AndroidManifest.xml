@@ -5,17 +5,20 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:hardwareAccelerated="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.main.MainActivity">
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -23,6 +26,7 @@
         </activity>
 
         <activity
+            android:exported="true"
             android:name="com.vk.api.sdk.ui.VKWebViewAuthActivity"
             android:theme="@style/VK.Material"
             tools:replace="android:theme" />

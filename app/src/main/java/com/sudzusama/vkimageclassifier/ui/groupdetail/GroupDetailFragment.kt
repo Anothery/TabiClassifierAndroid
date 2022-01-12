@@ -1,9 +1,9 @@
 package com.sudzusama.vkimageclassifier.ui.groupdetail
 
+import android.Manifest
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -12,8 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.fondesa.kpermissions.allGranted
+import com.fondesa.kpermissions.extension.permissionsBuilder
+import com.fondesa.kpermissions.extension.send
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentGroupDetailBinding
+import com.sudzusama.vkimageclassifier.domain.model.WallItem
+import com.sudzusama.vkimageclassifier.ui.createpost.CreatePostFragment
 import com.sudzusama.vkimageclassifier.ui.groupdetail.header.HeaderAdapter
 import com.sudzusama.vkimageclassifier.ui.groupdetail.wall.WallAdapter
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetailParentFragment
@@ -27,6 +32,15 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
     private var wallAdapter: WallAdapter? = null
     private var headerAdapter: HeaderAdapter? = null
 
+    companion object {
+        const val GROUP_ID = "groupId"
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.getInt(GROUP_ID)?.let(viewModel::initialize)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -35,6 +49,21 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
         binding.btnBack.setOnClickListener {
             activity?.findNavController(R.id.navHostFragment)?.popBackStack()
         }
+
+        binding.fabCreate.setOnClickListener {
+            permissionsBuilder(
+                Manifest.permission.READ_EXTERNAL_STORAGE).build().send {
+                if (it.allGranted()) {
+                    viewModel.onFabCreateClicked()
+                }
+            }
+        }
+
+        viewModel.showCreateScreen.observe(viewLifecycleOwner, { id ->
+            activity?.supportFragmentManager?.let {
+                CreatePostFragment.newInstance(id).show(it, CreatePostFragment.TAG)
+            }
+        })
 
         viewModel.details.observe(viewLifecycleOwner, {
             binding.btnSettings.visibility = if (it.isAdmin) View.VISIBLE else View.GONE
@@ -75,16 +104,11 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
 
         viewModel.errorMessage.observe(viewLifecycleOwner, { requireContext().shortToast(it) })
 
-        arguments?.getInt("groupId")?.let {
-            viewModel.initWallItem(it)
-            viewModel.getGroupById()
-            Handler(Looper.getMainLooper()).postDelayed({ viewModel.getFirstWallItems() }, 600)
-        }
-
     }
 
     private fun initDetailRecyclerView() {
         wallAdapter = WallAdapter(
+            arrayListOf<WallItem?>().apply { viewModel.wallItems.value?.mapTo(this) { it } },
             requireContext(),
             Glide.with(this),
             viewModel::onPostLiked,
@@ -99,6 +123,14 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
         binding.rvWall.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.rvWall.adapter = ConcatAdapter(headerAdapter, wallAdapter)
+        binding.rvWall.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy < 0 && !binding.fabCreate.isShown)
+                    binding.fabCreate.show();
+                else if (dy > 0 && binding.fabCreate.isShown)
+                    binding.fabCreate.hide();
+            }
+        })
     }
 
 }

@@ -19,8 +19,10 @@ import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetail
 import org.ocpsoft.prettytime.PrettyTime
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class WallAdapter(
+    private val posts: ArrayList<WallItem?>,
     private val context: Context,
     private val glide: RequestManager,
     private val onPostLiked: (Int, Boolean) -> Unit,
@@ -28,7 +30,6 @@ class WallAdapter(
     private val onDownloadMore: () -> Unit
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val posts = arrayListOf<WallItem?>()
     private var downloadMore = true
     private var isLoading = false
 
@@ -124,7 +125,7 @@ class WallAdapter(
         RecyclerView.ViewHolder(binding.root)
 
     inner class WallItemViewHolder(
-        private val binding: GroupWallItemBinding,
+        val binding: GroupWallItemBinding,
         private val adapter: PostImageAdapter
     ) :
         RecyclerView.ViewHolder(binding.root) {

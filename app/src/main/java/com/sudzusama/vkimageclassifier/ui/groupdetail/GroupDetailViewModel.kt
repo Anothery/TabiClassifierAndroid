@@ -9,6 +9,7 @@ import com.sudzusama.vkimageclassifier.domain.model.WallItem
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.domain.usecase.GroupsInteractor
 import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
+import com.sudzusama.vkimageclassifier.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -34,13 +35,21 @@ class GroupDetailViewModel @Inject constructor(
     private val _showStartProgress = MutableLiveData(true)
     val showStartProgress: LiveData<Boolean> get() = _showStartProgress
 
+    private val _showCreateScreen = SingleLiveEvent<Int>()
+    val showCreateScreen: LiveData<Int> get() = _showCreateScreen
+
     private var wallId: Int = -1
 
-    fun initWallItem(id: Int) {
-        wallId = id
+    init {
     }
 
-    fun getGroupById() {
+    fun initialize(id: Int) {
+        wallId = id
+        getFirstWallItems()
+        getGroupById()
+    }
+
+    private fun getGroupById() {
         viewModelScope.launch {
             _details.value = groupsInteractor.getGroupById(wallId)
         }
@@ -100,5 +109,9 @@ class GroupDetailViewModel @Inject constructor(
                 _errorMessage.value = ex.message
             }
         }
+    }
+
+    fun onFabCreateClicked() {
+        viewModelScope.launch { _showCreateScreen.value = wallId }
     }
 }

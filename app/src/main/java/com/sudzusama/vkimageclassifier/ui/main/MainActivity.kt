@@ -34,6 +34,6 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
             (supportFragmentManager.findFragmentByTag(ImageDetailParentFragment.TAG) as? ImageDetailParentFragment)
         detailsFragment?.let {
             if (it.isVisible) (it as? OnBackPressedListener)?.onBackPressed()
-        } ?: if (!binding.navHostFragment.findNavController().popBackStack()) finish()
+        } ?: super.onBackPressed()
     }
 }

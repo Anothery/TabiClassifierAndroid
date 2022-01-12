@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/groupsFragment"
         android:name="com.sudzusama.vkimageclassifier.ui.groups.GroupsFragment"
-        android:label="GroupsFragment" >
+        android:label="GroupsFragment">
         <action
             android:id="@+id/action_groupsFragment_to_groupDetailFragment"
             app:destination="@id/groupDetailFragment"
@@ -24,6 +24,7 @@
         <action
             android:id="@+id/itemToImageDetailFragment"
             app:destination="@id/imageDetailFragment" />
+
     </fragment>
 
     <fragment

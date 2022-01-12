@@ -5,4 +5,7 @@
     <string name="sign_out">Выйти из аккаунта</string>
     <string name="group_detail_empty_wall">Нет записей</string>
     <string name="wall_item_no_content">Пост не содержит текста или изображений</string>
+    <string name="fab_create_post">Добавить пост</string>
+    <string name="create_post">Добавить пост</string>
+    <string name="add_at_least_one_image">Добавьте хотя бы одно изображение</string>
 </resources>

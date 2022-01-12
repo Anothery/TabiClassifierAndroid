@@ -9,14 +9,6 @@ plugins {
 
 
 android {
-    signingConfigs {
-        release {
-            storeFile file('C:\\test.jks')
-            storePassword '123456'
-            keyAlias 'key0'
-            keyPassword '123456'
-        }
-    }
     compileSdkVersion compile_sdk_version
 
     defaultConfig {
@@ -106,6 +98,9 @@ dependencies {
 
     // Time utils
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.4.Final'
+
+    // Security
+    implementation 'com.github.fondesa:kpermissions:3.3.0'
 
     // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
 }

@@ -3,8 +3,8 @@ buildscript {
         kotlin_version = "1.5.21"
 
         min_sdk_version = 21
-        target_sdk_version = 30
-        compile_sdk_version = 30
+        target_sdk_version = 31
+        compile_sdk_version = 31
 
         // Core
         app_compat_version = "1.2.0"

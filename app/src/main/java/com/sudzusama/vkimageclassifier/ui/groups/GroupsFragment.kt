@@ -17,6 +17,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentGroupsBinding
+import com.sudzusama.vkimageclassifier.ui.groupdetail.GroupDetailFragment
 import com.sudzusama.vkimageclassifier.utils.ext.getQueryTextChangeStateFlow
 import com.sudzusama.vkimageclassifier.utils.ext.hideKeyboard
 import com.sudzusama.vkimageclassifier.utils.ext.shortToast
@@ -67,7 +68,10 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
 
     private fun showGroupDetail(id: Int) {
         activity?.findNavController(R.id.navHostFragment)
-            ?.navigate(R.id.action_groupsFragment_to_groupDetailFragment, bundleOf("groupId" to id))
+            ?.navigate(
+                R.id.action_groupsFragment_to_groupDetailFragment,
+                bundleOf(GroupDetailFragment.GROUP_ID to id)
+            )
     }
 
 
