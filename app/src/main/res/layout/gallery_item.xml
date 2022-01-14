@@ -14,8 +14,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/roundedImageView"
-        app:srcCompat="@drawable/group_stub_avatar" />
+        app:shapeAppearanceOverlay="@style/roundedImageView" />
 
     <FrameLayout
         android:id="@+id/flSelected"

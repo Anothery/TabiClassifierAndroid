@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sudzusama.vkimageclassifier.utils.DisallowInterceptView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,9 +45,33 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_pictures"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:layout_gravity="center" />
+
+                <ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
+                    android:id="@+id/rv_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp"
+                    android:layout_gravity="center"
+                    app:spi_dotColor="@color/colorOnPrimaryDisabled"
+                    app:spi_dotSelectedColor="@color/colorOnPrimary"
+                    app:spi_visibleDotCount="11"
+                    app:spi_visibleDotThreshold="1" />
+            </LinearLayout>
+
+
             <FrameLayout
+                android:id="@+id/fl_empty_picture"
                 android:layout_width="180dp"
-                android:layout_height="240dp"
+                android:layout_height="250dp"
                 android:layout_gravity="center"
                 android:background="@drawable/rounded_stub">
 
@@ -57,18 +83,18 @@
                     android:textAlignment="center" />
             </FrameLayout>
 
-
         </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvGallery"
+            android:id="@+id/rv_gallery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
             android:background="@drawable/gallery_on_sheet_bg"
             android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
             android:paddingTop="8dp" />
 
 
     </LinearLayout>
-</FrameLayout>
+</com.sudzusama.vkimageclassifier.utils.DisallowInterceptView>

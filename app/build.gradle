@@ -84,6 +84,7 @@ dependencies {
 
     // Material
     implementation "com.google.android.material:material:$material_version"
+    implementation "ru.tinkoff.scrollingpagerindicator:scrollingpagerindicator:1.2.1"
 
     // Image
     implementation "com.github.bumptech.glide:glide:$glide_version"
@@ -101,6 +102,7 @@ dependencies {
 
     // Security
     implementation 'com.github.fondesa:kpermissions:3.3.0'
+
 
     // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
 }

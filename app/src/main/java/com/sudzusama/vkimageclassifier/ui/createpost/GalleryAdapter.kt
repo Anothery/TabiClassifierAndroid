@@ -1,5 +1,6 @@
 package com.sudzusama.vkimageclassifier.ui.createpost
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +41,7 @@ class GalleryAdapter(
     inner class ViewHolder(private val binding: GalleryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("ClickableViewAccessibility")
         fun bind(galleryItem: GalleryItem, position: Int) {
             if (galleryItem.selected) {
                 binding.flSelected.animate().alpha(1f)
@@ -52,6 +54,7 @@ class GalleryAdapter(
             }
             glide.load(galleryItem.uri).centerCrop().into(binding.ivPicture)
             binding.ivPicture.setOnClickListener { onItemClicked(galleryItem, position) }
+
         }
 
         fun recycle() {
