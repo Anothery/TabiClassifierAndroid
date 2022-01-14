@@ -1,20 +1,15 @@
-package com.sudzusama.vkimageclassifier.utils.ext
+package com.sudzusama.vkimageclassifier.utils.view
 
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.SearchView
 import android.widget.Toast
-import androidx.annotation.Px
-import androidx.core.view.marginTop
 import androidx.core.view.updateLayoutParams
-import androidx.fragment.app.Fragment
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

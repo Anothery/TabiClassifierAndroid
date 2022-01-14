@@ -18,8 +18,8 @@ import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryAdapter
 import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryItem
 import com.sudzusama.vkimageclassifier.ui.createpost.pictures.Picture
 import com.sudzusama.vkimageclassifier.ui.createpost.pictures.PicturesAdapter
-import com.sudzusama.vkimageclassifier.utils.ext.gone
-import com.sudzusama.vkimageclassifier.utils.ext.visible
+import com.sudzusama.vkimageclassifier.utils.view.gone
+import com.sudzusama.vkimageclassifier.utils.view.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 

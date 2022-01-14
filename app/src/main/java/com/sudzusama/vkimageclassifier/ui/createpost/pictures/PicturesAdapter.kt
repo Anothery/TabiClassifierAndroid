@@ -1,9 +1,11 @@
 package com.sudzusama.vkimageclassifier.ui.createpost.pictures
 
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.doOnNextLayout
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
@@ -13,6 +15,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.sudzusama.vkimageclassifier.databinding.CreatePostPictureItemBinding
+import com.sudzusama.vkimageclassifier.utils.view.dominantcolor.DominantColor
 
 class PicturesAdapter(
     private val glide: RequestManager,
@@ -73,6 +76,9 @@ class PicturesAdapter(
                             isFirstResource: Boolean
                         ): Boolean {
                             binding.fabRemove.animate().alpha(1f)
+                            binding.dominantColorPalette.updateLayoutParams {
+                                width = resource?.intrinsicWidth ?: 0
+                            }
                             return false
                         }
 

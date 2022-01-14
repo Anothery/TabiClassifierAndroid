@@ -8,7 +8,7 @@ import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
 import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryItem
 import com.sudzusama.vkimageclassifier.ui.createpost.pictures.Picture
 import com.sudzusama.vkimageclassifier.utils.FileUtils
-import com.sudzusama.vkimageclassifier.utils.SingleLiveEvent
+import com.sudzusama.vkimageclassifier.utils.view.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,10 +25,12 @@ class CreatePostViewModel @Inject constructor(
     private val _pictures = MutableLiveData<List<Picture>>(listOf())
     val pictures: LiveData<List<Picture>> get() = _pictures
 
-    private val _selectedItem = SingleLiveEvent<Int>()
+    private val _selectedItem =
+        SingleLiveEvent<Int>()
     val selectedItem: LiveData<Int> get() = _selectedItem
 
-    private val _deselectedItem = SingleLiveEvent<Int>()
+    private val _deselectedItem =
+        SingleLiveEvent<Int>()
     val deselectedItem: LiveData<Int> get() = _deselectedItem
 
     init {

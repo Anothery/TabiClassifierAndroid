@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.core.view.doOnPreDraw
-import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
@@ -14,10 +13,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentImageDetailParentBinding
-import com.sudzusama.vkimageclassifier.utils.OnBackPressedListener
-import com.sudzusama.vkimageclassifier.utils.ext.invisible
-import com.sudzusama.vkimageclassifier.utils.ext.toDp
-import com.sudzusama.vkimageclassifier.utils.ext.visible
+import com.sudzusama.vkimageclassifier.utils.view.OnBackPressedListener
+import com.sudzusama.vkimageclassifier.utils.view.toDp
+import com.sudzusama.vkimageclassifier.utils.view.visible
 
 class ImageDetailParentFragment(
     private val images: List<ImageDetail>,

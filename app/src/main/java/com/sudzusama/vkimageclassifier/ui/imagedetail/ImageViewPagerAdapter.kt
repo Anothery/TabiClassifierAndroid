@@ -15,10 +15,10 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.sudzusama.vkimageclassifier.databinding.ImageDetailItemBinding
-import com.sudzusama.vkimageclassifier.utils.ext.addGravity
-import com.sudzusama.vkimageclassifier.utils.ext.getStatusBarHeight
-import com.sudzusama.vkimageclassifier.utils.ext.removeGravity
-import com.sudzusama.vkimageclassifier.utils.ext.toPx
+import com.sudzusama.vkimageclassifier.utils.view.addGravity
+import com.sudzusama.vkimageclassifier.utils.view.getStatusBarHeight
+import com.sudzusama.vkimageclassifier.utils.view.removeGravity
+import com.sudzusama.vkimageclassifier.utils.view.toPx
 import kotlin.math.abs
 
 class ImageViewPagerAdapter(

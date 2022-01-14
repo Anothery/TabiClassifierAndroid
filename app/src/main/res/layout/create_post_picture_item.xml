@@ -11,7 +11,7 @@
         android:layout_gravity="center">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabRemove"
+            android:id="@+id/fab_remove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -21,14 +21,26 @@
             app:tint="@color/colorOnPrimary" />
 
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/ivPicture"
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_margin="20dp"
-            app:shapeAppearanceOverlay="@style/roundedImageView"
-            tools:src="@drawable/group_stub_avatar" />
-    </FrameLayout>
+            android:layout_margin="16dp">
 
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:shapeAppearanceOverlay="@style/roundedImageView"
+                tools:src="@drawable/group_stub_avatar" />
+
+            <com.sudzusama.vkimageclassifier.utils.view.dominantcolor.DominantColorPalette
+               android:id="@+id/dominant_color_palette"
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                app:bottomCorners="16"
+                android:layout_gravity="bottom" />
+        </FrameLayout>
+
+    </FrameLayout>
 
 </FrameLayout>

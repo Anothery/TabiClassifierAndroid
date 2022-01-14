@@ -18,9 +18,9 @@ import com.bumptech.glide.Glide
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentGroupsBinding
 import com.sudzusama.vkimageclassifier.ui.groupdetail.GroupDetailFragment
-import com.sudzusama.vkimageclassifier.utils.ext.getQueryTextChangeStateFlow
-import com.sudzusama.vkimageclassifier.utils.ext.hideKeyboard
-import com.sudzusama.vkimageclassifier.utils.ext.shortToast
+import com.sudzusama.vkimageclassifier.utils.view.getQueryTextChangeStateFlow
+import com.sudzusama.vkimageclassifier.utils.view.hideKeyboard
+import com.sudzusama.vkimageclassifier.utils.view.shortToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview

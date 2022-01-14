@@ -1,4 +1,4 @@
-package com.sudzusama.vkimageclassifier.utils;
+package com.sudzusama.vkimageclassifier.utils.view;
 
 /*
  *  Copyright 2017 Google Inc.

@@ -7,7 +7,7 @@ import com.sudzusama.vkimageclassifier.domain.model.GroupShort
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.domain.usecase.GroupsInteractor
 import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
-import com.sudzusama.vkimageclassifier.utils.SingleLiveEvent
+import com.sudzusama.vkimageclassifier.utils.view.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -22,7 +22,8 @@ class GroupsViewModel @Inject constructor(
     private val _groups = MutableLiveData<List<GroupShort>>()
     val groups: LiveData<List<GroupShort>> get() = _groups
 
-    private val _showGroupDetail = SingleLiveEvent<Int>()
+    private val _showGroupDetail =
+        SingleLiveEvent<Int>()
     val showGroupDetail: LiveData<Int> get() = _showGroupDetail
 
     fun onGroupClicked(id: Int) {

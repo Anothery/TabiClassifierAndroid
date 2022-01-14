@@ -3,7 +3,6 @@ package com.sudzusama.vkimageclassifier.ui.groupdetail
 import android.Manifest
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -22,7 +21,7 @@ import com.sudzusama.vkimageclassifier.ui.createpost.CreatePostFragment
 import com.sudzusama.vkimageclassifier.ui.groupdetail.header.HeaderAdapter
 import com.sudzusama.vkimageclassifier.ui.groupdetail.wall.WallAdapter
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetailParentFragment
-import com.sudzusama.vkimageclassifier.utils.ext.shortToast
+import com.sudzusama.vkimageclassifier.utils.view.shortToast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

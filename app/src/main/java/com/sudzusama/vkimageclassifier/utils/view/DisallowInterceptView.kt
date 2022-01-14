@@ -1,4 +1,4 @@
-package com.sudzusama.vkimageclassifier.utils
+package com.sudzusama.vkimageclassifier.utils.view
 
 import android.content.Context
 import android.util.AttributeSet

@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="DominantColorPalette">
+        <attr name="topCorners" format="float" />
+        <attr name="bottomCorners" format="float" />
+    </declare-styleable>
+</resources>

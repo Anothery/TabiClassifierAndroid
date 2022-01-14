@@ -2,14 +2,13 @@ package com.sudzusama.vkimageclassifier.ui.groupdetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
 import com.sudzusama.vkimageclassifier.domain.model.WallItem
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.domain.usecase.GroupsInteractor
 import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
-import com.sudzusama.vkimageclassifier.utils.SingleLiveEvent
+import com.sudzusama.vkimageclassifier.utils.view.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -35,7 +34,8 @@ class GroupDetailViewModel @Inject constructor(
     private val _showStartProgress = MutableLiveData(true)
     val showStartProgress: LiveData<Boolean> get() = _showStartProgress
 
-    private val _showCreateScreen = SingleLiveEvent<Int>()
+    private val _showCreateScreen =
+        SingleLiveEvent<Int>()
     val showCreateScreen: LiveData<Int> get() = _showCreateScreen
 
     private var wallId: Int = -1
