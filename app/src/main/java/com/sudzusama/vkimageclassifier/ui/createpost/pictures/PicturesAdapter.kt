@@ -1,4 +1,4 @@
-package com.sudzusama.vkimageclassifier.ui.createpost
+package com.sudzusama.vkimageclassifier.ui.createpost.pictures
 
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
@@ -29,13 +29,13 @@ class PicturesAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PicturesAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             CreatePostPictureItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: PicturesAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(pictures[position])
     }
 

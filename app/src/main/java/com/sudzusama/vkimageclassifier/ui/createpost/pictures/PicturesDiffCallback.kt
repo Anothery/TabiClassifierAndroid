@@ -1,4 +1,4 @@
-package com.sudzusama.vkimageclassifier.ui.createpost
+package com.sudzusama.vkimageclassifier.ui.createpost.pictures
 
 import androidx.recyclerview.widget.DiffUtil
 

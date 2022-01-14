@@ -3,6 +3,8 @@ package com.sudzusama.vkimageclassifier.ui.groupdetail.wall
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnPreDrawListener
+import androidx.core.view.doOnNextLayout
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -53,7 +55,6 @@ class PostImageAdapter(
                         VIEW_TYPE_FULL -> lp.apply {
                             isFullSpan = true
                             width = parent.width
-                            height = heightPx
                         }
                         VIEW_TYPE_HALF -> lp.apply {
                             isFullSpan = false
@@ -88,10 +89,31 @@ class PostImageAdapter(
         holder.bind(images[position], position)
     }
 
+    override fun onViewRecycled(holder: PostImageViewHolder) {
+        super.onViewRecycled(holder)
+        holder.recycle()
+    }
+
     inner class PostImageViewHolder(val binding: GroupWallImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(image: WallImageItem, position: Int) {
+            binding.root.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    if (getItemViewType(position) == VIEW_TYPE_FULL) {
+                        val ratio = 1f * image.height / image.width
+                        binding.ivWallImage.updateLayoutParams { height = (width * ratio).toInt() }
+                    }
+                    glide.load(image.url)
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .transition(DrawableTransitionOptions.withCrossFade(500))
+                        .into(binding.ivWallImage)
+                    binding.root.viewTreeObserver.removeOnPreDrawListener(this)
+                    return true
+                }
+            })
+
             binding.ivWallImage.setOnClickListener {
                 val imagesList = mutableListOf<ImageDetail>()
                 currentRecyclerView?.let { rv ->
@@ -103,30 +125,12 @@ class PostImageAdapter(
                         }
                     }
                 }
-
                 onImageClicked(imagesList, position)
             }
+        }
 
-            binding.root.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    if (images.size == 1) {
-                        val ratio = 1f * image.height / image.width
-                        binding.root.layoutParams = binding.root.layoutParams.apply {
-                            height = (width * ratio).toInt()
-                        }
-                    }
-                    binding.root.viewTreeObserver.removeOnPreDrawListener(this)
-                    return true
-                }
-            })
-
-            glide.load(image.url)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .transition(DrawableTransitionOptions.withCrossFade(500))
-                .apply {
-                    if (getItemViewType(position) == VIEW_TYPE_FULL) centerInside().into(binding.ivWallImage)
-                    else centerCrop().into(binding.ivWallImage)
-                }
+        fun recycle() {
+            binding.ivWallImage.apply { glide.clear(this) }
         }
     }
 }

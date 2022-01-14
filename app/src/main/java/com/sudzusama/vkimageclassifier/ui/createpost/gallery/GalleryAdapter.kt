@@ -1,4 +1,4 @@
-package com.sudzusama.vkimageclassifier.ui.createpost
+package com.sudzusama.vkimageclassifier.ui.createpost.gallery
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -13,12 +13,12 @@ class GalleryAdapter(
     private val onItemClicked: (GalleryItem, Int) -> Unit
 ) : RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = GalleryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: GalleryAdapter.ViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(galleryItems[position], position)
 
     override fun getItemCount(): Int = galleryItems.size

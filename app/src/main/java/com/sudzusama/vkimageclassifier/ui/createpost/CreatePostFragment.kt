@@ -14,6 +14,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentCreatePostBinding
+import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryAdapter
+import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryItem
+import com.sudzusama.vkimageclassifier.ui.createpost.pictures.Picture
+import com.sudzusama.vkimageclassifier.ui.createpost.pictures.PicturesAdapter
 import com.sudzusama.vkimageclassifier.utils.ext.gone
 import com.sudzusama.vkimageclassifier.utils.ext.visible
 import dagger.hilt.android.AndroidEntryPoint

@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
+import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryItem
+import com.sudzusama.vkimageclassifier.ui.createpost.pictures.Picture
 import com.sudzusama.vkimageclassifier.utils.FileUtils
 import com.sudzusama.vkimageclassifier.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
