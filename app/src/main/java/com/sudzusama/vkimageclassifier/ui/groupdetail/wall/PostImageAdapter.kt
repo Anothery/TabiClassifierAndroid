@@ -119,10 +119,14 @@ class PostImageAdapter(
                     return true
                 }
             })
+
             glide.load(image.url)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .transition(DrawableTransitionOptions.withCrossFade(500))
-                .into(binding.ivWallImage)
+                .apply {
+                    if (getItemViewType(position) == VIEW_TYPE_FULL) centerInside().into(binding.ivWallImage)
+                    else centerCrop().into(binding.ivWallImage)
+                }
         }
     }
 }

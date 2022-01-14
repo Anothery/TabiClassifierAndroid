@@ -21,11 +21,12 @@
             app:tint="@color/colorOnPrimary" />
 
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivPicture"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="20dp"
+            app:shapeAppearanceOverlay="@style/roundedImageView"
             tools:src="@drawable/group_stub_avatar" />
     </FrameLayout>
 
