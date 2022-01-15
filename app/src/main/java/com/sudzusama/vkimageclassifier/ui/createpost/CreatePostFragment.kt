@@ -19,6 +19,7 @@ import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryItem
 import com.sudzusama.vkimageclassifier.ui.createpost.pictures.Picture
 import com.sudzusama.vkimageclassifier.ui.createpost.pictures.PicturesAdapter
 import com.sudzusama.vkimageclassifier.utils.view.gone
+import com.sudzusama.vkimageclassifier.utils.view.shortToast
 import com.sudzusama.vkimageclassifier.utils.view.visible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,6 +46,7 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         viewModel.pictures.observe(viewLifecycleOwner, ::onPicturesUpdated)
         viewModel.selectedItem.observe(viewLifecycleOwner) { galleryAdapter?.selectItem(it) }
         viewModel.deselectedItem.observe(viewLifecycleOwner) { galleryAdapter?.deselectItem(it) }
+        viewModel.errorMessage.observe(viewLifecycleOwner) { context?.shortToast(it) }
         binding.btnClose.setOnClickListener { dismiss() }
     }
 
@@ -98,7 +100,7 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     }
 
     private fun initPictures() {
-        picturesAdapter = PicturesAdapter(Glide.with(this)) { viewModel.onRemovePictureClicked(it) }
+        picturesAdapter = PicturesAdapter(Glide.with(this), viewModel::onRemovePictureClicked, requireContext())
         binding.rvPictures.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rvPictures.adapter = picturesAdapter

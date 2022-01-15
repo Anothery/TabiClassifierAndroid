@@ -1,9 +1,10 @@
 package com.sudzusama.vkimageclassifier.ui.createpost.pictures
 
-import android.graphics.Color
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.DiffUtil
@@ -14,12 +15,17 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.CreatePostPictureItemBinding
-import com.sudzusama.vkimageclassifier.utils.view.dominantcolor.DominantColor
+import com.sudzusama.vkimageclassifier.domain.Genre
+import com.sudzusama.vkimageclassifier.utils.view.gone
+import com.sudzusama.vkimageclassifier.utils.view.invisible
+import com.sudzusama.vkimageclassifier.utils.view.visible
 
 class PicturesAdapter(
     private val glide: RequestManager,
-    private val onRemoveClicked: (Picture) -> Unit
+    private val onRemoveClicked: (Picture) -> Unit,
+    private val context: Context
 ) :
     RecyclerView.Adapter<PicturesAdapter.ViewHolder>() {
 
@@ -45,16 +51,19 @@ class PicturesAdapter(
     override fun getItemCount(): Int = pictures.size
 
     override fun onViewRecycled(holder: ViewHolder) {
-        holder.recycle()
         super.onViewRecycled(holder)
+        holder.recycle()
     }
 
-    inner class ViewHolder(val binding: CreatePostPictureItemBinding) :
+    inner class ViewHolder(private val binding: CreatePostPictureItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(picture: Picture) {
-            binding.fabRemove.animate().alpha(0f)
+            binding.dominantColorPalette.gone()
+            binding.tvGenre.invisible()
+            binding.fabRemove.gone()
             binding.fabRemove.setOnClickListener { onRemoveClicked(picture) }
+            binding.ivPicture.requestLayout()
             binding.ivPicture.doOnNextLayout {
                 glide.load(picture.uri)
                     .transition(DrawableTransitionOptions.withCrossFade(500))
@@ -75,8 +84,32 @@ class PicturesAdapter(
                             dataSource: DataSource?,
                             isFirstResource: Boolean
                         ): Boolean {
-                            binding.fabRemove.animate().alpha(1f)
-                            binding.dominantColorPalette.updateLayoutParams {
+                            if (picture.isLoading) {
+                                showClassifyingBackground()
+                            } else {
+                                hideClassifyingBackground()
+                            }
+                            picture.detail?.let { detail ->
+                                binding.dominantColorPalette.scaleX = 0f
+                                binding.dominantColorPalette.alpha = 0f
+                                binding.dominantColorPalette.visible()
+                                binding.dominantColorPalette.setColors(detail.colors)
+                                binding.dominantColorPalette.updateLayoutParams {
+                                    width = resource?.intrinsicWidth ?: 0
+                                }
+                                binding.dominantColorPalette.animate().alpha(1f).scaleX(1f)
+                                binding.tvGenre.text = when (detail.genre) {
+                                    Genre.Frame -> context.getString(R.string.genre_anime_frame)
+                                    Genre.Manga -> context.getString(R.string.genre_manga)
+                                    Genre.Art -> context.getString(R.string.genre_art)
+                                    Genre.Unknown -> context.getString(R.string.genre_unknown)
+                                }
+                                binding.tvGenre.alpha = 0f
+                                binding.tvGenre.visible()
+                                binding.tvGenre.animate().alpha(1f).scaleX(1f).scaleY(1f)
+                            }
+                            binding.fabRemove.visible()
+                            binding.flClassifying.updateLayoutParams {
                                 width = resource?.intrinsicWidth ?: 0
                             }
                             return false
@@ -86,8 +119,19 @@ class PicturesAdapter(
             }
         }
 
-        fun recycle() {
-            binding.ivPicture.apply { glide.clear(this) }
+        private fun showClassifyingBackground() {
+            binding.flClassifying.alpha = 0f
+            binding.flClassifying.visible()
+            binding.flClassifying.animate().alpha(1f)
         }
+
+        private fun hideClassifyingBackground() {
+            binding.flClassifying.animate().alpha(0f).withEndAction { binding.flClassifying.gone() }
+        }
+
+        fun recycle() {
+            glide.clear(binding.ivPicture)
+        }
+
     }
 }

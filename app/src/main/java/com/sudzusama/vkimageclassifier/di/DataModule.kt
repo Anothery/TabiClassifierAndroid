@@ -2,9 +2,11 @@ package com.sudzusama.vkimageclassifier.di
 
 import android.content.SharedPreferences
 import com.sudzusama.vkimageclassifier.data.local.preferences.VKSessionPreferences
+import com.sudzusama.vkimageclassifier.data.repository.TabiRepository
 import com.sudzusama.vkimageclassifier.data.repository.VkAuthRepository
 import com.sudzusama.vkimageclassifier.data.repository.VkGroupsRepository
 import com.sudzusama.vkimageclassifier.domain.repository.AuthRepository
+import com.sudzusama.vkimageclassifier.domain.repository.ClassifyRepository
 import com.sudzusama.vkimageclassifier.domain.repository.GroupsRepository
 import dagger.Module
 import dagger.Provides
@@ -23,6 +25,10 @@ class DataModule {
     @Provides
     @Singleton
     fun provideAuthRepository(vkAuthRepository: VkAuthRepository): AuthRepository = vkAuthRepository
+
+    @Provides
+    @Singleton
+    fun provideTabiRepository(tabiRepository: TabiRepository): ClassifyRepository = tabiRepository
 
     @Provides
     @Singleton

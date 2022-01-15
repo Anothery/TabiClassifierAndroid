@@ -15,7 +15,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true">
@@ -26,8 +27,8 @@
         </activity>
 
         <activity
-            android:exported="true"
             android:name="com.vk.api.sdk.ui.VKWebViewAuthActivity"
+            android:exported="true"
             android:theme="@style/VK.Material"
             tools:replace="android:theme" />
 

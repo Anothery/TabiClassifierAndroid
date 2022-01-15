@@ -49,7 +49,7 @@ fun View.visible() {
 }
 
 fun View.invisible() {
-    this.visibility = View.VISIBLE
+    this.visibility = View.INVISIBLE
 }
 
 fun Context.getStatusBarHeight(): Int {

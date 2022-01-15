@@ -3,10 +3,8 @@ package com.sudzusama.vkimageclassifier.data.mapper
 import com.sudzusama.vkimageclassifier.data.response.GroupDetailResponse
 import com.sudzusama.vkimageclassifier.data.response.GroupWallResponse
 import com.sudzusama.vkimageclassifier.data.response.GroupsListResponse
-import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
-import com.sudzusama.vkimageclassifier.domain.model.GroupShort
-import com.sudzusama.vkimageclassifier.domain.model.WallImageItem
-import com.sudzusama.vkimageclassifier.domain.model.WallItem
+import com.sudzusama.vkimageclassifier.data.response.TabiClassifyResponse
+import com.sudzusama.vkimageclassifier.domain.model.*
 import kotlin.math.abs
 
 fun GroupsListResponse.mapToDomain(): List<GroupShort> = this.response.groups.map {
@@ -26,6 +24,16 @@ fun GroupsListResponse.mapToDomain(): List<GroupShort> = this.response.groups.ma
         it.activity
     )
 }
+
+fun TabiClassifyResponse.mapToDomain(): ClassifyResponse =
+    ClassifyResponse(
+        colors.map { ClassifyResponse.Color(it.meanHexColor, it.name, it.percentage) },
+        ClassifyResponse.Predictions(
+            this.predictions.art,
+            this.predictions.frame,
+            this.predictions.manga
+        )
+    )
 
 fun GroupDetailResponse.mapToDomain(): GroupDetail = with(this.response[0]) {
     return@with GroupDetail(

@@ -9,6 +9,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.utils.view.invisible
+import com.sudzusama.vkimageclassifier.utils.view.toPx
 import com.sudzusama.vkimageclassifier.utils.view.visible
 
 class DominantColorPalette : View {
@@ -96,8 +97,8 @@ class DominantColorPalette : View {
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         val a = context.obtainStyledAttributes(attrs, R.styleable.DominantColorPalette, defStyle, 0)
-        _topCornersRadius = a.getFloat(R.styleable.DominantColorPalette_topCorners, 0f)
-        _bottomCornersRadius = a.getFloat(R.styleable.DominantColorPalette_bottomCorners, 0f)
+        _topCornersRadius = a.getFloat(R.styleable.DominantColorPalette_topCorners, 0f).toPx
+        _bottomCornersRadius = a.getFloat(R.styleable.DominantColorPalette_bottomCorners, 0f).toPx
         invalidateCorners()
         a.recycle()
     }
@@ -120,30 +121,13 @@ class DominantColorPalette : View {
         val contentHeight = height - paddingTop - paddingBottom
 
         var left = 0f
+        path.reset()
+        paint.reset()
 
-        colors.forEachIndexed { index, it ->
+        colors.forEach {
             val itemWidth = contentWidth * it.percent
             paint.color = it.color
-            path.reset()
-            var corners = noCorners
-            if (colors.size == 1 && index == 1) {
-                corners = fullCorners
-            } else if (colors.size > 1) {
-                when (index) {
-                    0 -> corners = leftCorners
-                    colors.lastIndex -> corners = rightCorners
-                }
-            }
-
-            path.addRoundRect(
-                left,
-                0f,
-                left + itemWidth,
-                contentHeight.toFloat(),
-                corners,
-                Path.Direction.CW
-            )
-            canvas.drawPath(path, paint)
+            canvas.drawRect(left, 0f, left + itemWidth, contentHeight.toFloat(), paint)
             left += itemWidth
         }
 

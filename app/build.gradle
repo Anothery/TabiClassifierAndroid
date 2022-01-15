@@ -37,6 +37,7 @@ android {
         debug {
             resValue "integer", "com_vk_sdk_AppId", vkAppId
             buildConfigField "String", "VK_API_URL", "\"https://api.vk.com/method/\""
+            buildConfigField "String", "TABI_API_URL", "\"http://80.249.146.176/\""
         }
         release {
             minifyEnabled true

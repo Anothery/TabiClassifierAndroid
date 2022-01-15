@@ -10,4 +10,9 @@
     <string name="fab_create_post">Create post</string>
     <string name="create_post">Create post</string>
     <string name="add_at_least_one_image">Add at least one picture</string>
+    <string name="processing">Processing</string>
+    <string name="genre_anime_frame">Anime frame</string>
+    <string name="genre_manga">Manga frame</string>
+    <string name="genre_art">Art</string>
+    <string name="genre_unknown">Unknown</string>
 </resources>

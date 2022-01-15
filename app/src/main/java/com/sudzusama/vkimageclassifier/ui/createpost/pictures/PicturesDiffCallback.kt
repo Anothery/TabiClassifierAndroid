@@ -8,13 +8,11 @@ class PicturesDiffCallback(private val oldList: List<Picture>, private val newLi
 
     override fun getNewListSize(): Int = newList.size
 
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-        oldList[oldItemPosition].uri == newList[newItemPosition].uri
-
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition].uri == newList[newItemPosition].uri
+    }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldItem = oldList[oldItemPosition]
-        val newItem = newList[newItemPosition]
-        return oldItem.hashCode() == newItem.hashCode()
+        return oldList[oldItemPosition] == newList[newItemPosition]
     }
 }
