@@ -14,6 +14,7 @@ import com.sudzusama.vkimageclassifier.databinding.FragmentAuthBinding
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
+import com.vk.api.sdk.exceptions.VKAuthException
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -40,9 +41,10 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 viewModel.onLoginSuccess(token)
             }
 
-            override fun onLoginFailed(errorCode: Int) {
-                viewModel.onError(errorCode)
+            override fun onLoginFailed(authException: VKAuthException) {
+                viewModel.onError(authException)
             }
+
         }
         if (data == null || !VK.onActivityResult(requestCode, resultCode, data, callback)) {
             super.onActivityResult(requestCode, resultCode, data)

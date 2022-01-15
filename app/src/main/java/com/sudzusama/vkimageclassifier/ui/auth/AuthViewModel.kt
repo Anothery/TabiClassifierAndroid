@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
 import com.vk.api.sdk.auth.VKAccessToken
+import com.vk.api.sdk.exceptions.VKAuthException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -14,15 +15,15 @@ class AuthViewModel @Inject constructor(private val authInteractor: AuthInteract
     BaseViewModel(authInteractor) {
 
     fun onLoginSuccess(token: VKAccessToken) {
-        authInteractor.saveSession(token.accessToken, token.userId)
+        authInteractor.saveSession(token.accessToken, token.userId.value.toInt()) // TODO change userId to long
     }
 
     fun onLogin(activityContext: Activity) {
         authInteractor.login(activityContext)
     }
 
-    fun onError(errorCode: Int) {
-        val message = "Login error. Error code: $errorCode"
+    fun onError(authException: VKAuthException) {
+        val message = "Login error: ${authException.message}"
         _errorMessage.value = message
     }
 

@@ -81,7 +81,8 @@ dependencies {
     kapt "androidx.hilt:hilt-compiler:$hilt_compiler_version"
 
     // VK SDK
-    implementation "com.vk:androidsdk:$vk_sdk_version"
+    implementation "com.vk:android-sdk-core:$vk_sdk_version"
+
 
     // Material
     implementation "com.google.android.material:material:$material_version"
