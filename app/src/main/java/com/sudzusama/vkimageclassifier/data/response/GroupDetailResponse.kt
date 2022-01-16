@@ -21,6 +21,8 @@ data class GroupDetailResponse(
         val isClosed: Int = 0,
         @SerialName("is_member")
         val isMember: Int = 0,
+        @SerialName("can_post")
+        val canPost: Int = 0,
         @SerialName("name")
         val name: String = "",
         @SerialName("photo_100")

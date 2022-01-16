@@ -14,4 +14,9 @@
     <string name="genre_art">Арт</string>
     <string name="genre_unknown">Неизвестно</string>
     <string name="uploading">Загрузка</string>
+    <string name="suggest_post">Предложить пост</string>
+    <string name="button_set_default_tags">Добавить базовые теги</string>
+    <string name="button_send_post">Отправить пост</string>
+    <string name="button_recognition">Включить/выключить автоматическое распознавание тегов</string>
+    <string name="button_close">Закрыть</string>
 </resources>

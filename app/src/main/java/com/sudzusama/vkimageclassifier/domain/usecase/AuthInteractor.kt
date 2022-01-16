@@ -20,6 +20,7 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
         authRepository.login(activityContext, scopes)
     }
 
+
     fun logout() {
         authRepository.logout()
     }

@@ -42,7 +42,13 @@ fun GroupDetailResponse.mapToDomain(): GroupDetail = with(this.response[0]) {
         this.photo50,
         this.photo100,
         this.photo200,
-        this.isAdmin != 0
+        this.isAdmin != 0,
+        this.canPost != 0,
+        when (type) {
+            "event" -> GroupTypes.EVENT
+            "page" -> GroupTypes.PAGE
+            else -> GroupTypes.GROUP
+        }
     )
 }
 

@@ -34,9 +34,8 @@ class GroupDetailViewModel @Inject constructor(
     private val _showStartProgress = MutableLiveData(true)
     val showStartProgress: LiveData<Boolean> get() = _showStartProgress
 
-    private val _showCreateScreen =
-        SingleLiveEvent<Int>()
-    val showCreateScreen: LiveData<Int> get() = _showCreateScreen
+    private val _showCreateScreen = SingleLiveEvent<GroupDetail>()
+    val showCreateScreen: LiveData<GroupDetail> get() = _showCreateScreen
 
     private var wallId: Int = -1
 
@@ -115,13 +114,14 @@ class GroupDetailViewModel @Inject constructor(
             val list = wallItems.value?.toMutableList() ?: mutableListOf()
             val loadedData = groupsInteractor.getGroupWall(wallId, 0)
             if (list.isEmpty()) _wallItems.value = loadedData.sortedByDescending { it.date }
-            else _wallItems.value = list.apply { addAll(loadedData) }.distinctBy { it.id }.sortedByDescending { it.date }
+            else _wallItems.value = list.apply { addAll(loadedData) }.distinctBy { it.id }
+                .sortedByDescending { it.date }
         } catch (ex: Exception) {
             _errorMessage.value = ex.message
         }
     }
 
     fun onFabCreateClicked() {
-        viewModelScope.launch { _showCreateScreen.value = wallId }
+        viewModelScope.launch { _showCreateScreen.value = _details.value }
     }
 }

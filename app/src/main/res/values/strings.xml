@@ -16,4 +16,9 @@
     <string name="genre_art">Art</string>
     <string name="genre_unknown">Unknown</string>
     <string name="uploading">Uploading</string>
+    <string name="suggest_post">Suggest a post</string>
+    <string name="button_set_default_tags">Set default tags</string>
+    <string name="button_send_post">Send post</string>
+    <string name="button_recognition">Tags recognition</string>
+    <string name="button_close">Close</string>
 </resources>

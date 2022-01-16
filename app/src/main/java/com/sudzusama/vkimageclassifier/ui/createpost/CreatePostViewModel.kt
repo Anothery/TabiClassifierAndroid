@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sudzusama.vkimageclassifier.domain.Genre
+import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.domain.usecase.ClassifyInteractor
 import com.sudzusama.vkimageclassifier.domain.usecase.GroupsInteractor
@@ -18,7 +19,6 @@ import com.sudzusama.vkimageclassifier.utils.view.SingleLiveEvent
 import com.sudzusama.vkimageclassifier.utils.view.dominantcolor.DominantColor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
 import javax.inject.Inject
 
 @HiltViewModel
@@ -65,8 +65,8 @@ class CreatePostViewModel @Inject constructor(
         }
     }
 
-    fun setGroupId(id: Int) {
-        groupId = id
+    fun setGroupDetails(detail: GroupDetail?) {
+        groupId = detail?.id ?: -1
     }
 
     fun onGalleryItemClicked(item: GalleryItem, position: Int) {
@@ -87,6 +87,10 @@ class CreatePostViewModel @Inject constructor(
 
         } else {
             pictures.value?.let { pictures ->
+                if (pictures.size >= GroupsInteractor.MAX_PICTURES_PER_POST) {
+                    _errorMessage.value = "Нельзя добавить более 10 изображений"
+                    return
+                }
                 viewModelScope.launch {
                     _selectedItem.value = position
 
@@ -214,9 +218,20 @@ class CreatePostViewModel @Inject constructor(
             pictures.value?.let { pictures ->
                 try {
                     groupId?.let { groupId ->
-                        _postingState.value = true
+                        if(pictures.firstOrNull{ it.isLoading } != null) {
+                            _errorMessage.value = "Дождитесь окончания распознавания изображений"
+                            return@launch
+                        }
+
                         val selectedGenre = _genreTags.value?.firstOrNull { it.selected }
                         val selectedColors = _colorTags.value?.filter { it.selected }
+                        val hasTags = !selectedColors.isNullOrEmpty() && selectedGenre != null
+                        val hasPictures = pictures.isNotEmpty()
+                        if(!hasTags && !hasPictures) {
+                            _errorMessage.value = "Добавьте хотя бы одно изображение или тег"
+                            return@launch
+                        }
+                        _postingState.value = true
                         var message = ""
                         if (selectedGenre != null) message = "#" + selectedGenre.name + "\n"
                         if (selectedColors != null && selectedColors.isNotEmpty()) {
@@ -262,7 +277,7 @@ class CreatePostViewModel @Inject constructor(
         _colorTags.value?.let { colors ->
             val newItems = listOf(
                 Tag("bw", Color.BLACK, false),
-                Tag("mixed", Color.YELLOW, false),
+                Tag("mixed", Color.GREEN, false),
                 Tag("white", Color.WHITE, false),
                 Tag("black", Color.BLACK, false),
                 Tag("gray", Color.GRAY, false),
@@ -292,12 +307,12 @@ class CreatePostViewModel @Inject constructor(
 
     fun onGenreCheckUpdate(checked: Boolean, position: Int) = viewModelScope.launch {
         _genreTags.value?.let { tags ->
-            val test =   tags.toMutableList().mapIndexed { i, it ->
+            val test = tags.toMutableList().mapIndexed { i, it ->
                 if (i == position) it.copy(selected = checked)
                 else if (checked && it.selected) it.copy(selected = false)
                 else it
             }.sortedByDescending { it.selected }
-            _genreTags.value =test
+            _genreTags.value = test
         }
     }
 }

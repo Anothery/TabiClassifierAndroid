@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -16,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentCreatePostBinding
+import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
 import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryAdapter
 import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryItem
 import com.sudzusama.vkimageclassifier.ui.createpost.pictures.Picture
@@ -47,16 +49,27 @@ class CreatePostFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.setGroupId(arguments?.getInt(GROUP_ID) ?: -1)
+
+        val details = arguments?.getParcelable<GroupDetail>(GROUP_DETAIL)
         initPictures()
         initGenres()
         initColors()
+
+
+        TooltipCompat.setTooltipText(binding?.btnSetDefaultTags as View, getString(R.string.button_set_default_tags));
+        TooltipCompat.setTooltipText(binding?.btnSave as View, getString(R.string.button_send_post));
+        TooltipCompat.setTooltipText(binding?.btnTagsRecognition as View, getString(R.string.button_recognition));
+        TooltipCompat.setTooltipText(binding?.btnClose as View, getString(R.string.button_close));
+
+        binding?.tvTitle?.text =
+            if (details?.canPost == true) getString(R.string.create_post) else getString(R.string.suggest_post)
         binding?.btnSave?.setOnClickListener { viewModel.onSaveButtonClicked() }
         binding?.btnClose?.setOnClickListener { dismiss() }
         binding?.btnSetDefaultTags?.setOnClickListener { viewModel.onSetDefaultTagsClicked() }
         binding?.btnTagsRecognition?.setOnClickListener { viewModel.onChangeTagsRecognition() }
         binding?.llMain?.layoutTransition?.enableTransitionType(LayoutTransition.CHANGING)
 
+        viewModel.setGroupDetails(details)
         viewModel.galleryItems.observe(viewLifecycleOwner, ::initGallery)
         viewModel.pictures.observe(viewLifecycleOwner, ::onPicturesUpdated)
         viewModel.selectedItem.observe(viewLifecycleOwner) { galleryAdapter?.selectItem(it) }
@@ -221,12 +234,12 @@ class CreatePostFragment : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "CreatePostFragment"
-        const val GROUP_ID = "GROUP_ID"
+        const val GROUP_DETAIL = "GROUP_DETAIL"
         const val ON_POST_CREATED = "ON_POST_CREATED"
 
         @JvmStatic
-        fun newInstance(id: Int) = CreatePostFragment().apply {
-            arguments = Bundle().apply { putInt(GROUP_ID, id) }
+        fun newInstance(detail: GroupDetail) = CreatePostFragment().apply {
+            arguments = Bundle().apply { putParcelable(GROUP_DETAIL, detail) }
         }
     }
 }

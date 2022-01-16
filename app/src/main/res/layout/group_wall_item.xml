@@ -23,18 +23,19 @@
 
         <TextView
             android:id="@+id/tv_poster_name"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
             android:layout_marginStart="8dp"
-            android:gravity="center"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:lines="1"
+            android:fontFamily="sans-serif-medium"
+            android:textAlignment="textStart"
             android:textColor="@color/colorOnPrimary"
             android:textSize="16sp"
             tools:text="Poster name" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/tv_date"
@@ -50,8 +51,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:textSize="16sp"
         tools:text="Some text" />
 

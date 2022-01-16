@@ -3,8 +3,8 @@ package com.sudzusama.vkimageclassifier.ui.groupdetail
 import android.Manifest
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
@@ -17,12 +17,14 @@ import com.fondesa.kpermissions.extension.permissionsBuilder
 import com.fondesa.kpermissions.extension.send
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentGroupDetailBinding
+import com.sudzusama.vkimageclassifier.domain.model.GroupTypes
 import com.sudzusama.vkimageclassifier.domain.model.WallItem
 import com.sudzusama.vkimageclassifier.ui.createpost.CreatePostFragment
 import com.sudzusama.vkimageclassifier.ui.createpost.CreatePostFragment.Companion.ON_POST_CREATED
 import com.sudzusama.vkimageclassifier.ui.groupdetail.header.HeaderAdapter
 import com.sudzusama.vkimageclassifier.ui.groupdetail.wall.WallAdapter
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetailParentFragment
+import com.sudzusama.vkimageclassifier.utils.view.gone
 import com.sudzusama.vkimageclassifier.utils.view.shortToast
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -66,13 +68,34 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
             }
         }
 
-        viewModel.showCreateScreen.observe(viewLifecycleOwner, { id ->
+        viewModel.showCreateScreen.observe(viewLifecycleOwner, { detail ->
             activity?.supportFragmentManager?.let {
-                CreatePostFragment.newInstance(id).show(it, CreatePostFragment.TAG)
+                CreatePostFragment.newInstance(detail).show(it, CreatePostFragment.TAG)
             }
         })
 
         viewModel.details.observe(viewLifecycleOwner, {
+            if (!it.canPost) {
+                if (it.type == GroupTypes.PAGE) {
+                    binding.fabCreate.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.outline_idea_24
+                        )
+                    )
+                } else {
+                    binding.fabCreate.gone()
+                    binding.fabCreate.isEnabled = false
+                }
+            } else {
+                binding.fabCreate.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_create_black_24dp
+                    )
+                )
+            }
+
             binding.btnSettings.visibility = if (it.isAdmin) View.VISIBLE else View.GONE
             binding.tvTitle.text = it.name
             headerAdapter?.setHeaders(listOf(it))
@@ -132,10 +155,12 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
         binding.rvWall.adapter = ConcatAdapter(headerAdapter, wallAdapter)
         binding.rvWall.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy < 0 && !binding.fabCreate.isShown)
-                    binding.fabCreate.show();
-                else if (dy > 0 && binding.fabCreate.isShown)
-                    binding.fabCreate.hide();
+                if (binding.fabCreate.isEnabled) {
+                    if (dy < 0 && !binding.fabCreate.isShown)
+                        binding.fabCreate.show()
+                    else if (dy > 0 && binding.fabCreate.isShown)
+                        binding.fabCreate.hide()
+                }
             }
         })
     }

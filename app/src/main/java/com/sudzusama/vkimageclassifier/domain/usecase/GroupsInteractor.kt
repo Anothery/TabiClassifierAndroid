@@ -17,6 +17,7 @@ class GroupsInteractor @Inject constructor(
         private const val EXTENDED = 1
         const val LIKE_TYPE_POST = "post"
         const val FROM_GROUP = 1
+        const val MAX_PICTURES_PER_POST = 10
     }
 
     suspend fun getGroups(): List<GroupShort> {
@@ -72,6 +73,5 @@ class GroupsInteractor @Inject constructor(
     ) {
         groupsRepository.removeLikeFromItem(API_VERSION, ownerId, itemId, type)
     }
-
 
 }
