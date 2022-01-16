@@ -26,6 +26,4 @@ class AuthViewModel @Inject constructor(private val authInteractor: AuthInteract
         val message = "Login error: ${authException.message}"
         _errorMessage.value = message
     }
-
-
 }

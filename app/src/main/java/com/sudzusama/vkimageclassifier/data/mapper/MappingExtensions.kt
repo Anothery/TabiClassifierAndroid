@@ -27,7 +27,7 @@ fun GroupsListResponse.mapToDomain(): List<GroupShort> = this.response.groups.ma
 
 fun TabiClassifyResponse.mapToDomain(): ClassifyResponse =
     ClassifyResponse(
-        colors.map { ClassifyResponse.Color(it.meanHexColor, it.name, it.percentage) },
+        colors.map { ClassifyResponse.Color(it.meanHexColor, it.name, it.percentage.toFloat()) },
         ClassifyResponse.Predictions(
             this.predictions.art,
             this.predictions.frame,

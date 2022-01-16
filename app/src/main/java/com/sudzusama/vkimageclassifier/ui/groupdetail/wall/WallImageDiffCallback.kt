@@ -16,8 +16,6 @@ class WallImageDiffCallback(
 
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldItem = oldList[oldItemPosition]
-        val newItem = newList[newItemPosition]
-        return oldItem.hashCode() == newItem.hashCode()
+        return oldList[oldItemPosition] == newList[newItemPosition]
     }
 }

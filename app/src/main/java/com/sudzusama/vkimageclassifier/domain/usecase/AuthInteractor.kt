@@ -16,7 +16,7 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
     fun getUserId() : Int = authRepository.getUserId()
 
     fun login(activityContext: Activity) {
-        val scopes = listOf(VKScope.GROUPS, VKScope.OFFLINE, VKScope.WALL)
+        val scopes = listOf(VKScope.GROUPS, VKScope.WALL, VKScope.PHOTOS)
         authRepository.login(activityContext, scopes)
     }
 

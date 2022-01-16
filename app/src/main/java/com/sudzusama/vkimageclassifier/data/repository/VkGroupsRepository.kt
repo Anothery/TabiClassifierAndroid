@@ -2,10 +2,16 @@ package com.sudzusama.vkimageclassifier.data.repository
 
 import com.sudzusama.vkimageclassifier.data.mapper.mapToDomain
 import com.sudzusama.vkimageclassifier.data.network.vk.GroupsApi
+import com.sudzusama.vkimageclassifier.data.response.WallPostResponse
 import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
 import com.sudzusama.vkimageclassifier.domain.model.GroupShort
 import com.sudzusama.vkimageclassifier.domain.model.WallItem
 import com.sudzusama.vkimageclassifier.domain.repository.GroupsRepository
+import com.sudzusama.vkimageclassifier.ui.createpost.pictures.Picture
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 import javax.inject.Inject
 
 class VkGroupsRepository @Inject constructor(
@@ -49,6 +55,53 @@ class VkGroupsRepository @Inject constructor(
             fields?.joinToString(",")
         )
         return wall.mapToDomain()
+    }
+
+    override suspend fun uploadPhotos(
+        version: String,
+        groupId: Int,
+        photos: List<Picture>
+    ): List<String> {
+        val uploadServerUrl = groupsApi.getUploadServer(version, groupId).response.uploadUrl
+        val uploadedPhotos = mutableListOf<String>()
+        photos.forEach { photo ->
+            val file = File(photo.uri)
+            val body = MultipartBody.Part.createFormData(
+                "photo",
+                file.name,
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+            )
+            val uploadedResult = groupsApi.uploadFileToServer(uploadServerUrl, version, body)
+            val wallResponse = groupsApi.saveWallPhoto(
+                version,
+                groupId,
+                uploadedResult.photo,
+                uploadedResult.server,
+                uploadedResult.hash
+            )
+
+            wallResponse.response.firstOrNull()
+                ?.let { uploadedPhotos.add("photo${it.ownerId}_${it.id}") }
+        }
+
+
+        return uploadedPhotos
+    }
+
+    override suspend fun postToWall(
+        version: String,
+        ownerId: Int,
+        fromGroup: Int,
+        message: String?,
+        attachements: List<String>?
+    ): Int {
+        return groupsApi.postToWall(
+            version,
+            ownerId,
+            fromGroup,
+            message,
+            attachements?.joinToString(",")
+        ).response.postId
     }
 
     override suspend fun likeAnItem(

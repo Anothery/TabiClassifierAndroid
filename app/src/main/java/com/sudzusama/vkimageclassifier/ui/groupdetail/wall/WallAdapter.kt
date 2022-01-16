@@ -43,9 +43,7 @@ class WallAdapter(
         posts.addAll(list)
         diffResult.dispatchUpdatesTo(this)
     }
-
-    fun getWall(): List<WallItem> = posts.filterNotNull()
-
+    
     fun setDownloadMore(downloadMore: Boolean) {
         this.downloadMore = downloadMore
         setWall(posts.filterNotNull())

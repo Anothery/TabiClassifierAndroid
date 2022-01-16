@@ -4,7 +4,9 @@ import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
 import com.sudzusama.vkimageclassifier.domain.model.GroupShort
 import com.sudzusama.vkimageclassifier.domain.model.WallItem
 import com.sudzusama.vkimageclassifier.domain.repository.GroupsRepository
+import com.sudzusama.vkimageclassifier.ui.createpost.pictures.Picture
 import javax.inject.Inject
+import kotlin.math.abs
 
 class GroupsInteractor @Inject constructor(
     private val authInteractor: AuthInteractor,
@@ -14,6 +16,7 @@ class GroupsInteractor @Inject constructor(
         private const val API_VERSION = "5.131"
         private const val EXTENDED = 1
         const val LIKE_TYPE_POST = "post"
+        const val FROM_GROUP = 1
     }
 
     suspend fun getGroups(): List<GroupShort> {
@@ -33,7 +36,8 @@ class GroupsInteractor @Inject constructor(
             filter,
             fields
         )
-        return arrayListOf<GroupShort>().apply { addAll(modGroups); addAll(nonModGroups) }.distinctBy { it.id }
+        return arrayListOf<GroupShort>().apply { addAll(modGroups); addAll(nonModGroups) }
+            .distinctBy { it.id }
     }
 
     suspend fun getGroupById(id: Int): GroupDetail {
@@ -43,7 +47,7 @@ class GroupsInteractor @Inject constructor(
 
     suspend fun getGroupWall(id: Int, offset: Int): List<WallItem> {
         val count = 10
-        val fields = listOf( "photo_50", "name")
+        val fields = listOf("photo_50", "name")
         val extended = 1
         return groupsRepository.getWallById(API_VERSION, -id, offset, count, extended, fields)
     }
@@ -56,6 +60,10 @@ class GroupsInteractor @Inject constructor(
         groupsRepository.likeAnItem(API_VERSION, ownerId, itemId, type)
     }
 
+    suspend fun sendPost(groupId: Int, pictures: List<Picture>, message: String?): Int {
+        val photos = groupsRepository.uploadPhotos(API_VERSION, groupId, pictures)
+        return groupsRepository.postToWall(API_VERSION, -abs(groupId), FROM_GROUP, message, photos)
+    }
 
     suspend fun removeLikeFromItem(
         ownerId: Int,
@@ -64,4 +72,6 @@ class GroupsInteractor @Inject constructor(
     ) {
         groupsRepository.removeLikeFromItem(API_VERSION, ownerId, itemId, type)
     }
+
+
 }

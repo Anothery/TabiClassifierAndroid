@@ -3,12 +3,15 @@ package com.sudzusama.vkimageclassifier.utils.view
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.annotation.ColorInt
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.updateLayoutParams
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -65,3 +68,9 @@ fun Int.toDp(context: Context): Int = (this / context.resources.displayMetrics.d
 val Int.toPx get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 val Float.toPx get() = this * Resources.getSystem().displayMetrics.density
 val Float.toDp get() = this / Resources.getSystem().displayMetrics.density
+
+
+inline val @receiver:ColorInt Int.darken
+    @ColorInt
+    get() = ColorUtils.blendARGB(this, Color.BLACK, 0.3f)
+

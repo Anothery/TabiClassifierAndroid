@@ -99,10 +99,10 @@ class PicturesAdapter(
                                 }
                                 binding.dominantColorPalette.animate().alpha(1f).scaleX(1f)
                                 binding.tvGenre.text = when (detail.genre) {
-                                    Genre.Frame -> context.getString(R.string.genre_anime_frame)
-                                    Genre.Manga -> context.getString(R.string.genre_manga)
-                                    Genre.Art -> context.getString(R.string.genre_art)
-                                    Genre.Unknown -> context.getString(R.string.genre_unknown)
+                                    is Genre.Frame -> context.getString(R.string.genre_anime_frame)
+                                    is Genre.Manga -> context.getString(R.string.genre_manga)
+                                    is Genre.Art -> context.getString(R.string.genre_art)
+                                    else -> context.getString(R.string.genre_unknown)
                                 }
                                 binding.tvGenre.alpha = 0f
                                 binding.tvGenre.visible()

@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
@@ -18,6 +19,7 @@ import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentGroupDetailBinding
 import com.sudzusama.vkimageclassifier.domain.model.WallItem
 import com.sudzusama.vkimageclassifier.ui.createpost.CreatePostFragment
+import com.sudzusama.vkimageclassifier.ui.createpost.CreatePostFragment.Companion.ON_POST_CREATED
 import com.sudzusama.vkimageclassifier.ui.groupdetail.header.HeaderAdapter
 import com.sudzusama.vkimageclassifier.ui.groupdetail.wall.WallAdapter
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetailParentFragment
@@ -45,13 +47,19 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
 
         initDetailRecyclerView()
 
+        activity?.supportFragmentManager?.setFragmentResultListener(ON_POST_CREATED,
+            viewLifecycleOwner,
+            { requestKey, result -> viewModel.onUpdateWall() })
+
+
         binding.btnBack.setOnClickListener {
             activity?.findNavController(R.id.navHostFragment)?.popBackStack()
         }
 
         binding.fabCreate.setOnClickListener {
             permissionsBuilder(
-                Manifest.permission.READ_EXTERNAL_STORAGE).build().send {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ).build().send {
                 if (it.allGranted()) {
                     viewModel.onFabCreateClicked()
                 }
@@ -86,7 +94,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
             } else {
                 binding.tvEmptyWall.visibility = View.GONE
             }
-            wallAdapter?.let { it.setWall(it.getWall().toMutableList().apply { addAll(newList) }) }
+            wallAdapter?.let { it.setWall(newList) }
         })
 
         viewModel.isLoading.observe(viewLifecycleOwner, { isLoading ->

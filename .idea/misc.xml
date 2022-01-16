@@ -6,6 +6,7 @@
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/drawable/gallery_on_sheet_bg.xml" value="0.1765625" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/drawable/ic_close.xml" value="0.22447916666666667" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/drawable/ic_create_black_24dp.xml" value="0.3769230769230769" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/drawable/ic_t__1_.xml" value="0.19583333333333333" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/drawable/ronded_dialog.xml" value="0.22447916666666667" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/drawable/rounded_darker_stub.xml" value="0.20729166666666668" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/drawable/rounded_stub.xml" value="0.3769230769230769" />
@@ -13,7 +14,8 @@
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/content_progress_bar.xml" value="0.3269927536231884" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/create_post_picture_item.xml" value="0.4002267573696145" />
-        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_create_post.xml" value="0.22" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_auth.xml" value="0.20833333333333334" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_create_post.xml" value="0.3903192584963955" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_group_detail.xml" value="0.2" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_groups.xml" value="0.1" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_image_detail.xml" value="0.20833333333333334" />
@@ -26,6 +28,8 @@
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/image_detail_item.xml" value="0.20833333333333334" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/sample_dominant_color_palette.xml" value="0.33" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/sample_t_e_s_t_c_v_c_v.xml" value="0.1546875" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/tag_item.xml" value="0.33" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.19583333333333333" />
       </map>
     </option>
   </component>

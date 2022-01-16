@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
 import com.sudzusama.vkimageclassifier.utils.view.SingleLiveEvent
+import com.vk.api.sdk.VK
+import com.vk.api.sdk.VKApiConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

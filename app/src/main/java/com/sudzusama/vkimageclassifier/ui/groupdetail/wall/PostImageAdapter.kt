@@ -1,5 +1,6 @@
 package com.sudzusama.vkimageclassifier.ui.groupdetail.wall
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnPreDrawListener
@@ -9,11 +10,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.sudzusama.vkimageclassifier.databinding.GroupWallImageBinding
 import com.sudzusama.vkimageclassifier.domain.model.WallImageItem
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetail
+import com.sudzusama.vkimageclassifier.utils.view.toPx
 
 
 class PostImageAdapter(
@@ -47,19 +53,18 @@ class PostImageAdapter(
             GroupWallImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         binding.root.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
             override fun onPreDraw(): Boolean {
-                val density = parent.context.resources.displayMetrics.density
-                val heightPx = (300 * density + 0.5f).toInt()
                 val lp = binding.root.layoutParams
                 if (lp is StaggeredGridLayoutManager.LayoutParams) {
                     when (viewType) {
-                        VIEW_TYPE_FULL -> lp.apply {
+                        VIEW_TYPE_FULL -> binding.root.updateLayoutParams<StaggeredGridLayoutManager.LayoutParams> {
                             isFullSpan = true
                             width = parent.width
                         }
-                        VIEW_TYPE_HALF -> lp.apply {
+
+                        VIEW_TYPE_HALF -> binding.root.updateLayoutParams<StaggeredGridLayoutManager.LayoutParams> {
                             isFullSpan = false
                             width = parent.width / 2
-                            height = heightPx
+                            height = 300.toPx
                         }
                     }
                     val lm = (parent as RecyclerView).layoutManager as StaggeredGridLayoutManager?
@@ -68,7 +73,6 @@ class PostImageAdapter(
                 binding.root.viewTreeObserver.removeOnPreDrawListener(this)
                 return true
             }
-
         })
         return PostImageViewHolder(binding)
     }
@@ -109,10 +113,12 @@ class PostImageAdapter(
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .transition(DrawableTransitionOptions.withCrossFade(500))
                         .into(binding.ivWallImage)
+
                     binding.root.viewTreeObserver.removeOnPreDrawListener(this)
                     return true
                 }
             })
+            binding.root.requestLayout()
 
             binding.ivWallImage.setOnClickListener {
                 val imagesList = mutableListOf<ImageDetail>()

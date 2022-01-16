@@ -7,7 +7,7 @@ data class ClassifyResponse(
     data class Color(
         val meanHexColor: String,
         val name: String,
-        val percent: Double
+        val percent: Float
     )
 
     data class Predictions(

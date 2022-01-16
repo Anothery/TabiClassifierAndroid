@@ -11,9 +11,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:padding="16dp">
 
             <ImageButton
@@ -25,26 +26,73 @@
                 android:src="@drawable/ic_close" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
                 android:text="@string/create_post"
                 android:textSize="20sp" />
 
-            <ImageButton
-                android:id="@+id/btn_save"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="end"
-                android:background="?selectableItemBackgroundBorderless"
-                android:src="@drawable/outline_save_24"
-                android:tint="@color/colorOnPrimary" />
-        </FrameLayout>
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btn_tags_recognition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:src="@drawable/outline_blur_on_24"
+                    android:tint="@color/colorOnPrimary" />
+
+                <ImageButton
+                    android:id="@+id/btn_set_default_tags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:src="@drawable/outline_tag_24"
+                    android:tint="@color/colorOnPrimary" />
+
+                <ImageButton
+                    android:id="@+id/btn_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:src="@drawable/outline_save_24"
+                    android:tint="@color/colorOnPrimary" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_genre_tags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:clipToPadding="false"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_color_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:clipToPadding="false"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:visibility="gone" />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="260dp"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -62,7 +110,7 @@
                     android:id="@+id/rv_indicator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     app:spi_dotColor="@color/colorOnPrimaryDisabled"
                     app:spi_dotSelectedColor="@color/colorOnPrimary"
                     app:spi_visibleDotCount="11"
@@ -92,7 +140,7 @@
             android:id="@+id/rv_gallery"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:background="@drawable/gallery_on_sheet_bg"
             android:clipToPadding="false"

@@ -1,10 +1,8 @@
 package com.sudzusama.vkimageclassifier.data.network.vk
 
-import com.sudzusama.vkimageclassifier.data.response.GroupDetailResponse
-import com.sudzusama.vkimageclassifier.data.response.GroupWallResponse
-import com.sudzusama.vkimageclassifier.data.response.GroupsListResponse
-import retrofit2.http.GET
-import retrofit2.http.Query
+import com.sudzusama.vkimageclassifier.data.response.*
+import okhttp3.MultipartBody
+import retrofit2.http.*
 
 interface GroupsApi {
 
@@ -50,4 +48,39 @@ interface GroupsApi {
         @Query("item_id") item_id: Int,
         @Query("type") type: String
     )
+
+    @GET("photos.getWallUploadServer")
+    suspend fun getUploadServer(
+        @Query("v") version: String,
+        @Query("group_id") groupId: Int
+    ): GetUploadServerResponse
+
+    @Multipart
+    @POST
+    suspend fun uploadFileToServer(
+        @Url url: String,
+        @Query("v") version: String,
+        @Part photo: MultipartBody.Part,
+    ): UploadFileResponse
+
+
+    @GET("photos.saveWallPhoto")
+    suspend fun saveWallPhoto(
+        @Query("v") version: String,
+        @Query("group_id") groupId: Int,
+        @Query("photo") photo: String,
+        @Query("server") server: Int,
+        @Query("hash") hash: String,
+    ): SaveWallResponse
+
+    @GET("wall.post")
+    suspend fun postToWall(
+        @Query("v") version: String,
+        @Query("owner_id") ownerId: Int,
+        @Query("from_group") fromGroup: Int,
+        @Query("message") message: String?,
+        @Query("attachments") attachments: String?,
+    ): WallPostResponse
+
+
 }

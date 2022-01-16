@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.*
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -18,6 +20,7 @@ import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryAdapter
 import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryItem
 import com.sudzusama.vkimageclassifier.ui.createpost.pictures.Picture
 import com.sudzusama.vkimageclassifier.ui.createpost.pictures.PicturesAdapter
+import com.sudzusama.vkimageclassifier.ui.createpost.tags.TagsAdapter
 import com.sudzusama.vkimageclassifier.utils.view.gone
 import com.sudzusama.vkimageclassifier.utils.view.shortToast
 import com.sudzusama.vkimageclassifier.utils.view.visible
@@ -30,30 +33,83 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     private val viewModel: CreatePostViewModel by viewModels()
     private var galleryAdapter: GalleryAdapter? = null
     private var picturesAdapter: PicturesAdapter? = null
+    private var genresAdapter: TagsAdapter? = null
+    private var colorsAdapter: TagsAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_create_post, container, false);
+        return inflater.inflate(R.layout.fragment_create_post, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.setGroupId(arguments?.getInt(GROUP_ID) ?: -1)
         initPictures()
+        initGenres()
+        initColors()
         viewModel.galleryItems.observe(viewLifecycleOwner, ::initGallery)
         viewModel.pictures.observe(viewLifecycleOwner, ::onPicturesUpdated)
         viewModel.selectedItem.observe(viewLifecycleOwner) { galleryAdapter?.selectItem(it) }
         viewModel.deselectedItem.observe(viewLifecycleOwner) { galleryAdapter?.deselectItem(it) }
+        viewModel.genreTags.observe(viewLifecycleOwner) { tags ->
+            genresAdapter?.let { adapter ->
+                if (adapter.itemCount == 0 && tags.isNotEmpty()) {
+                    binding.rvGenreTags.visible()
+                    binding.rvGenreTags.alpha = 0f
+                    binding.rvGenreTags.animate().alpha(1f).scaleY(1f)
+                    binding.rvGenreTags.post { adapter.setTags(tags) }
+                } else if (adapter.itemCount != 0 && tags.isEmpty()) {
+                    binding.rvGenreTags.animate().alpha(0f).scaleY(0f)
+                        .withEndAction {
+                            binding.rvGenreTags.gone()
+                            binding.rvGenreTags.post { adapter.setTags(tags) }
+                        }
+                } else binding.rvGenreTags.post { adapter.setTags(tags) }
+            }
+        }
+        viewModel.colorTags.observe(viewLifecycleOwner) { tags ->
+            colorsAdapter?.let { adapter ->
+                if (adapter.itemCount == 0 && tags.isNotEmpty()) {
+                    binding.rvColorTags.post { adapter.setTags(tags) }
+                    binding.rvColorTags.visible()
+                    binding.rvColorTags.alpha = 0f
+                    binding.rvColorTags.animate().alpha(1f)
+                } else if (adapter.itemCount != 0 && tags.isEmpty()) {
+                    binding.rvGallery.isEnabled = false
+                    binding.rvColorTags.animate().alpha(0f)
+                        .withEndAction {
+                            binding.rvColorTags.gone()
+                            binding.rvColorTags.post { adapter.setTags(tags) }
+                            binding.rvGallery.isEnabled = true
+                        }
+                } else binding.rvColorTags.post { adapter.setTags(tags) }
+            }
+        }
         viewModel.errorMessage.observe(viewLifecycleOwner) { context?.shortToast(it) }
+        viewModel.onPostSent.observe(viewLifecycleOwner) {
+            activity?.supportFragmentManager?.setFragmentResult(ON_POST_CREATED, bundleOf())
+            dismiss();
+        }
+        viewModel.tagsRecognition.observe(viewLifecycleOwner) { enabled ->
+            binding.btnTagsRecognition.setImageDrawable(
+                if (enabled) ContextCompat.getDrawable(
+                    requireContext(), R.drawable.outline_blur_on_24
+                ) else ContextCompat.getDrawable(requireContext(), R.drawable.outline_blur_off_24)
+            )
+        }
+        binding.btnSave.setOnClickListener { viewModel.onSaveButtonClicked() }
         binding.btnClose.setOnClickListener { dismiss() }
+        binding.btnSetDefaultTags.setOnClickListener { viewModel.onSetDefaultTagsClicked() }
+        binding.btnTagsRecognition.setOnClickListener { viewModel.onChangeTagsRecognition() }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initGallery(items: List<GalleryItem>) {
         binding.rvGallery.layoutManager = GridLayoutManager(context, 3)
-        binding.rvGallery.setHasFixedSize(true);
+        binding.rvGallery.setHasFixedSize(true)
         galleryAdapter =
             GalleryAdapter(ArrayList(items), Glide.with(this)) { item, position ->
                 if (binding.rvGallery.isEnabled) viewModel.onGalleryItemClicked(item, position)
@@ -61,6 +117,20 @@ class CreatePostFragment : BottomSheetDialogFragment() {
 
         (binding.rvGallery.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
         binding.rvGallery.adapter = galleryAdapter
+    }
+
+    private fun initColors() {
+        colorsAdapter = TagsAdapter(viewModel::onColorCheckUpdate)
+        binding.rvColorTags.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvColorTags.adapter = colorsAdapter
+    }
+
+    private fun initGenres() {
+        genresAdapter = TagsAdapter(viewModel::onGenreCheckUpdate)
+        binding.rvGenreTags.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvGenreTags.adapter = genresAdapter
     }
 
     private fun onPicturesUpdated(pictures: List<Picture>) {
@@ -100,7 +170,8 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     }
 
     private fun initPictures() {
-        picturesAdapter = PicturesAdapter(Glide.with(this), viewModel::onRemovePictureClicked, requireContext())
+        picturesAdapter =
+            PicturesAdapter(Glide.with(this), viewModel::onRemovePictureClicked, requireContext())
         binding.rvPictures.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rvPictures.adapter = picturesAdapter
@@ -119,6 +190,8 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         super.onDestroyView()
         galleryAdapter = null
         picturesAdapter = null
+        genresAdapter = null
+        colorsAdapter = null
     }
 
     override fun getTheme(): Int {
@@ -129,6 +202,7 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     companion object {
         const val TAG = "CreatePostFragment"
         const val GROUP_ID = "GROUP_ID"
+        const val ON_POST_CREATED = "ON_POST_CREATED"
 
         @JvmStatic
         fun newInstance(id: Int) = CreatePostFragment().apply {

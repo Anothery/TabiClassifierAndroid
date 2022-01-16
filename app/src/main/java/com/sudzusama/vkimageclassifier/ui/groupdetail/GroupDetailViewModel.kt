@@ -40,8 +40,6 @@ class GroupDetailViewModel @Inject constructor(
 
     private var wallId: Int = -1
 
-    init {
-    }
 
     fun initialize(id: Int) {
         wallId = id
@@ -77,7 +75,8 @@ class GroupDetailViewModel @Inject constructor(
             val list = wallItems.value?.toMutableList() ?: mutableListOf()
             val loadedData = groupsInteractor.getGroupWall(wallId, wallItems.value?.size ?: 0)
             if (loadedData.isEmpty()) _downloadMore.value = false
-            else _wallItems.value = list.apply { addAll(loadedData) }
+            else _wallItems.value = list.apply { addAll(loadedData) }.distinctBy { it.id }
+                .sortedByDescending { it.date }
         } catch (ex: Exception) {
             _errorMessage.value = ex.message
         } finally {
@@ -108,6 +107,17 @@ class GroupDetailViewModel @Inject constructor(
             } catch (ex: Exception) {
                 _errorMessage.value = ex.message
             }
+        }
+    }
+
+    fun onUpdateWall() = viewModelScope.launch {
+        try {
+            val list = wallItems.value?.toMutableList() ?: mutableListOf()
+            val loadedData = groupsInteractor.getGroupWall(wallId, 0)
+            if (list.isEmpty()) _wallItems.value = loadedData.sortedByDescending { it.date }
+            else _wallItems.value = list.apply { addAll(loadedData) }.distinctBy { it.id }.sortedByDescending { it.date }
+        } catch (ex: Exception) {
+            _errorMessage.value = ex.message
         }
     }
 
