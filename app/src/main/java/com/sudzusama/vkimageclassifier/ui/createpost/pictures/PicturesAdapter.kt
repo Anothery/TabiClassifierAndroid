@@ -63,7 +63,6 @@ class PicturesAdapter(
             binding.tvGenre.invisible()
             binding.fabRemove.gone()
             binding.fabRemove.setOnClickListener { onRemoveClicked(picture) }
-            binding.ivPicture.requestLayout()
             binding.ivPicture.doOnNextLayout {
                 glide.load(picture.uri)
                     .transition(DrawableTransitionOptions.withCrossFade(500))
@@ -117,6 +116,7 @@ class PicturesAdapter(
 
                     }).centerInside().into(binding.ivPicture)
             }
+            binding.ivPicture.requestLayout()
         }
 
         private fun showClassifyingBackground() {

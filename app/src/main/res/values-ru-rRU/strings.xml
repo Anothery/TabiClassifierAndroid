@@ -13,4 +13,5 @@
     <string name="genre_manga">Кадр из манги</string>
     <string name="genre_art">Арт</string>
     <string name="genre_unknown">Неизвестно</string>
+    <string name="uploading">Загрузка</string>
 </resources>

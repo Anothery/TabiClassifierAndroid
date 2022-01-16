@@ -9,6 +9,8 @@
     <color name="colorStatusBar">@android:color/transparent</color>
     <color name="colorOnPrimaryDisabled">#aaaaaa</color>
     <color name="black50">#80000000</color>
+    <color name="black30">#66000000</color>
+    <color name="white80">#CCffffff</color>
     <color name="colorDisabledStub">#f8f7f5</color>
     <color name="light_blue_400">#FF29B6F6</color>
     <color name="light_blue_600">#FF039BE5</color>

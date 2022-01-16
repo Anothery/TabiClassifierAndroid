@@ -37,7 +37,7 @@ android {
         debug {
             resValue "integer", "com_vk_sdk_AppId", vkAppId
             buildConfigField "String", "VK_API_URL", "\"https://api.vk.com/method/\""
-            buildConfigField "String", "TABI_API_URL", "\"http://80.249.146.176/\""
+            buildConfigField "String", "TABI_API_URL", "\"http://81.163.26.108/\""
         }
         release {
             minifyEnabled true
@@ -61,7 +61,7 @@ dependencies {
     // Core
     implementation "androidx.appcompat:appcompat:$app_compat_version"
     implementation "androidx.constraintlayout:constraintlayout:${constraint_version}"
-    implementation 'com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.4.4'
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.5.6'
     implementation("androidx.recyclerview:recyclerview:1.2.1")
 
     // Kotlin - KTX

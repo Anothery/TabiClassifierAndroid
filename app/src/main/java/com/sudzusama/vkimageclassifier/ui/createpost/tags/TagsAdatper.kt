@@ -1,12 +1,12 @@
 package com.sudzusama.vkimageclassifier.ui.createpost.tags
 
-import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
 import com.sudzusama.vkimageclassifier.databinding.TagItemBinding
 import com.sudzusama.vkimageclassifier.utils.view.darken
 import com.sudzusama.vkimageclassifier.utils.view.toPx
@@ -31,7 +31,7 @@ class TagsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(tags[position], position)
+        holder.bind(tags[position])
     }
 
     override fun getItemCount(): Int = tags.size
@@ -46,40 +46,27 @@ class TagsAdapter(
             return luminance > 0.6
         }
 
-
-        fun bind(tag: Tag, position: Int) {
+        fun bind(tag: Tag) {
             binding.chip.text = tag.name
-            binding.chip.chipStrokeWidth = 2.toPx.toFloat()
-            binding.chip.isChecked = tag.selected
-            if (binding.chip.isChecked) {
-                binding.chip.setTextColor(if (isLightColor(tag.color)) tag.color.darken else Color.WHITE)
-                binding.chip.rippleColor = ColorStateList.valueOf(Color.WHITE)
-                binding.chip.chipBackgroundColor = ColorStateList.valueOf(tag.color)
-                binding.chip.chipStrokeWidth = 0f
-            } else {
-                binding.chip.setTextColor(if (isLightColor(tag.color)) tag.color.darken else tag.color)
-                binding.chip.rippleColor = ColorStateList.valueOf(tag.color)
-                binding.chip.chipBackgroundColor = ColorStateList.valueOf(Color.WHITE)
-                binding.chip.chipStrokeWidth = 2.toPx.toFloat()
-                binding.chip.chipStrokeColor =
-                    ColorStateList.valueOf(if (isLightColor(tag.color)) tag.color.darken else tag.color)
+            setChipChecked(tag.selected, tag.color, binding.chip)
+            binding.chip.setOnCheckedChangeListener { _, _ ->
+                onCheckedChange(!tag.selected, tags.indexOf(tag))
             }
-            
-            binding.chip.setOnCheckedChangeListener { _, checked ->
-                onCheckedChange(checked, position)
-                if (checked) {
-                    binding.chip.setTextColor(if (isLightColor(tag.color)) tag.color.darken else Color.WHITE)
-                    binding.chip.rippleColor = ColorStateList.valueOf(Color.WHITE)
-                    binding.chip.chipBackgroundColor = ColorStateList.valueOf(tag.color)
-                    binding.chip.chipStrokeWidth = 0f
-                } else {
-                    binding.chip.setTextColor(if (isLightColor(tag.color)) tag.color.darken else tag.color)
-                    binding.chip.rippleColor = ColorStateList.valueOf(tag.color)
-                    binding.chip.chipBackgroundColor = ColorStateList.valueOf(Color.WHITE)
-                    binding.chip.chipStrokeWidth = 2.toPx.toFloat()
-                    binding.chip.chipStrokeColor =
-                        ColorStateList.valueOf(if (isLightColor(tag.color)) tag.color.darken else tag.color)
-                }
+        }
+
+        private fun setChipChecked(checked: Boolean, color: Int, chip: Chip) {
+            if (checked) {
+                chip.setTextColor(if (isLightColor(color)) color.darken else Color.WHITE)
+                chip.rippleColor = ColorStateList.valueOf(Color.WHITE)
+                chip.chipBackgroundColor = ColorStateList.valueOf(color)
+                chip.chipStrokeWidth = 0f
+            } else {
+                chip.setTextColor(if (isLightColor(color)) color.darken else color)
+                chip.rippleColor = ColorStateList.valueOf(color)
+                chip.chipBackgroundColor = ColorStateList.valueOf(Color.WHITE)
+                chip.chipStrokeWidth = 2.toPx.toFloat()
+                chip.chipStrokeColor =
+                    ColorStateList.valueOf(if (isLightColor(color)) color.darken else color)
             }
         }
     }

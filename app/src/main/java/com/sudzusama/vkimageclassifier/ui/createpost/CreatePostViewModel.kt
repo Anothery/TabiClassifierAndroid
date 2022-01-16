@@ -19,7 +19,6 @@ import com.sudzusama.vkimageclassifier.utils.view.dominantcolor.DominantColor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,7 +28,6 @@ class CreatePostViewModel @Inject constructor(
     private val groupsInteractor: GroupsInteractor,
     fileUtils: FileUtils
 ) : BaseViewModel(authInteractor) {
-    private val mutex = Mutex()
 
     private val _galleryItems = MutableLiveData<List<GalleryItem>>()
     val galleryItems: LiveData<List<GalleryItem>> get() = _galleryItems
@@ -55,8 +53,10 @@ class CreatePostViewModel @Inject constructor(
     private val _tagsRecognition = MutableLiveData(true)
     val tagsRecognition: LiveData<Boolean> get() = _tagsRecognition
 
+    private val _postingState = SingleLiveEvent<Boolean>()
+    val postingState: LiveData<Boolean> get() = _postingState
+
     private var groupId: Int? = null
-    private var defaultTagsMode = false
 
     init {
         viewModelScope.launch {
@@ -117,11 +117,6 @@ class CreatePostViewModel @Inject constructor(
 
                             _pictures.value?.let { recent ->
                                 recent.find { it.uri == picture.uri }?.let { picture ->
-                                    if (defaultTagsMode) {
-                                        defaultTagsMode = false
-                                        _genreTags.value = listOf()
-                                        _colorTags.value = listOf()
-                                    }
                                     updateGenreTags(
                                         info.predictions.art,
                                         info.predictions.manga,
@@ -163,19 +158,21 @@ class CreatePostViewModel @Inject constructor(
         currentPictureColors: List<DominantColor>,
         pictures: List<Picture>
     ) {
-
+        // TODO refactor & mb optimize
         _colorTags.value?.let { prevColors ->
             if (prevColors.isNotEmpty()) {
                 val allDominantColors =
                     pictures.flatMap { it.detail?.colors ?: return }
                         .toMutableList().apply { addAll(currentPictureColors) }
 
-                _colorTags.value = allDominantColors.distinctBy { it.name }.map { dc ->
-                    dc.copy(percent = allDominantColors.filter { adc -> adc.name == dc.name }
-                        .map { it.percent }.sum())
-                }
-                    .apply { sortedByDescending { it.percent } }
-                    .mapIndexed { i, it -> Tag(it.name, it.color, i < 3) }
+                _colorTags.value =
+                    allDominantColors.distinctBy { it.name }.map { dc ->
+                        dc.copy(percent = allDominantColors.filter { adc -> adc.name == dc.name }
+                            .map { it.percent }.sum())
+                    }
+                        .apply { sortedByDescending { it.percent } }
+                        .mapIndexed { i, it -> Tag(it.name, it.color, i < 3) }
+                        .sortedByDescending { it.selected }
             } else {
                 _colorTags.value =
                     currentPictureColors.toMutableList().apply { sortByDescending { it.percent } }
@@ -192,7 +189,8 @@ class CreatePostViewModel @Inject constructor(
         val artTag = Tag("art", Color.GRAY, checkedArt && !checkedManga && !checkedFrame)
         val mangaTag = Tag("manga", Color.GRAY, checkedManga && !checkedArt && !checkedFrame)
         val frameTag = Tag("frame", Color.GRAY, checkedFrame && !checkedArt && !checkedManga)
-        _genreTags.value = listOf(artTag, mangaTag, frameTag)
+        _genreTags.value =
+            mutableListOf(artTag, mangaTag, frameTag).sortedByDescending { it.selected }
     }
 
     fun onRemovePictureClicked(picture: Picture) {
@@ -216,6 +214,7 @@ class CreatePostViewModel @Inject constructor(
             pictures.value?.let { pictures ->
                 try {
                     groupId?.let { groupId ->
+                        _postingState.value = true
                         val selectedGenre = _genreTags.value?.firstOrNull { it.selected }
                         val selectedColors = _colorTags.value?.filter { it.selected }
                         var message = ""
@@ -231,11 +230,13 @@ class CreatePostViewModel @Inject constructor(
                             pictures,
                             if (message.isNotEmpty()) message else null
                         )
+                        _postingState.value = false
                         _onPostSent.value = true
                     }
                 } catch (ex: Exception) {
                     ex.printStackTrace()
                     _errorMessage.value = ex.message
+                    _postingState.value = false
                 }
             }
         }
@@ -247,59 +248,56 @@ class CreatePostViewModel @Inject constructor(
     }
 
     fun onSetDefaultTagsClicked() = viewModelScope.launch {
-        _genreTags.value?.let {
-            if (it.isEmpty()) {
-                defaultTagsMode = true
-                _genreTags.value = listOf(
-                    Tag("art", Color.GRAY, false),
-                    Tag("manga", Color.GRAY, false),
-                    Tag("frame", Color.GRAY, false),
-                    Tag("gif", Color.GRAY, false),
-                    Tag("other", Color.GRAY, false),
-                )
-            }
+        _genreTags.value?.let { genres ->
+            val newItems = listOf(
+                Tag("art", Color.GRAY, false),
+                Tag("manga", Color.GRAY, false),
+                Tag("frame", Color.GRAY, false),
+                Tag("gif", Color.GRAY, false),
+                Tag("other", Color.GRAY, false),
+            ).filter { !genres.any { g -> g.name == it.name } }
+
+            _genreTags.value = genres.toMutableList().apply { addAll(newItems) }
         }
-        _colorTags.value?.let {
-            if (it.isEmpty()) {
-                defaultTagsMode = true
-                _colorTags.value = listOf(
-                    Tag("bw", Color.BLACK, false),
-                    Tag("mixed", Color.YELLOW, false),
-                    Tag("white", Color.WHITE, false),
-                    Tag("black", Color.BLACK, false),
-                    Tag("gray", Color.GRAY, false),
-                    Tag("red", Color.RED, false),
-                    Tag("orange", Color.parseColor("#FFA500"), false),
-                    Tag("pink", Color.parseColor("#FFC0CB"), false),
-                    Tag("violet", Color.parseColor("#EE82EE"), false),
-                    Tag("cyan", Color.CYAN, false),
-                    Tag("blue", Color.BLUE, false),
-                    Tag("yellow", Color.YELLOW, false),
-                    Tag("gold", Color.parseColor("#FFD700"), false),
-                    Tag("beige", Color.parseColor("#F5F5DC"), false),
-                    Tag("brown", Color.parseColor("#A52A2A"), false),
-                )
-            }
+        _colorTags.value?.let { colors ->
+            val newItems = listOf(
+                Tag("bw", Color.BLACK, false),
+                Tag("mixed", Color.YELLOW, false),
+                Tag("white", Color.WHITE, false),
+                Tag("black", Color.BLACK, false),
+                Tag("gray", Color.GRAY, false),
+                Tag("red", Color.RED, false),
+                Tag("orange", Color.parseColor("#FFA500"), false),
+                Tag("pink", Color.parseColor("#FFC0CB"), false),
+                Tag("violet", Color.parseColor("#EE82EE"), false),
+                Tag("cyan", Color.CYAN, false),
+                Tag("blue", Color.BLUE, false),
+                Tag("yellow", Color.YELLOW, false),
+                Tag("gold", Color.parseColor("#FFD700"), false),
+                Tag("beige", Color.parseColor("#F5F5DC"), false),
+                Tag("brown", Color.parseColor("#A52A2A"), false),
+            ).filter { !colors.any { g -> g.name == it.name } }
+            _colorTags.value = colors.toMutableList().apply { addAll(newItems) }
         }
     }
 
     fun onColorCheckUpdate(checked: Boolean, position: Int) = viewModelScope.launch {
-        _colorTags.value?.let {
+        _colorTags.value?.let { colors ->
             _colorTags.value =
-                it.toMutableList().apply { set(position, get(position).copy(selected = checked)) }
+                colors.toMutableList()
+                    .apply { set(position, get(position).copy(selected = checked)) }
+                    .sortedByDescending { it.selected }
         }
     }
 
     fun onGenreCheckUpdate(checked: Boolean, position: Int) = viewModelScope.launch {
         _genreTags.value?.let { tags ->
-            _genreTags.value =
-                tags.toMutableList().apply {
-                    if (checked) {
-                        val i = indexOfFirst { it.selected }
-                        if (i != -1) this[i] = this[i].copy(selected = false)
-                    }
-                    this[position] = this[position].copy(selected = checked)
-                }
+            val test =   tags.toMutableList().mapIndexed { i, it ->
+                if (i == position) it.copy(selected = checked)
+                else if (checked && it.selected) it.copy(selected = false)
+                else it
+            }.sortedByDescending { it.selected }
+            _genreTags.value =test
         }
     }
 }

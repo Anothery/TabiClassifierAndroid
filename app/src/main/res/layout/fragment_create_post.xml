@@ -2,6 +2,7 @@
 <com.sudzusama.vkimageclassifier.utils.view.DisallowInterceptView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/create_post_bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -69,84 +70,127 @@
             </LinearLayout>
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_genre_tags"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clipToPadding="false"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:visibility="gone" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_color_tags"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clipToPadding="false"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:visibility="gone" />
-
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="260dp"
-            android:layout_marginTop="8dp">
+            android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/ll_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:animateLayoutChanges="true"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:id="@+id/ll_tags"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_genre_tags"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:clipToPadding="false"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_color_tags"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:clipToPadding="false"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp"
+                    android:layout_marginTop="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_pictures"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
+                            android:id="@+id/rv_indicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            app:spi_dotColor="@color/colorOnPrimaryDisabled"
+                            app:spi_dotSelectedColor="@color/colorOnPrimary"
+                            app:spi_visibleDotCount="11"
+                            app:spi_visibleDotThreshold="1" />
+                    </LinearLayout>
+
+
+                    <FrameLayout
+                        android:id="@+id/fl_empty_picture"
+                        android:layout_width="180dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@drawable/rounded_stub"
+                        tools:visibility="visible">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/add_at_least_one_image"
+                            android:textAlignment="center" />
+                    </FrameLayout>
+
+                </FrameLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_pictures"
+                    android:id="@+id/rv_gallery"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
-                    android:id="@+id/rv_indicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    app:spi_dotColor="@color/colorOnPrimaryDisabled"
-                    app:spi_dotSelectedColor="@color/colorOnPrimary"
-                    app:spi_visibleDotCount="11"
-                    app:spi_visibleDotThreshold="1" />
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/gallery_on_sheet_bg"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingTop="8dp" />
             </LinearLayout>
 
-
-            <FrameLayout
-                android:id="@+id/fl_empty_picture"
-                android:layout_width="180dp"
+            <LinearLayout
+                android:id="@+id/fl_posting"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:background="@drawable/rounded_stub"
-                tools:visibility="visible">
+                android:background="@color/white80"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@color/colorOnPrimary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/add_at_least_one_image"
-                    android:textAlignment="center" />
-            </FrameLayout>
+                    android:text="@string/uploading"
+                    android:textColor="@color/colorOnPrimary"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
 
         </FrameLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_gallery"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:layout_weight="1"
-            android:background="@drawable/gallery_on_sheet_bg"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="false"
-            android:paddingTop="8dp" />
-
 
     </LinearLayout>
 </com.sudzusama.vkimageclassifier.utils.view.DisallowInterceptView>
