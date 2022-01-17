@@ -34,6 +34,12 @@ import com.sudzusama.vkimageclassifier.utils.view.visible
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import kotlin.collections.ArrayList
+import android.R.animator
+
+import androidx.recyclerview.widget.SimpleItemAnimator
+
+
+
 
 
 @AndroidEntryPoint

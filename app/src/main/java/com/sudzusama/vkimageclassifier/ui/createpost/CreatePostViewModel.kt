@@ -206,7 +206,7 @@ class CreatePostViewModel @Inject constructor(
         }
     }
 
-    private fun updateGenreTags(art: Double, frame: Double, manga: Double) {
+    private fun updateGenreTags(art: Double, manga: Double, frame: Double) {
         val checkedArt = art >= manga && art >= frame
         val checkedManga = manga >= art && manga >= frame
         val checkedFrame = frame >= manga && frame >= art

@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.DiffUtil
@@ -54,7 +53,7 @@ class PicturesAdapter(
         super.onViewRecycled(holder)
         holder.recycle()
     }
-
+    
     inner class ViewHolder(private val binding: CreatePostPictureItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -114,7 +113,8 @@ class PicturesAdapter(
                             return false
                         }
 
-                    }).centerInside().into(binding.ivPicture)
+                    }).centerInside()
+                    .into(binding.ivPicture)
             }
             binding.ivPicture.requestLayout()
         }
