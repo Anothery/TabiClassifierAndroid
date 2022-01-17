@@ -80,6 +80,7 @@ interface GroupsApi {
         @Query("from_group") fromGroup: Int,
         @Query("message") message: String?,
         @Query("attachments") attachments: String?,
+        @Query("publish_date") publishDate: Long?,
     ): WallPostResponse
 
 

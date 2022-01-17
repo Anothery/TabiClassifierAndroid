@@ -19,6 +19,7 @@ import com.sudzusama.vkimageclassifier.utils.view.SingleLiveEvent
 import com.sudzusama.vkimageclassifier.utils.view.dominantcolor.DominantColor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -56,7 +57,14 @@ class CreatePostViewModel @Inject constructor(
     private val _postingState = SingleLiveEvent<Boolean>()
     val postingState: LiveData<Boolean> get() = _postingState
 
+    private val _showDateScreen = SingleLiveEvent<Date?>()
+    val showDateScreen: LiveData<Date?> get() = _showDateScreen
+
+    private val _pickerDate = MutableLiveData<Date?>(null)
+    val pickerDate: LiveData<Date?> get() = _pickerDate
+
     private var groupId: Int? = null
+
 
     init {
         viewModelScope.launch {
@@ -67,6 +75,14 @@ class CreatePostViewModel @Inject constructor(
 
     fun setGroupDetails(detail: GroupDetail?) {
         groupId = detail?.id ?: -1
+    }
+
+    fun onSelectTimeButtonClicked() {
+        _showDateScreen.value = _pickerDate.value
+    }
+
+    fun onDatePicked(date: Date?) {
+        _pickerDate.value = date
     }
 
     fun onGalleryItemClicked(item: GalleryItem, position: Int) {
@@ -91,7 +107,7 @@ class CreatePostViewModel @Inject constructor(
                     _errorMessage.value = "Нельзя добавить более 10 изображений"
                     return
                 }
-                if(!fileUtils.checkFileExists(item.uri)) {
+                if (!fileUtils.checkFileExists(item.uri)) {
                     _errorMessage.value = "Некорректный путь к файлу"
                     return
                 }
@@ -222,7 +238,7 @@ class CreatePostViewModel @Inject constructor(
             pictures.value?.let { pictures ->
                 try {
                     groupId?.let { groupId ->
-                        if(pictures.firstOrNull{ it.isLoading } != null) {
+                        if (pictures.firstOrNull { it.isLoading } != null) {
                             _errorMessage.value = "Дождитесь окончания распознавания изображений"
                             return@launch
                         }
@@ -231,7 +247,7 @@ class CreatePostViewModel @Inject constructor(
                         val selectedColors = _colorTags.value?.filter { it.selected }
                         val hasTags = !selectedColors.isNullOrEmpty() && selectedGenre != null
                         val hasPictures = pictures.isNotEmpty()
-                        if(!hasTags && !hasPictures) {
+                        if (!hasTags && !hasPictures) {
                             _errorMessage.value = "Добавьте хотя бы одно изображение или тег"
                             return@launch
                         }
@@ -247,7 +263,8 @@ class CreatePostViewModel @Inject constructor(
                         groupsInteractor.sendPost(
                             groupId,
                             pictures,
-                            if (message.isNotEmpty()) message else null
+                            if (message.isNotEmpty()) message else null,
+                            _pickerDate.value?.time?.div(1000)
                         )
                         _postingState.value = false
                         _onPostSent.value = true

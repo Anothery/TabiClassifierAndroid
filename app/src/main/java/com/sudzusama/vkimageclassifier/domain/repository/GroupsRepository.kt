@@ -39,6 +39,6 @@ interface GroupsRepository {
         photos: List<Picture>
     ): List<String>
 
-    suspend fun postToWall(version: String, ownerId: Int, fromGroup: Int, message: String?, attachements: List<String>?): Int
+    suspend fun postToWall(version: String, ownerId: Int, fromGroup: Int, message: String?, attachements: List<String>?, publishDate: Long?): Int
 }
 

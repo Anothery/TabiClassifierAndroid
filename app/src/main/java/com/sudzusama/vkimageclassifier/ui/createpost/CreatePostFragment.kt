@@ -2,13 +2,16 @@ package com.sudzusama.vkimageclassifier.ui.createpost
 
 import android.animation.LayoutTransition
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.*
@@ -17,7 +20,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentCreatePostBinding
+import com.sudzusama.vkimageclassifier.databinding.PostTimePickerBinding
 import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
+import com.sudzusama.vkimageclassifier.domain.model.GroupTypes
 import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryAdapter
 import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryItem
 import com.sudzusama.vkimageclassifier.ui.createpost.pictures.Picture
@@ -27,6 +32,8 @@ import com.sudzusama.vkimageclassifier.utils.view.gone
 import com.sudzusama.vkimageclassifier.utils.view.shortToast
 import com.sudzusama.vkimageclassifier.utils.view.visible
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -37,6 +44,8 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     private var picturesAdapter: PicturesAdapter? = null
     private var genresAdapter: TagsAdapter? = null
     private var colorsAdapter: TagsAdapter? = null
+
+    private var datePickerDialog: AlertDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,10 +65,23 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         initColors()
 
 
-        TooltipCompat.setTooltipText(binding?.btnSetDefaultTags as View, getString(R.string.button_set_default_tags));
-        TooltipCompat.setTooltipText(binding?.btnSave as View, getString(R.string.button_send_post));
-        TooltipCompat.setTooltipText(binding?.btnTagsRecognition as View, getString(R.string.button_recognition));
+        TooltipCompat.setTooltipText(
+            binding?.btnSetDefaultTags as View,
+            getString(R.string.button_set_default_tags)
+        );
+        TooltipCompat.setTooltipText(
+            binding?.btnSave as View,
+            getString(R.string.button_send_post)
+        );
+        TooltipCompat.setTooltipText(
+            binding?.btnTagsRecognition as View,
+            getString(R.string.button_recognition)
+        );
         TooltipCompat.setTooltipText(binding?.btnClose as View, getString(R.string.button_close));
+        TooltipCompat.setTooltipText(
+            binding?.btnSelectTime as View,
+            getString(R.string.button_select_time)
+        )
 
         binding?.tvTitle?.text =
             if (details?.canPost == true) getString(R.string.create_post) else getString(R.string.suggest_post)
@@ -69,11 +91,46 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         binding?.btnTagsRecognition?.setOnClickListener { viewModel.onChangeTagsRecognition() }
         binding?.llMain?.layoutTransition?.enableTransitionType(LayoutTransition.CHANGING)
 
+        details?.let {
+            if (it.canPost) binding?.btnSelectTime?.visible() else binding?.btnSelectTime?.gone()
+        }
+        binding?.btnSelectTime?.setOnClickListener { viewModel.onSelectTimeButtonClicked() }
+
         viewModel.setGroupDetails(details)
         viewModel.galleryItems.observe(viewLifecycleOwner, ::initGallery)
         viewModel.pictures.observe(viewLifecycleOwner, ::onPicturesUpdated)
         viewModel.selectedItem.observe(viewLifecycleOwner) { galleryAdapter?.selectItem(it) }
         viewModel.deselectedItem.observe(viewLifecycleOwner) { galleryAdapter?.deselectItem(it) }
+        viewModel.showDateScreen.observe(viewLifecycleOwner) { showDatePickerDialog(it) }
+        viewModel.pickerDate.observe(viewLifecycleOwner) {
+            val defaultCalendar =
+                ContextCompat.getDrawable(requireContext(), R.drawable.outline_edit_calendar_24)
+            val calendarWithDate =
+                ContextCompat.getDrawable(requireContext(), R.drawable.outline_event_available_24)
+
+            if (it == null) {
+                binding?.btnSelectTime?.setImageDrawable(defaultCalendar)
+                binding?.btnSelectTime?.setColorFilter(
+                    ResourcesCompat.getColor(
+                        resources,
+                        R.color.colorOnPrimary,
+                        null
+                    )
+                )
+            } else {
+                binding?.btnSelectTime?.setImageDrawable(calendarWithDate)
+                binding?.btnSelectTime?.setColorFilter(
+                    ResourcesCompat.getColor(
+                        resources,
+                        R.color.light_blue_400,
+                        null
+                    )
+                )
+            }
+
+
+        }
+
 
         viewModel.genreTags.observe(viewLifecycleOwner) { tags ->
             genresAdapter?.let { binding?.rvGenreTags?.post { it.setTags(tags) } }
@@ -137,6 +194,70 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         binding?.rvGenreTags?.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding?.rvGenreTags?.adapter = genresAdapter
+    }
+
+    private fun showDatePickerDialog(date: Date?) {
+        val selectedDate = Calendar.getInstance()
+        date?.let(selectedDate::setTime)
+        context?.let { context ->
+            var isFirstPage = true
+            val iconNext = ContextCompat.getDrawable(context, R.drawable.ic_forward)
+            val iconSave = ContextCompat.getDrawable(context, R.drawable.outline_save_24)
+            val binding = PostTimePickerBinding.inflate(LayoutInflater.from(context))
+            binding.datePicker.minDate = Calendar.getInstance().timeInMillis
+            binding.datePicker.updateDate(
+                selectedDate.get(Calendar.YEAR),
+                selectedDate.get(Calendar.MONTH),
+                selectedDate.get(Calendar.DAY_OF_MONTH)
+            )
+            binding.icErase.setOnClickListener {
+                viewModel.onDatePicked(null)
+                datePickerDialog?.hide()
+            }
+            binding.timePicker.setIs24HourView(true)
+            binding.timePicker.currentHour = selectedDate.get(Calendar.HOUR_OF_DAY)
+            binding.timePicker.currentMinute = selectedDate.get(Calendar.MINUTE)
+            binding.icBack.gone()
+            binding.icNext.setImageDrawable(iconNext)
+            binding.tvTitle.text = getString(R.string.choose_date)
+            binding.icNext.setOnClickListener {
+                if (isFirstPage) {
+                    binding.tvTitle.text = getString(R.string.choose_time)
+                    binding.icNext.setImageDrawable(null)
+                    binding.icNext.setImageDrawable(iconSave)
+                    binding.icBack.visible()
+                    binding.timePicker.gone()
+                    binding.datePicker.gone()
+                    binding.timePicker.visible()
+                    isFirstPage = false
+                } else {
+                    val calendar = GregorianCalendar()
+                    calendar.set(
+                        binding.datePicker.year,
+                        binding.datePicker.month,
+                        binding.datePicker.dayOfMonth
+                    )
+
+                    calendar.set(Calendar.HOUR_OF_DAY, binding.timePicker.currentHour)
+                    calendar.set(Calendar.MINUTE, binding.timePicker.currentMinute)
+                    viewModel.onDatePicked(calendar.time)
+                    datePickerDialog?.hide()
+                }
+            }
+            binding.icBack.setOnClickListener {
+                binding.tvTitle.text = getString(R.string.choose_date)
+                binding.icBack.gone()
+                binding.icNext.setImageDrawable(null)
+                binding.icNext.setImageDrawable(iconNext)
+                binding.datePicker.visible()
+                binding.timePicker.gone()
+                isFirstPage = true
+            }
+            val dialog = AlertDialog.Builder(context).create()
+            dialog.setView(binding.root)
+            dialog.show()
+            datePickerDialog = dialog
+        }
     }
 
     private fun onPicturesUpdated(pictures: List<Picture>) {

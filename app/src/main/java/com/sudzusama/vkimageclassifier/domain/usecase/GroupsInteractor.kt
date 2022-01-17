@@ -61,9 +61,9 @@ class GroupsInteractor @Inject constructor(
         groupsRepository.likeAnItem(API_VERSION, ownerId, itemId, type)
     }
 
-    suspend fun sendPost(groupId: Int, pictures: List<Picture>, message: String?): Int {
+    suspend fun sendPost(groupId: Int, pictures: List<Picture>, message: String?, publishDate: Long?): Int {
         val photos = groupsRepository.uploadPhotos(API_VERSION, groupId, pictures)
-        return groupsRepository.postToWall(API_VERSION, -abs(groupId), FROM_GROUP, message, photos)
+        return groupsRepository.postToWall(API_VERSION, -abs(groupId), FROM_GROUP, message, photos, publishDate)
     }
 
     suspend fun removeLikeFromItem(

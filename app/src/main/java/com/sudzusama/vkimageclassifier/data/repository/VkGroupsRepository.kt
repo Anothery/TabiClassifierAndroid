@@ -93,14 +93,16 @@ class VkGroupsRepository @Inject constructor(
         ownerId: Int,
         fromGroup: Int,
         message: String?,
-        attachements: List<String>?
+        attachements: List<String>?,
+        publishDate: Long?
     ): Int {
         return groupsApi.postToWall(
             version,
             ownerId,
             fromGroup,
             message,
-            attachements?.joinToString(",")
+            attachements?.joinToString(","),
+            publishDate
         ).response.postId
     }
 

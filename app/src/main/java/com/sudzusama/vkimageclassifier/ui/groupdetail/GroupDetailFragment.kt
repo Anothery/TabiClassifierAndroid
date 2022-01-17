@@ -3,6 +3,7 @@ package com.sudzusama.vkimageclassifier.ui.groupdetail
 import android.Manifest
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -78,6 +79,10 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
         viewModel.details.observe(viewLifecycleOwner, {
             if (!it.canPost) {
                 if (it.type == GroupTypes.PAGE) {
+                    TooltipCompat.setTooltipText(
+                        binding.fabCreate as View,
+                        getString(R.string.suggest_post)
+                    )
                     binding.fabCreate.setImageDrawable(
                         ContextCompat.getDrawable(
                             requireContext(),
@@ -89,6 +94,10 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
                     binding.fabCreate.isEnabled = false
                 }
             } else {
+                TooltipCompat.setTooltipText(
+                    binding.fabCreate as View,
+                    getString(R.string.create_post)
+                )
                 binding.fabCreate.setImageDrawable(
                     ContextCompat.getDrawable(
                         requireContext(),

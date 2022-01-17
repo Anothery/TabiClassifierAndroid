@@ -44,9 +44,20 @@
                 android:orientation="horizontal">
 
                 <ImageButton
+                    android:id="@+id/btn_select_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:src="@drawable/outline_edit_calendar_24"
+                    android:tint="@color/colorOnPrimary" />
+
+
+                <ImageButton
                     android:id="@+id/btn_tags_recognition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:background="?selectableItemBackgroundBorderless"
                     android:src="@drawable/outline_blur_on_24"
                     android:tint="@color/colorOnPrimary" />
@@ -64,7 +75,7 @@
                     android:id="@+id/btn_save"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="8dp"
                     android:background="?selectableItemBackgroundBorderless"
                     android:src="@drawable/outline_save_24"
                     android:tint="@color/colorOnPrimary" />
