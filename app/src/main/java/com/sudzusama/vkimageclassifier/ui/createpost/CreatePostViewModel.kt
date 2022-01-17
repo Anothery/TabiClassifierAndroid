@@ -26,7 +26,7 @@ class CreatePostViewModel @Inject constructor(
     authInteractor: AuthInteractor,
     private val classifyInteractor: ClassifyInteractor,
     private val groupsInteractor: GroupsInteractor,
-    fileUtils: FileUtils
+    private val fileUtils: FileUtils
 ) : BaseViewModel(authInteractor) {
 
     private val _galleryItems = MutableLiveData<List<GalleryItem>>()
@@ -89,6 +89,10 @@ class CreatePostViewModel @Inject constructor(
             pictures.value?.let { pictures ->
                 if (pictures.size >= GroupsInteractor.MAX_PICTURES_PER_POST) {
                     _errorMessage.value = "Нельзя добавить более 10 изображений"
+                    return
+                }
+                if(!fileUtils.checkFileExists(item.uri)) {
+                    _errorMessage.value = "Некорректный путь к файлу"
                     return
                 }
                 viewModelScope.launch {

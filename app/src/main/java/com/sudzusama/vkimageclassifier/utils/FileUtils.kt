@@ -2,13 +2,15 @@ package com.sudzusama.vkimageclassifier.utils
 
 import android.content.Context
 import android.provider.MediaStore
+import java.io.File
 import java.util.*
 import javax.inject.Inject
+import android.os.Environment
 
 
 class FileUtils @Inject constructor(private val context: Context) {
-    fun findMediaFiles(): List<String?> {
-        val fileList: MutableList<String?> = ArrayList()
+    fun findMediaFiles(): List<String> {
+        val fileList: MutableList<String> = ArrayList()
         val columns = arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID)
         val orderBy = MediaStore.Images.Media._ID
 
@@ -21,16 +23,17 @@ class FileUtils @Inject constructor(private val context: Context) {
         )
         if (cursor != null) {
             val count = cursor.count
-
             val arrPath = arrayOfNulls<String>(count)
             for (i in 0 until count) {
                 cursor.moveToPosition(i)
                 val dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
                 arrPath[i] = cursor.getString(dataColumnIndex)
-                fileList.add(arrPath[i])
+                arrPath.getOrNull(i)?.let { fileList.add(it) }
             }
             cursor.close()
         }
         return fileList
     }
+
+    fun checkFileExists(path: String) = File(path).exists()
 }
