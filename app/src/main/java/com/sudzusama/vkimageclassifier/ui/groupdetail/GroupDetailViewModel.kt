@@ -11,8 +11,8 @@ import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
 import com.sudzusama.vkimageclassifier.utils.view.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
+import kotlin.Exception
 
 @HiltViewModel
 class GroupDetailViewModel @Inject constructor(
@@ -118,6 +118,21 @@ class GroupDetailViewModel @Inject constructor(
                 .sortedByDescending { it.date }
         } catch (ex: Exception) {
             _errorMessage.value = ex.message
+        }
+    }
+
+    fun onPostRemoved(id: Int) = viewModelScope.launch {
+        _details.value?.let { details ->
+            try {
+                if (groupsInteractor.deletePost(details.id, id)) {
+                    _wallItems.value =
+                        _wallItems.value?.toMutableList()?.apply { removeAll { it.id == id } }
+                } else {
+                    _errorMessage.value = "Не удалось удалить пост"
+                }
+            } catch (ex: Exception) {
+                _errorMessage.value = "Не удалось удалить пост"
+            }
         }
     }
 

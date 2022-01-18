@@ -1,11 +1,11 @@
 package com.sudzusama.vkimageclassifier.ui.groupdetail.wall
 
+import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Rect
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -17,9 +17,12 @@ import com.sudzusama.vkimageclassifier.databinding.GroupWallItemBinding
 import com.sudzusama.vkimageclassifier.domain.model.WallItem
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetail
 import org.ocpsoft.prettytime.PrettyTime
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import android.util.TypedValue
+import android.view.*
+import com.sudzusama.vkimageclassifier.databinding.WallOptionDialogBinding
+
 
 class WallAdapter(
     private val posts: ArrayList<WallItem?>,
@@ -27,7 +30,8 @@ class WallAdapter(
     private val glide: RequestManager,
     private val onPostLiked: (Int, Boolean) -> Unit,
     private val onImageClicked: (List<ImageDetail>, Int) -> Unit,
-    private val onDownloadMore: () -> Unit
+    private val onDownloadMore: () -> Unit,
+    private val onPostRemoved: (Int) -> Unit,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var downloadMore = true
@@ -43,7 +47,7 @@ class WallAdapter(
         posts.addAll(list)
         diffResult.dispatchUpdatesTo(this)
     }
-    
+
     fun setDownloadMore(downloadMore: Boolean) {
         this.downloadMore = downloadMore
         setWall(posts.filterNotNull())
@@ -125,16 +129,16 @@ class WallAdapter(
     inner class WallItemViewHolder(
         val binding: GroupWallItemBinding,
         private val adapter: PostImageAdapter
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        private lateinit var menuDialog: AlertDialog
 
         fun bind(wallItem: WallItem) {
+            initDialog(wallItem)
+
             if (wallItem.images.isEmpty() && wallItem.text.isBlank()) {
                 binding.tvText.setTextColor(
-                    ContextCompat.getColor(
-                        context,
-                        R.color.colorOnPrimaryDisabled
-                    )
+                    ContextCompat.getColor(context, R.color.colorOnPrimaryDisabled)
                 )
                 binding.tvText.text = context.resources.getString(R.string.wall_item_no_content)
             } else {
@@ -172,6 +176,20 @@ class WallAdapter(
             }
 
             adapter.setImages(wallItem.images)
+        }
+
+        private fun initDialog(wallItem: WallItem) {
+            val menuBinding = WallOptionDialogBinding.inflate(LayoutInflater.from(context))
+            menuDialog = AlertDialog.Builder(context).setView(menuBinding.root).create()
+            menuDialog.window?.decorView?.background?.alpha = 0
+            binding.root.setOnLongClickListener {
+                menuDialog.show()
+                menuBinding.tvDeletePost.setOnClickListener {
+                    onPostRemoved(wallItem.id)
+                    menuDialog.dismiss()
+                }
+                true
+            }
         }
     }
 

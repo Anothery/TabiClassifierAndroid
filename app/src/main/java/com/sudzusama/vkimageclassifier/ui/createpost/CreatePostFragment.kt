@@ -4,7 +4,6 @@ import android.animation.LayoutTransition
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.res.Resources
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +21,6 @@ import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentCreatePostBinding
 import com.sudzusama.vkimageclassifier.databinding.PostTimePickerBinding
 import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
-import com.sudzusama.vkimageclassifier.domain.model.GroupTypes
 import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryAdapter
 import com.sudzusama.vkimageclassifier.ui.createpost.gallery.GalleryItem
 import com.sudzusama.vkimageclassifier.ui.createpost.pictures.Picture
@@ -34,12 +32,6 @@ import com.sudzusama.vkimageclassifier.utils.view.visible
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import kotlin.collections.ArrayList
-import android.R.animator
-
-import androidx.recyclerview.widget.SimpleItemAnimator
-
-
-
 
 
 @AndroidEntryPoint
@@ -259,8 +251,8 @@ class CreatePostFragment : BottomSheetDialogFragment() {
                 binding.timePicker.gone()
                 isFirstPage = true
             }
-            val dialog = AlertDialog.Builder(context).create()
-            dialog.setView(binding.root)
+            val dialog = AlertDialog.Builder(context).setView(binding.root).create()
+            dialog.window?.decorView?.background?.alpha = 0
             dialog.show()
             datePickerDialog = dialog
         }

@@ -1,9 +1,6 @@
 package com.sudzusama.vkimageclassifier.data.mapper
 
-import com.sudzusama.vkimageclassifier.data.response.GroupDetailResponse
-import com.sudzusama.vkimageclassifier.data.response.GroupWallResponse
-import com.sudzusama.vkimageclassifier.data.response.GroupsListResponse
-import com.sudzusama.vkimageclassifier.data.response.TabiClassifyResponse
+import com.sudzusama.vkimageclassifier.data.response.*
 import com.sudzusama.vkimageclassifier.domain.model.*
 import kotlin.math.abs
 
@@ -24,6 +21,8 @@ fun GroupsListResponse.mapToDomain(): List<GroupShort> = this.response.groups.ma
         it.activity
     )
 }
+
+fun WallDeleteDesponse.mapToDomain(): Boolean = this.response == 1
 
 fun TabiClassifyResponse.mapToDomain(): ClassifyResponse =
     ClassifyResponse(

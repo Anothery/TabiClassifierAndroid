@@ -83,5 +83,12 @@ interface GroupsApi {
         @Query("publish_date") publishDate: Long?,
     ): WallPostResponse
 
+    @GET("wall.delete")
+    suspend fun deletePost(
+        @Query("v") version: String,
+        @Query("owner_id") ownerId: Int,
+        @Query("post_id") postId: Int,
+    ): WallDeleteDesponse
+
 
 }

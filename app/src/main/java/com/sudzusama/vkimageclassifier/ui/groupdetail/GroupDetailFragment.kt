@@ -127,7 +127,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
             } else {
                 binding.tvEmptyWall.visibility = View.GONE
             }
-            wallAdapter?.let { it.setWall(newList) }
+            wallAdapter?.setWall(newList)
         })
 
         viewModel.isLoading.observe(viewLifecycleOwner, { isLoading ->
@@ -157,7 +157,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
                 requireActivity().supportFragmentManager.beginTransaction()
                     .add(R.id.navHostFragment, detailsFragment, ImageDetailParentFragment.TAG)
                     .commit()
-            }, viewModel::onDownloadMore
+            }, viewModel::onDownloadMore, viewModel::onPostRemoved
         )
         headerAdapter = HeaderAdapter(Glide.with(this))
         binding.rvWall.layoutManager =
