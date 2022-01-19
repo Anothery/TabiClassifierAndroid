@@ -1,5 +1,9 @@
 package com.sudzusama.vkimageclassifier.data.repository
 
+import android.content.Context
+import android.database.Cursor
+import android.net.Uri
+import android.provider.OpenableColumns
 import com.sudzusama.vkimageclassifier.data.mapper.mapToDomain
 import com.sudzusama.vkimageclassifier.data.network.vk.GroupsApi
 import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
@@ -7,6 +11,7 @@ import com.sudzusama.vkimageclassifier.domain.model.GroupShort
 import com.sudzusama.vkimageclassifier.domain.model.WallItem
 import com.sudzusama.vkimageclassifier.domain.repository.GroupsRepository
 import com.sudzusama.vkimageclassifier.ui.createpost.pictures.Picture
+import com.sudzusama.vkimageclassifier.utils.FileUtils
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -14,7 +19,9 @@ import java.io.File
 import javax.inject.Inject
 import kotlin.math.abs
 
+
 class VkGroupsRepository @Inject constructor(
+    private val fileUtils: FileUtils,
     private val groupsApi: GroupsApi
 ) : GroupsRepository {
     companion object {
@@ -65,12 +72,23 @@ class VkGroupsRepository @Inject constructor(
         val uploadServerUrl = groupsApi.getUploadServer(API_VERSION, groupId).response.uploadUrl
         val uploadedPhotos = mutableListOf<String>()
         photos.forEach { photo ->
-            val file = File(photo.uri)
-            val body = MultipartBody.Part.createFormData(
-                "photo",
-                file.name,
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-            )
+            val body = if (photo.isInternal) {
+                val file = File(photo.uri)
+                MultipartBody.Part.createFormData(
+                    "photo",
+                    file.name,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+                )
+            } else {
+                val content = fileUtils.contentFileToByteUtils(Uri.parse(photo.uri))
+                val name = fileUtils.getFileName(Uri.parse(photo.uri)) ?: ""
+                MultipartBody.Part.createFormData(
+                    "photo",
+                    name,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), content)
+                )
+            }
+
             val uploadedResult = groupsApi.uploadFileToServer(uploadServerUrl, API_VERSION, body)
             val wallResponse = groupsApi.saveWallPhoto(
                 API_VERSION,
@@ -87,6 +105,7 @@ class VkGroupsRepository @Inject constructor(
 
         return uploadedPhotos
     }
+
 
     override suspend fun postToWall(
         ownerId: Int,

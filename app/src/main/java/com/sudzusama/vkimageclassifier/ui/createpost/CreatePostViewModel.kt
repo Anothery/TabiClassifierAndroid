@@ -85,6 +85,11 @@ class CreatePostViewModel @Inject constructor(
         _pickerDate.value = date
     }
 
+    fun onIntentUriCatched(uri: String) {
+        uploadPicture(uri, false)
+    }
+
+    // TODO MOVE PICTURE UPLOADING LOGIC OUTSIDE onGalleryItemClicked
     fun onGalleryItemClicked(item: GalleryItem, position: Int) {
         if (item.selected) {
             pictures.value?.let { pictures ->
@@ -102,77 +107,82 @@ class CreatePostViewModel @Inject constructor(
             }
 
         } else {
-            pictures.value?.let { pictures ->
-                if (pictures.size >= GroupsInteractor.MAX_PICTURES_PER_POST) {
-                    _errorMessage.value = "Нельзя добавить более 10 изображений"
-                    return
-                }
-                if (!fileUtils.checkFileExists(item.uri)) {
-                    _errorMessage.value = "Некорректный путь к файлу"
-                    return
-                }
-                viewModelScope.launch {
-                    _selectedItem.value = position
+            uploadPicture(item.uri, true, position)
+        }
+    }
 
-                    if (_tagsRecognition.value != false) {
-                        val picture = Picture(item.uri, position, true, null)
-                        val updatedPictures = pictures.toMutableList().apply { add(picture) }
-                        _pictures.value = updatedPictures
-                        try {
-                            val info = classifyInteractor.classifyImage(item.uri)
-                            val genre = with(info.predictions) {
-                                if (art >= manga && art >= frame) return@with Genre.Art(art)
-                                else if (manga >= art && manga >= frame) return@with Genre.Manga(
-                                    manga
-                                )
-                                else if (frame >= art && frame >= manga) return@with Genre.Frame(
-                                    frame
-                                )
-                                else return@with Genre.Unknown(0.0)
-                            }
+    private fun uploadPicture(uri: String, isInternal: Boolean, positionInGallery: Int = -1) {
+        pictures.value?.let { pictures ->
+            if (pictures.size >= GroupsInteractor.MAX_PICTURES_PER_POST) {
+                _errorMessage.value = "Нельзя добавить более 10 изображений"
+                return
+            }
+            if (isInternal && !fileUtils.checkFileExists(uri)) {
+                _errorMessage.value = "Некорректный путь к файлу"
+                return
+            }
 
-                            val dominantColors = info.colors.map {
-                                DominantColor(
-                                    Color.parseColor(it.meanHexColor),
-                                    it.percent,
-                                    it.name
-                                )
-                            }
+            viewModelScope.launch {
+                if (isInternal) _selectedItem.value = positionInGallery
 
-                            _pictures.value?.let { recent ->
-                                recent.find { it.uri == picture.uri }?.let { picture ->
-                                    updateGenreTags(
-                                        info.predictions.art,
-                                        info.predictions.manga,
-                                        info.predictions.frame
+                if (_tagsRecognition.value != false) {
+                    val picture = Picture(uri, positionInGallery, true, null, isInternal)
+                    val updatedPictures = pictures.toMutableList().apply { add(picture) }
+                    _pictures.value = updatedPictures
+                    try {
+                        val info = classifyInteractor.classifyImage(uri, isInternal)
+                        val genre = with(info.predictions) {
+                            if (art >= manga && art >= frame) return@with Genre.Art(art)
+                            else if (manga >= art && manga >= frame) return@with Genre.Manga(
+                                manga
+                            )
+                            else if (frame >= art && frame >= manga) return@with Genre.Frame(
+                                frame
+                            )
+                            else return@with Genre.Unknown(0.0)
+                        }
+
+                        val dominantColors = info.colors.map {
+                            DominantColor(
+                                Color.parseColor(it.meanHexColor),
+                                it.percent,
+                                it.name
+                            )
+                        }
+
+                        _pictures.value?.let { recent ->
+                            recent.find { it.uri == picture.uri }?.let { picture ->
+                                updateGenreTags(
+                                    info.predictions.art,
+                                    info.predictions.manga,
+                                    info.predictions.frame
+                                )
+                                updateColorTags(dominantColors, pictures)
+                                _pictures.value = recent.toMutableList().apply {
+                                    this[indexOf(picture)] = picture.copy(
+                                        isLoading = false,
+                                        detail = PictureDetail(genre, dominantColors)
                                     )
-                                    updateColorTags(dominantColors, pictures)
-                                    _pictures.value = recent.toMutableList().apply {
-                                        this[indexOf(picture)] = picture.copy(
-                                            isLoading = false,
-                                            detail = PictureDetail(genre, dominantColors)
-                                        )
-                                    }
-                                }
-                            }
-
-                        } catch (ex: Exception) {
-                            ex.printStackTrace()
-                            _pictures.value?.let { recent ->
-                                recent.find { it.uri == picture.uri }?.let { picture ->
-                                    _errorMessage.value = ex.message
-                                    _pictures.value = recent.toMutableList().apply {
-                                        this[indexOf(picture)] = picture.copy(isLoading = false)
-                                    }
                                 }
                             }
                         }
 
-                    } else {
-                        val picture = Picture(item.uri, position, false, null)
-                        val updatedPictures = pictures.toMutableList().apply { add(picture) }
-                        _pictures.value = updatedPictures
+                    } catch (ex: Exception) {
+                        ex.printStackTrace()
+                        _pictures.value?.let { recent ->
+                            recent.find { it.uri == picture.uri }?.let { picture ->
+                                _errorMessage.value = ex.message
+                                _pictures.value = recent.toMutableList().apply {
+                                    this[indexOf(picture)] = picture.copy(isLoading = false)
+                                }
+                            }
+                        }
                     }
+
+                } else {
+                    val picture = Picture(uri, positionInGallery, false, null, isInternal)
+                    val updatedPictures = pictures.toMutableList().apply { add(picture) }
+                    _pictures.value = updatedPictures
                 }
             }
         }
@@ -222,7 +232,7 @@ class CreatePostViewModel @Inject constructor(
             val updatedList = pictures.toMutableList().apply {
                 pictures.firstOrNull { it.uri == picture.uri }?.let {
                     remove(it)
-                    _deselectedItem.value = picture.galleryPosition
+                    if (picture.isInternal) _deselectedItem.value = picture.galleryPosition
                 }
             }
             _pictures.value = updatedList

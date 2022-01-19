@@ -8,9 +8,13 @@ fun GroupsListResponse.mapToDomain(): List<GroupShort> = this.response.groups.ma
     GroupShort(
         it.id,
         it.name,
-        it.type,
+        when (it.type) {
+            "event" -> GroupTypes.EVENT
+            "page" -> GroupTypes.PAGE
+            else -> GroupTypes.GROUP
+        },
         it.adminLevel,
-        it.isAdmin,
+        it.isAdmin != 0,
         it.isAdvertiser,
         it.isClosed,
         it.isMember,
@@ -18,7 +22,8 @@ fun GroupsListResponse.mapToDomain(): List<GroupShort> = this.response.groups.ma
         it.photo200,
         it.photo50,
         it.screenName,
-        it.activity
+        it.activity,
+        it.canPost != 0
     )
 }
 

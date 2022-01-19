@@ -4,6 +4,7 @@ import android.animation.LayoutTransition
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.res.Resources
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -58,6 +59,8 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val details = arguments?.getParcelable<GroupDetail>(GROUP_DETAIL)
+        val intentImageUri = arguments?.getString(INTENT_IMAGE)
+
         initPictures()
         initGenres()
         initColors()
@@ -89,6 +92,8 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         binding?.btnTagsRecognition?.setOnClickListener { viewModel.onChangeTagsRecognition() }
         binding?.llMain?.layoutTransition?.enableTransitionType(LayoutTransition.CHANGING)
 
+
+        intentImageUri?.let { viewModel.onIntentUriCatched(it) }
         details?.let {
             if (it.canPost) binding?.btnSelectTime?.visible() else binding?.btnSelectTime?.gone()
         }
@@ -354,11 +359,15 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     companion object {
         const val TAG = "CreatePostFragment"
         const val GROUP_DETAIL = "GROUP_DETAIL"
+        const val INTENT_IMAGE = "INTENT_IMAGE"
         const val ON_POST_CREATED = "ON_POST_CREATED"
 
         @JvmStatic
-        fun newInstance(detail: GroupDetail) = CreatePostFragment().apply {
-            arguments = Bundle().apply { putParcelable(GROUP_DETAIL, detail) }
+        fun newInstance(detail: GroupDetail, intentImageUri: Uri?) = CreatePostFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(GROUP_DETAIL, detail)
+                putString(INTENT_IMAGE, intentImageUri?.toString())
+            }
         }
     }
 }

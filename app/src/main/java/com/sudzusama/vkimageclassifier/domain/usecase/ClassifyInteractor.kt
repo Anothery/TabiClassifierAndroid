@@ -5,7 +5,7 @@ import com.sudzusama.vkimageclassifier.domain.repository.ClassifyRepository
 import javax.inject.Inject
 
 class ClassifyInteractor @Inject constructor(private val tabiRepository: ClassifyRepository) {
-    suspend fun classifyImage(uri: String): ClassifyResponse {
-        return tabiRepository.classifyImage(uri)
+    suspend fun classifyImage(uri: String, isInternal: Boolean): ClassifyResponse {
+        return tabiRepository.classifyImage(uri, isInternal)
     }
 }

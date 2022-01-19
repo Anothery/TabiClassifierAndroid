@@ -3,9 +3,9 @@ package com.sudzusama.vkimageclassifier.domain.model
 data class GroupShort(
     val id: Int,
     val name: String,
-    val type: String,
+    val type: Int,
     val adminLevel: Int?,
-    val isAdmin: Int,
+    val isAdmin: Boolean,
     val isAdvertiser: Int,
     val isClosed: Int,
     val isMember: Int,
@@ -14,4 +14,5 @@ data class GroupShort(
     val photo50: String,
     val screenName: String?,
     val activity: String?,
+    val canPost: Boolean
 )

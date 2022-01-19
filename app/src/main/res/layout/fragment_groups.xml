@@ -36,9 +36,15 @@
                         android:layout_height="match_parent"
                         android:scrollbars="none"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
                 </LinearLayout>
             </ScrollView>
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:visibility="gone" />
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/action_bar"
@@ -91,6 +97,7 @@
 
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
     </com.google.android.material.card.MaterialCardView>
 

@@ -7,7 +7,8 @@ data class Picture(
     val uri: String,
     val galleryPosition: Int,
     val isLoading: Boolean,
-    val detail: PictureDetail?
+    val detail: PictureDetail?,
+    val isInternal: Boolean
 )
 
 data class PictureDetail(val genre: Genre, val colors: List<DominantColor>)

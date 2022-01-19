@@ -17,8 +17,8 @@ android {
         targetSdkVersion target_sdk_version
 
         applicationId "xyz.anothery.tabiclassifier"
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -41,11 +41,12 @@ android {
             buildConfigField "String", "TABI_API_URL", "\"http://81.163.26.108/\""
         }
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             resValue "integer", "com_vk_sdk_AppId", vkAppId
             buildConfigField "String", "VK_API_URL", "\"https://api.vk.com/method/\""
+            buildConfigField "String", "TABI_API_URL", "\"http://81.163.26.108/\""
         }
     }
 

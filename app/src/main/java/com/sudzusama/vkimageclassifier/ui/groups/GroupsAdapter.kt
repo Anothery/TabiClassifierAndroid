@@ -12,7 +12,7 @@ import com.sudzusama.vkimageclassifier.domain.model.GroupShort
 
 class GroupsAdapter(
     private val glide: RequestManager,
-    private val onItemClicked: (Int) -> Unit
+    private val onItemClicked: (GroupShort) -> Unit
 ) :
     RecyclerView.Adapter<GroupsAdapter.ViewHolder>() {
 
@@ -44,11 +44,11 @@ class GroupsAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(groupShort: GroupShort) {
-            binding.root.setOnClickListener { onItemClicked(groupShort.id) }
+            binding.root.setOnClickListener { onItemClicked(groupShort) }
             binding.tvGroupName.text = groupShort.name
             binding.tvGroupType.text = groupShort.activity
 
-            if (groupShort.isAdmin != 0) {
+            if (groupShort.isAdmin) {
                 binding.ivAdminPrivilege.visibility = View.VISIBLE
             } else {
                 binding.ivAdminPrivilege.visibility = View.INVISIBLE

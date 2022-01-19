@@ -1,5 +1,6 @@
 package com.sudzusama.vkimageclassifier.ui.groups
 
+import android.Manifest
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -15,12 +16,14 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.fondesa.kpermissions.allGranted
+import com.fondesa.kpermissions.extension.permissionsBuilder
+import com.fondesa.kpermissions.extension.send
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentGroupsBinding
+import com.sudzusama.vkimageclassifier.ui.createpost.CreatePostFragment
 import com.sudzusama.vkimageclassifier.ui.groupdetail.GroupDetailFragment
-import com.sudzusama.vkimageclassifier.utils.view.getQueryTextChangeStateFlow
-import com.sudzusama.vkimageclassifier.utils.view.hideKeyboard
-import com.sudzusama.vkimageclassifier.utils.view.shortToast
+import com.sudzusama.vkimageclassifier.utils.view.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -61,8 +64,32 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
         viewModel.errorMessage.observe(viewLifecycleOwner, { requireContext().shortToast(it) })
 
         viewModel.showGroupDetail.observe(viewLifecycleOwner, {
-            showGroupDetail(it)
+            showGroupDetail(it.id)
             context?.hideKeyboard(view)
+        })
+
+        viewModel.loading.observe(viewLifecycleOwner) { if (it) binding.progressBar.visible() else binding.progressBar.gone() }
+
+        viewModel.showSendPost.observe(viewLifecycleOwner) {
+            permissionsBuilder(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ).build().send { permStatuses ->
+                if (permStatuses.allGranted()) {
+                    activity?.supportFragmentManager?.setFragmentResultListener(
+                        CreatePostFragment.ON_POST_CREATED,
+                        viewLifecycleOwner, { _, _ -> activity?.finish() })
+                    activity?.supportFragmentManager?.let { fm ->
+                        CreatePostFragment.newInstance(it.first, it.second)
+                            .show(fm, CreatePostFragment.TAG)
+                    }
+                }
+            }
+
+        }
+
+        viewModel.exit.observe(viewLifecycleOwner, {
+            activity?.finish()
         })
     }
 
@@ -143,7 +170,7 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
 
 
     private fun initGroupsList() {
-        adapter = GroupsAdapter(Glide.with(this)) { viewModel.onGroupClicked(it) }
+        adapter = GroupsAdapter(Glide.with(this)) { viewModel.onGroupClicked(it, activity?.intent) }
         binding.rvGroups.layoutManager = LinearLayoutManager(activity)
         binding.rvGroups.adapter = this.adapter
 

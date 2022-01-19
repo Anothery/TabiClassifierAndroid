@@ -51,8 +51,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
         initDetailRecyclerView()
 
         activity?.supportFragmentManager?.setFragmentResultListener(ON_POST_CREATED,
-            viewLifecycleOwner,
-            { requestKey, result -> viewModel.onUpdateWall() })
+            viewLifecycleOwner, { requestKey, result -> viewModel.onUpdateWall() })
 
 
         binding.btnBack.setOnClickListener {
@@ -72,7 +71,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
 
         viewModel.showCreateScreen.observe(viewLifecycleOwner, { detail ->
             activity?.supportFragmentManager?.let {
-                CreatePostFragment.newInstance(detail).show(it, CreatePostFragment.TAG)
+                CreatePostFragment.newInstance(detail, null).show(it, CreatePostFragment.TAG)
             }
         })
 

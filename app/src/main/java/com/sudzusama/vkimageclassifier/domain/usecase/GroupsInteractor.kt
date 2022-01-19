@@ -20,7 +20,7 @@ class GroupsInteractor @Inject constructor(
     }
 
     suspend fun getGroups(): List<GroupShort> {
-        val fields = listOf("activity")
+        val fields = listOf("activity", "can_post")
         val filter = "admin,moder,editor"
         val nonModGroups = groupsRepository.getGroups(
             authInteractor.getUserId(),
