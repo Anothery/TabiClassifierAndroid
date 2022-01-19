@@ -48,7 +48,11 @@ class GroupDetailViewModel @Inject constructor(
 
     private fun getGroupById() {
         viewModelScope.launch {
-            _details.value = groupsInteractor.getGroupById(wallId)
+            try {
+                _details.value = groupsInteractor.getGroupById(wallId)
+            } catch (ex: Exception) {
+                _errorMessage.value = ex.message
+            }
         }
     }
 

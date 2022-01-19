@@ -96,6 +96,7 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         intentImageUri?.let { viewModel.onIntentUriCatched(it) }
         details?.let {
             if (it.canPost) binding?.btnSelectTime?.visible() else binding?.btnSelectTime?.gone()
+
         }
         binding?.btnSelectTime?.setOnClickListener { viewModel.onSelectTimeButtonClicked() }
 

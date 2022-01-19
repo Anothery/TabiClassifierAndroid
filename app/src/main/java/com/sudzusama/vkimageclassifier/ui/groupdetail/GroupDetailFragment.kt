@@ -27,6 +27,7 @@ import com.sudzusama.vkimageclassifier.ui.groupdetail.wall.WallAdapter
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetailParentFragment
 import com.sudzusama.vkimageclassifier.utils.view.gone
 import com.sudzusama.vkimageclassifier.utils.view.shortToast
+import com.sudzusama.vkimageclassifier.utils.view.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -76,6 +77,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
         })
 
         viewModel.details.observe(viewLifecycleOwner, {
+            binding.fabCreate.visible()
             if (!it.canPost) {
                 if (it.type == GroupTypes.PAGE) {
                     TooltipCompat.setTooltipText(

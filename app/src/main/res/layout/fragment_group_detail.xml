@@ -97,11 +97,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_margin="16dp"
-
             android:contentDescription="@string/fab_create_post"
             android:src="@drawable/ic_create_black_24dp"
+            android:visibility="gone"
             app:backgroundTint="@android:color/white"
-            app:tint="@android:color/black" />
+            app:tint="@android:color/black"
+            tools:visibility="visible" />
     </FrameLayout>
 
 
