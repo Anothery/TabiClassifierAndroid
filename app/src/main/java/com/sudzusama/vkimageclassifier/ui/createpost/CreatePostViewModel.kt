@@ -152,18 +152,18 @@ class CreatePostViewModel @Inject constructor(
 
                         _pictures.value?.let { recent ->
                             recent.find { it.uri == picture.uri }?.let { picture ->
-                                updateGenreTags(
-                                    info.predictions.art,
-                                    info.predictions.manga,
-                                    info.predictions.frame
-                                )
-                                updateColorTags(dominantColors, pictures)
                                 _pictures.value = recent.toMutableList().apply {
                                     this[indexOf(picture)] = picture.copy(
                                         isLoading = false,
                                         detail = PictureDetail(genre, dominantColors)
                                     )
                                 }
+                                updateGenreTags(
+                                    info.predictions.art,
+                                    info.predictions.manga,
+                                    info.predictions.frame
+                                )
+                                updateColorTags(dominantColors, pictures)
                             }
                         }
 
