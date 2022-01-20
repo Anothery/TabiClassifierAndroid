@@ -3,8 +3,6 @@ package com.sudzusama.vkimageclassifier.ui.groupdetail.wall
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.ViewTreeObserver.OnPreDrawListener
-import androidx.core.view.doOnNextLayout
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -51,30 +49,7 @@ class PostImageAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostImageViewHolder {
         val binding =
             GroupWallImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        binding.root.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                val lp = binding.root.layoutParams
-                if (lp is StaggeredGridLayoutManager.LayoutParams) {
-                    when (viewType) {
-                        VIEW_TYPE_FULL -> binding.root.updateLayoutParams<StaggeredGridLayoutManager.LayoutParams> {
-                            isFullSpan = true
-                            width = parent.width
-                        }
-
-                        VIEW_TYPE_HALF -> binding.root.updateLayoutParams<StaggeredGridLayoutManager.LayoutParams> {
-                            isFullSpan = false
-                            width = parent.width / 2
-                            height = 300.toPx
-                        }
-                    }
-                    val lm = (parent as RecyclerView).layoutManager as StaggeredGridLayoutManager?
-                    lm?.invalidateSpanAssignments()
-                }
-                binding.root.viewTreeObserver.removeOnPreDrawListener(this)
-                return true
-            }
-        })
-        return PostImageViewHolder(binding)
+        return PostImageViewHolder(binding, parent.measuredWidth)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -98,41 +73,75 @@ class PostImageAdapter(
         holder.recycle()
     }
 
-    inner class PostImageViewHolder(val binding: GroupWallImageBinding) :
+    inner class PostImageViewHolder(
+        private val binding: GroupWallImageBinding,
+        private val parentWidth: Int
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(image: WallImageItem, position: Int) {
-            binding.root.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    if (getItemViewType(position) == VIEW_TYPE_FULL) {
-                        val ratio = 1f * image.height / image.width
-                        binding.ivWallImage.updateLayoutParams { height = (width * ratio).toInt() }
-                    }
-                    glide.load(image.url)
-                        .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .transition(DrawableTransitionOptions.withCrossFade(500))
-                        .into(binding.ivWallImage)
+            val ratio = 1f * image.height / image.width
+            when (getItemViewType(position)) {
+                VIEW_TYPE_FULL -> binding.root.updateLayoutParams<StaggeredGridLayoutManager.LayoutParams> {
+                    isFullSpan = true
+                    width = parentWidth
+                    height = (width * ratio).toInt()
 
-                    binding.root.viewTreeObserver.removeOnPreDrawListener(this)
-                    return true
                 }
-            })
-            binding.root.requestLayout()
-
-            binding.ivWallImage.setOnClickListener {
-                val imagesList = mutableListOf<ImageDetail>()
-                currentRecyclerView?.let { rv ->
-                    for (i in 0 until itemCount) {
-                        val holder = rv.getChildViewHolder(rv.getChildAt(i)) as PostImageViewHolder
-                        with(holder.binding.ivWallImage) {
-                            val xy = IntArray(2).apply { getLocationOnScreen(this) }
-                            imagesList.add(ImageDetail(images[i].url, width, height, xy[0], xy[1]))
-                        }
-                    }
+                VIEW_TYPE_HALF -> binding.root.updateLayoutParams<StaggeredGridLayoutManager.LayoutParams> {
+                    isFullSpan = false
+                    height = 300.toPx
                 }
-                onImageClicked(imagesList, position)
             }
+
+            glide.load(image.url)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transition(DrawableTransitionOptions.withCrossFade(500))
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        binding.ivWallImage.setOnClickListener {
+                            val imagesList = mutableListOf<ImageDetail>()
+                            currentRecyclerView?.let { rv ->
+                                for (i in 0 until itemCount) {
+                                    val holder =
+                                        rv.getChildViewHolder(rv.getChildAt(i)) as PostImageViewHolder
+                                    with(holder.binding.ivWallImage) {
+                                        val xy = IntArray(2).apply { getLocationOnScreen(this) }
+                                        imagesList.add(
+                                            ImageDetail(
+                                                images[i].url,
+                                                width,
+                                                height,
+                                                xy[0],
+                                                xy[1]
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                            onImageClicked(imagesList, position)
+                        }
+                        return false
+                    }
+
+                })
+                .into(binding.ivWallImage)
         }
 
         fun recycle() {

@@ -41,15 +41,12 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
         const val GROUP_ID = "groupId"
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.getInt(GROUP_ID)?.let(viewModel::initialize)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initDetailRecyclerView()
+
+        arguments?.getInt(GROUP_ID)?.let(viewModel::initialize)
 
         activity?.supportFragmentManager?.setFragmentResultListener(ON_POST_CREATED,
             viewLifecycleOwner, { requestKey, result -> viewModel.onUpdateWall() })

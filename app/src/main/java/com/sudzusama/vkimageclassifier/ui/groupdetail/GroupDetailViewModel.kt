@@ -12,7 +12,6 @@ import com.sudzusama.vkimageclassifier.utils.view.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.Exception
 
 @HiltViewModel
 class GroupDetailViewModel @Inject constructor(
@@ -42,8 +41,11 @@ class GroupDetailViewModel @Inject constructor(
 
     fun initialize(id: Int) {
         wallId = id
-        getFirstWallItems()
-        getGroupById()
+
+        if (_wallItems.value == null) {
+            getFirstWallItems()
+            getGroupById()
+        }
     }
 
     private fun getGroupById() {
@@ -60,7 +62,7 @@ class GroupDetailViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _isLoading.value = true
-                val loadedData = groupsInteractor.getGroupWall(wallId, wallItems.value?.size ?: 0)
+                val loadedData = groupsInteractor.getGroupWall(wallId, 0)
                 if (loadedData.isEmpty()) _downloadMore.value = false
                 _wallItems.value = loadedData
                 _showStartProgress.value = false
