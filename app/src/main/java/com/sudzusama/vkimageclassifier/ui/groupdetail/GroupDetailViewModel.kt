@@ -67,7 +67,7 @@ class GroupDetailViewModel @Inject constructor(
                 _wallItems.value = loadedData
                 _showStartProgress.value = false
             } catch (ex: Exception) {
-                _errorMessage.value = ex.message
+                _errorMessage.value = "Нет соединения с сервером VK"
             } finally {
                 _isLoading.value = false
             }

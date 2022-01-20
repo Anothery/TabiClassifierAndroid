@@ -1,19 +1,13 @@
-package com.sudzusama.vkimageclassifier.data.response
+package com.sudzusama.vkimageclassifier.data.response.vk
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class GroupsListResponse(
-    @SerialName("response") val response: Response
+    @SerialName("count") val count: Int? = null,
+    @SerialName("items") val groups: List<Group>
 ) {
-
-    @Serializable
-    data class Response(
-        @SerialName("count") val count: Int? = null,
-        @SerialName("items") val groups: List<Group>
-    )
-
     @Serializable
     data class Group(
         @SerialName("id") val id: Int,
@@ -32,6 +26,7 @@ data class GroupsListResponse(
         @SerialName("can_post") val canPost: Int
     )
 }
+
 
 
 

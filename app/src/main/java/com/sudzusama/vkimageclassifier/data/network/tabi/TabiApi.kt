@@ -1,6 +1,6 @@
 package com.sudzusama.vkimageclassifier.data.network.tabi
 
-import com.sudzusama.vkimageclassifier.data.response.TabiClassifyResponse
+import com.sudzusama.vkimageclassifier.data.response.tabi.TabiClassifyResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Multipart
 import retrofit2.http.POST

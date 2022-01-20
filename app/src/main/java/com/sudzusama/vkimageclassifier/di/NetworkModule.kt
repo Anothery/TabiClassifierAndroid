@@ -45,11 +45,12 @@ class NetworkModule {
             .baseUrl(BuildConfig.TABI_API_URL)
             .build().create(TabiApi::class.java)
 
+
     @ExperimentalSerializationApi
     @Provides
     @Singleton
     fun provideConverterFactory(): Converter.Factory =
-        Json { ignoreUnknownKeys = true }.asConverterFactory("application/json".toMediaType())
+        Json { ignoreUnknownKeys = true; }.asConverterFactory("application/json".toMediaType())
 
     @Provides
     @Singleton

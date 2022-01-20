@@ -19,6 +19,7 @@ import com.sudzusama.vkimageclassifier.utils.view.SingleLiveEvent
 import com.sudzusama.vkimageclassifier.utils.view.dominantcolor.DominantColor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 import java.util.*
 import javax.inject.Inject
 
@@ -69,7 +70,7 @@ class CreatePostViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _galleryItems.value =
-                fileUtils.findMediaFiles().map { GalleryItem("$it", false) }.reversed()
+                fileUtils.findMediaFiles().map { GalleryItem(it, false) }.reversed()
         }
     }
 
@@ -171,7 +172,7 @@ class CreatePostViewModel @Inject constructor(
                         ex.printStackTrace()
                         _pictures.value?.let { recent ->
                             recent.find { it.uri == picture.uri }?.let { picture ->
-                                _errorMessage.value = ex.message
+                                _errorMessage.value = "Не удалось классифицировать изображение"
                                 _pictures.value = recent.toMutableList().apply {
                                     this[indexOf(picture)] = picture.copy(isLoading = false)
                                 }
@@ -276,12 +277,12 @@ class CreatePostViewModel @Inject constructor(
                             if (message.isNotEmpty()) message else null,
                             _pickerDate.value?.time?.div(1000)
                         )
-                        _postingState.value = false
                         _onPostSent.value = true
                     }
                 } catch (ex: Exception) {
                     ex.printStackTrace()
-                    _errorMessage.value = ex.message
+                    _errorMessage.value = "Не удалось отправить пост"
+                } finally {
                     _postingState.value = false
                 }
             }

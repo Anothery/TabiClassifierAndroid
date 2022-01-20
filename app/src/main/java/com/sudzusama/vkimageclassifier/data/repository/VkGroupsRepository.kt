@@ -1,11 +1,10 @@
 package com.sudzusama.vkimageclassifier.data.repository
 
-import android.content.Context
-import android.database.Cursor
 import android.net.Uri
-import android.provider.OpenableColumns
 import com.sudzusama.vkimageclassifier.data.mapper.mapToDomain
 import com.sudzusama.vkimageclassifier.data.network.vk.GroupsApi
+import com.sudzusama.vkimageclassifier.data.network.vk.VkException
+import com.sudzusama.vkimageclassifier.data.response.vk.VkResponse
 import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
 import com.sudzusama.vkimageclassifier.domain.model.GroupShort
 import com.sudzusama.vkimageclassifier.domain.model.WallItem
@@ -15,6 +14,7 @@ import com.sudzusama.vkimageclassifier.utils.FileUtils
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONException
 import java.io.File
 import javax.inject.Inject
 import kotlin.math.abs
@@ -36,7 +36,7 @@ class VkGroupsRepository @Inject constructor(
     ): List<GroupShort> {
         val groups =
             groupsApi.getGroups(API_VERSION, userId, extended, filter, fields.joinToString(","))
-        return groups.mapToDomain()
+        return getResponseOrThrow(groups).mapToDomain()
     }
 
     override suspend fun getGroupById(
@@ -44,7 +44,7 @@ class VkGroupsRepository @Inject constructor(
         fields: List<String>
     ): GroupDetail {
         val group = groupsApi.getGroupById(API_VERSION, groupId, fields.joinToString(","))
-        return group.mapToDomain()
+        return getResponseOrThrow(group).mapToDomain()
     }
 
     override suspend fun getWallById(
@@ -62,14 +62,16 @@ class VkGroupsRepository @Inject constructor(
             extended,
             fields?.joinToString(",")
         )
-        return wall.mapToDomain()
+        return getResponseOrThrow(wall).mapToDomain()
     }
+
 
     override suspend fun uploadPhotos(
         groupId: Int,
         photos: List<Picture>
     ): List<String> {
-        val uploadServerUrl = groupsApi.getUploadServer(API_VERSION, groupId).response.uploadUrl
+        val uploadServerUrl =
+            getResponseOrThrow(groupsApi.getUploadServer(API_VERSION, groupId)).uploadUrl
         val uploadedPhotos = mutableListOf<String>()
         photos.forEach { photo ->
             val body = if (photo.isInternal) {
@@ -98,11 +100,9 @@ class VkGroupsRepository @Inject constructor(
                 uploadedResult.hash
             )
 
-            wallResponse.response.firstOrNull()
+            getResponseOrThrow(wallResponse).firstOrNull()
                 ?.let { uploadedPhotos.add("photo${it.ownerId}_${it.id}") }
         }
-
-
         return uploadedPhotos
     }
 
@@ -114,14 +114,16 @@ class VkGroupsRepository @Inject constructor(
         attachements: List<String>?,
         publishDate: Long?
     ): Int {
-        return groupsApi.postToWall(
-            API_VERSION,
-            -abs(ownerId),
-            fromGroup,
-            message,
-            attachements?.joinToString(","),
-            publishDate
-        ).response.postId
+        return getResponseOrThrow(
+            groupsApi.postToWall(
+                API_VERSION,
+                -abs(ownerId),
+                fromGroup,
+                message,
+                attachements?.joinToString(","),
+                publishDate
+            )
+        ).postId
     }
 
     override suspend fun likeAnItem(
@@ -142,6 +144,18 @@ class VkGroupsRepository @Inject constructor(
     }
 
     override suspend fun deletePost(groupId: Int, postId: Int): Boolean {
-        return groupsApi.deletePost(API_VERSION, -abs(groupId), postId).mapToDomain()
+        val deleteResult = groupsApi.deletePost(API_VERSION, -abs(groupId), postId)
+        return getResponseOrThrow(deleteResult) == 1
+    }
+
+    private fun <R : Any> getResponseOrThrow(response: VkResponse<R>): R {
+        when {
+            response.error != null -> throw VkException(
+                response.error.errorCode,
+                response.error.errorMsg
+            )
+            response.response != null -> return response.response
+            else -> throw JSONException("Unknown JSON")
+        }
     }
 }

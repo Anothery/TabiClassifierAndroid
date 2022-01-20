@@ -1,10 +1,14 @@
 package com.sudzusama.vkimageclassifier.data.mapper
 
 import com.sudzusama.vkimageclassifier.data.response.*
+import com.sudzusama.vkimageclassifier.data.response.tabi.TabiClassifyResponse
+import com.sudzusama.vkimageclassifier.data.response.vk.GroupDetailResponse
+import com.sudzusama.vkimageclassifier.data.response.vk.GroupWallResponse
+import com.sudzusama.vkimageclassifier.data.response.vk.GroupsListResponse
 import com.sudzusama.vkimageclassifier.domain.model.*
 import kotlin.math.abs
 
-fun GroupsListResponse.mapToDomain(): List<GroupShort> = this.response.groups.map {
+fun GroupsListResponse.mapToDomain(): List<GroupShort> = this.groups.map {
     GroupShort(
         it.id,
         it.name,
@@ -27,8 +31,6 @@ fun GroupsListResponse.mapToDomain(): List<GroupShort> = this.response.groups.ma
     )
 }
 
-fun WallDeleteDesponse.mapToDomain(): Boolean = this.response == 1
-
 fun TabiClassifyResponse.mapToDomain(): ClassifyResponse =
     ClassifyResponse(
         colors.map { ClassifyResponse.Color(it.meanHexColor, it.name, it.percentage.toFloat()) },
@@ -39,7 +41,7 @@ fun TabiClassifyResponse.mapToDomain(): ClassifyResponse =
         )
     )
 
-fun GroupDetailResponse.mapToDomain(): GroupDetail = with(this.response[0]) {
+fun List<GroupDetailResponse>.mapToDomain(): GroupDetail = with(this[0]) {
     return@with GroupDetail(
         this.id,
         this.name,
@@ -57,16 +59,16 @@ fun GroupDetailResponse.mapToDomain(): GroupDetail = with(this.response[0]) {
 }
 
 fun GroupWallResponse.mapToDomain(): List<WallItem> =
-    this.response.items.map { response ->
+    this.items.map { response ->
         var posterName = ""
         var posterThumbnail = ""
 
 
-        this.response.groups.filter { abs(it.id) == abs(response.fromId) }.getOrNull(0)?.let {
+        this.groups.filter { abs(it.id) == abs(response.fromId) }.getOrNull(0)?.let {
             it.photo50
             posterName = it.name
             posterThumbnail = it.photo50
-        } ?: this.response.profiles.filter { abs(it.id) == abs(response.fromId) }.getOrNull(0)
+        } ?: this.profiles.filter { abs(it.id) == abs(response.fromId) }.getOrNull(0)
             ?.let {
                 posterName = "${it.firstName} ${it.lastName}"
                 posterThumbnail = it.photo50

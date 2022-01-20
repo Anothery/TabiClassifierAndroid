@@ -87,7 +87,8 @@ class GroupsViewModel @Inject constructor(
                 val groupsResult = groupsInteractor.getGroups()
                 _groups.value = groupsResult
             } catch (ex: Exception) {
-                _errorMessage.value = ex.message
+                ex.printStackTrace()
+                _errorMessage.value = "Нет соединения с сервером VK"
             } finally {
                 _loading.value = false
             }

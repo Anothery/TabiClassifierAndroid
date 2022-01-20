@@ -1,4 +1,4 @@
-package com.sudzusama.vkimageclassifier.data.response
+package com.sudzusama.vkimageclassifier.data.response.tabi
 
 
 import kotlinx.serialization.SerialName

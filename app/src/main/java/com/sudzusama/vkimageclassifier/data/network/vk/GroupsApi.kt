@@ -1,6 +1,6 @@
 package com.sudzusama.vkimageclassifier.data.network.vk
 
-import com.sudzusama.vkimageclassifier.data.response.*
+import com.sudzusama.vkimageclassifier.data.response.vk.*
 import okhttp3.MultipartBody
 import retrofit2.http.*
 
@@ -13,7 +13,7 @@ interface GroupsApi {
         @Query("extended") extended: Int,
         @Query("filter") filter: String?,
         @Query("fields") fields: String
-    ): GroupsListResponse
+    ): VkResponse<GroupsListResponse>
 
 
     @GET("groups.getById")
@@ -21,7 +21,7 @@ interface GroupsApi {
         @Query("v") version: String,
         @Query("group_id") userId: Int,
         @Query("fields") fields: String?
-    ): GroupDetailResponse
+    ): VkResponse<List<GroupDetailResponse>>
 
     @GET("wall.get")
     suspend fun getWallById(
@@ -31,7 +31,7 @@ interface GroupsApi {
         @Query("count") count: Int,
         @Query("extended") extended: Int?,
         @Query("fields") fields: String?
-    ): GroupWallResponse
+    ): VkResponse<GroupWallResponse>
 
     @GET("likes.add")
     suspend fun likeAnItem(
@@ -53,7 +53,7 @@ interface GroupsApi {
     suspend fun getUploadServer(
         @Query("v") version: String,
         @Query("group_id") groupId: Int
-    ): GetUploadServerResponse
+    ): VkResponse<GetUploadServerResponse>
 
     @Multipart
     @POST
@@ -71,7 +71,7 @@ interface GroupsApi {
         @Query("photo") photo: String,
         @Query("server") server: Int,
         @Query("hash") hash: String,
-    ): SaveWallResponse
+    ): VkResponse<List<SaveWallResponse>>
 
     @GET("wall.post")
     suspend fun postToWall(
@@ -81,14 +81,14 @@ interface GroupsApi {
         @Query("message") message: String?,
         @Query("attachments") attachments: String?,
         @Query("publish_date") publishDate: Long?,
-    ): WallPostResponse
+    ): VkResponse<WallPostResponse>
 
     @GET("wall.delete")
     suspend fun deletePost(
         @Query("v") version: String,
         @Query("owner_id") ownerId: Int,
         @Query("post_id") postId: Int,
-    ): WallDeleteDesponse
+    ): VkResponse<Int>
 
 
 }
