@@ -2,10 +2,11 @@ package com.sudzusama.vkimageclassifier.ui.groupdetail.wall
 
 import android.app.AlertDialog
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Rect
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -14,14 +15,11 @@ import com.bumptech.glide.RequestManager
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.ContentProgressBarBinding
 import com.sudzusama.vkimageclassifier.databinding.GroupWallItemBinding
+import com.sudzusama.vkimageclassifier.databinding.WallOptionDialogBinding
 import com.sudzusama.vkimageclassifier.domain.model.WallItem
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetail
 import org.ocpsoft.prettytime.PrettyTime
 import java.util.*
-import kotlin.collections.ArrayList
-import android.util.TypedValue
-import android.view.*
-import com.sudzusama.vkimageclassifier.databinding.WallOptionDialogBinding
 
 
 class WallAdapter(
@@ -36,6 +34,7 @@ class WallAdapter(
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var downloadMore = true
     private var isLoading = false
+    private var showDeletePrompt = false
 
     fun setWall(newList: List<WallItem>) {
         val list =
@@ -107,6 +106,10 @@ class WallAdapter(
         }
     }
 
+    fun showDeletePrompt(enabled: Boolean) {
+        showDeletePrompt = enabled
+    }
+
     override fun getItemViewType(position: Int): Int {
         return if (posts[position] != null) VIEW_DEFAULT else VIEW_PROGRESS
     }
@@ -134,7 +137,7 @@ class WallAdapter(
         private lateinit var menuDialog: AlertDialog
 
         fun bind(wallItem: WallItem) {
-            initDialog(wallItem)
+            initDialog(wallItem, showDeletePrompt)
 
             if (wallItem.images.isEmpty() && wallItem.text.isBlank()) {
                 binding.tvText.setTextColor(
@@ -178,18 +181,21 @@ class WallAdapter(
             adapter.setImages(wallItem.images)
         }
 
-        private fun initDialog(wallItem: WallItem) {
+        private fun initDialog(wallItem: WallItem, showDeletePrompt: Boolean) {
             val menuBinding = WallOptionDialogBinding.inflate(LayoutInflater.from(context))
             menuDialog = AlertDialog.Builder(context).setView(menuBinding.root).create()
             menuDialog.window?.decorView?.background?.alpha = 0
-            binding.root.setOnLongClickListener {
-                menuDialog.show()
-                menuBinding.tvDeletePost.setOnClickListener {
-                    onPostRemoved(wallItem.id)
-                    menuDialog.dismiss()
+            if (showDeletePrompt) {
+                binding.root.setOnLongClickListener {
+                    menuDialog.show()
+                    menuBinding.tvDeletePost.setOnClickListener {
+                        onPostRemoved(wallItem.id)
+                        menuDialog.dismiss()
+                    }
+                    true
                 }
-                true
             }
+
         }
     }
 

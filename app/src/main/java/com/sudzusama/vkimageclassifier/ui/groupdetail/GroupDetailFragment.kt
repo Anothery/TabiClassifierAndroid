@@ -77,6 +77,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
         })
 
         viewModel.details.observe(viewLifecycleOwner, {
+            wallAdapter?.showDeletePrompt(it.isAdmin) // TODO ADD POSIBILITY TO DELETE SELF POSTS
             binding.fabCreate.visible()
             if (!it.canPost) {
                 if (it.type == GroupTypes.PAGE) {
