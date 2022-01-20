@@ -27,7 +27,7 @@ fun GroupsListResponse.mapToDomain(): List<GroupShort> = this.groups.map {
         it.photo50,
         it.screenName,
         it.activity,
-        it.canPost != 0
+        it.canPost != null && it.canPost != 0
     )
 }
 

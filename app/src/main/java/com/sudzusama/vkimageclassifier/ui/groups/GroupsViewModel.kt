@@ -14,6 +14,7 @@ import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
 import com.sudzusama.vkimageclassifier.utils.view.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -88,7 +89,8 @@ class GroupsViewModel @Inject constructor(
                 _groups.value = groupsResult
             } catch (ex: Exception) {
                 ex.printStackTrace()
-                _errorMessage.value = "Нет соединения с сервером VK"
+                if (ex is UnknownHostException) _errorMessage.value = "Нет соединения с сервером VK"
+                else _errorMessage.value = ex.message
             } finally {
                 _loading.value = false
             }

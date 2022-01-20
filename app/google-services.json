@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "557426314558",
+    "project_id": "tabi-classifier",
+    "storage_bucket": "tabi-classifier.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:557426314558:android:ddf5b0bb41b0bf0c63b06f",
+        "android_client_info": {
+          "package_name": "xyz.anothery.tabiclassifier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "557426314558-s5fu0fci3cqsou6f9j8jua1itdnasbtj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBP6QVAnwMHPlk9mdtsHxiodQtrRms1N4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "557426314558-s5fu0fci3cqsou6f9j8jua1itdnasbtj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.sudzusama.vkimageclassifier.data.network.vk.VkException
 import com.sudzusama.vkimageclassifier.domain.Genre
 import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
@@ -279,6 +280,9 @@ class CreatePostViewModel @Inject constructor(
                         )
                         _onPostSent.value = true
                     }
+                } catch (ex: VkException) {
+                    ex.printStackTrace()
+                    _errorMessage.value = ex.message
                 } catch (ex: Exception) {
                     ex.printStackTrace()
                     _errorMessage.value = "Не удалось отправить пост"

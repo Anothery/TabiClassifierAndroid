@@ -1,6 +1,5 @@
 package com.sudzusama.vkimageclassifier.ui.main
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.navigation.findNavController
