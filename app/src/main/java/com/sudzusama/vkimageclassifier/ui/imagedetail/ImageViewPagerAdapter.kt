@@ -203,7 +203,7 @@ class ImageViewPagerAdapter(
             // start offset variables
             private var startY: Float = 0f
             private var changedY: Float = 0f
-            private var dragOffsetPx = 50.toPx
+            private var dragOffsetPx = 25.toPx
             private val hideOffsetPx = 120.toPx
 
             // catch double click
