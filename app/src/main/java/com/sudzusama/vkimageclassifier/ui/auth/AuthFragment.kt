@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentAuthBinding
@@ -30,7 +29,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         binding.btnLogin.setOnClickListener {
             activity?.let { viewModel.onLogin(it as AppCompatActivity) }
         }
-        viewModel.errorMessage.observe(viewLifecycleOwner, {
+        viewModel.showMessage.observe(viewLifecycleOwner, {
             Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
         })
     }

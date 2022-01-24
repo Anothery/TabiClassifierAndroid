@@ -9,7 +9,6 @@ import com.sudzusama.vkimageclassifier.utils.FileUtils
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.File
 import javax.inject.Inject
 
 class TabiRepository @Inject constructor(
@@ -18,22 +17,12 @@ class TabiRepository @Inject constructor(
 ) : ClassifyRepository {
     override suspend fun classifyImage(uri: String, isInternal: Boolean): ClassifyResponse {
         val fileType = "file"
-        val body = if (isInternal) {
-            val file = File(uri)
-            MultipartBody.Part.createFormData(
-                fileType,
-                file.name,
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-            )
-        } else {
-            val content = fileUtils.contentFileToByteUtils(Uri.parse(uri))
-            val name = fileUtils.getFileName(Uri.parse(uri)) ?: ""
-            MultipartBody.Part.createFormData(
-                fileType,
-                name,
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), content)
-            )
-        }
+        val content = fileUtils.contentFileToByteUtils(Uri.parse(uri))
+        val name = fileUtils.getFileName(Uri.parse(uri)) ?: ""
+        val body = MultipartBody.Part.createFormData(
+            fileType,
+            name,
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(), content))
         return tabiApi.classifyImage(body).mapToDomain()
     }
 }

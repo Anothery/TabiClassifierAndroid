@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 
 abstract class BaseViewModel constructor(private val authInteractor: AuthInteractor) : ViewModel() {
-    protected val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String> = _errorMessage
+    protected val _showMessage = MutableLiveData<String>()
+    val showMessage: LiveData<String> = _showMessage
 
     protected fun onUserLogout() {
         authInteractor.logout()

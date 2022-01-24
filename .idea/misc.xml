@@ -37,6 +37,7 @@
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/tag_item.xml" value="0.33" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/wall_option_dialog.xml" value="0.16770833333333332" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.19583333333333333" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/xml/filepaths.xml" value="0.17831813576494426" />
       </map>
     </option>
   </component>
@@ -45,5 +46,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.2" />
+      </ProjectState>
+    </option>
   </component>
 </project>

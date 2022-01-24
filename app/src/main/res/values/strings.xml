@@ -25,4 +25,5 @@
     <string name="choose_time">Choose time</string>
     <string name="button_select_time">Select time to publish</string>
     <string name="option_delete_post">Удалить пост</string>
+    <string name="choose_an_app">Choose an app</string>
 </resources>

@@ -1,20 +1,50 @@
 package com.sudzusama.vkimageclassifier.utils
 
+import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
+import android.provider.OpenableColumns
+import com.sudzusama.vkimageclassifier.R
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
 import java.util.*
 import javax.inject.Inject
-import android.os.Environment
-import android.provider.OpenableColumns
 
 
 class FileUtils @Inject constructor(private val context: Context) {
+    private val ALBUM_NAME = context.resources.getString(R.string.app_name)
+
     fun contentFileToByteUtils(uri: Uri): ByteArray {
         return context.contentResolver.openInputStream(uri)?.readBytes()
             ?: throw Exception("Не удалось получить внешний файл")
+    }
+
+    fun getFileExtensionFromUrl(url: String): String? {
+        val pattern = "[.](jpg|jpeg|gif|png|webp)".toRegex()
+        return pattern.find(url)?.value?.replace(".", "")
+    }
+
+    fun saveBitmapToCache(bmp: Bitmap, extension: String): String? {
+        try {
+            val file = File(
+                context.cacheDir,
+                "shared_image_${System.currentTimeMillis()}.$extension"
+            )
+            val out = FileOutputStream(file)
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out)
+            out.close()
+            return file.absolutePath
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return null
+        }
     }
 
     fun getFileName(uri: Uri): String? {
@@ -39,29 +69,66 @@ class FileUtils @Inject constructor(private val context: Context) {
     }
 
     fun findMediaFiles(): List<String> {
-        val fileList: MutableList<String> = ArrayList()
-        val columns = arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID)
-        val orderBy = MediaStore.Images.Media._ID
+        val imgList = mutableListOf<String>()
 
-        val cursor = context.contentResolver.query(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            columns,
-            null,
-            null,
-            orderBy
-        )
-        if (cursor != null) {
-            val count = cursor.count
-            val arrPath = arrayOfNulls<String>(count)
-            for (i in 0 until count) {
-                cursor.moveToPosition(i)
-                val dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
-                arrPath[i] = cursor.getString(dataColumnIndex)
-                arrPath.getOrNull(i)?.let { fileList.add(it) }
+        val collection =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                MediaStore.Images.Media.getContentUri(
+                    MediaStore.VOLUME_EXTERNAL
+                )
+            } else {
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             }
-            cursor.close()
+
+        val projection = arrayOf(
+            MediaStore.Images.Media._ID,
+            MediaStore.Images.Media.DISPLAY_NAME,
+            MediaStore.Images.Media.SIZE
+        )
+
+
+        val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} ASC"
+
+        val query = context.contentResolver.query(
+            collection,
+            projection,
+            null,
+            null,
+            sortOrder
+        )
+        query?.use { cursor ->
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+            while (cursor.moveToNext()) {
+                val id = cursor.getLong(idColumn)
+                val contentUri: Uri = ContentUris.withAppendedId(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    id
+                )
+                imgList += contentUri.toString()
+            }
         }
-        return fileList
+        return imgList
+    }
+
+    fun saveImageToExternalStorage(bitmap: Bitmap, extension: String): Uri {
+        val storageDir = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            ALBUM_NAME
+        )
+        storageDir.mkdirs()
+        val newFileName = "${UUID.randomUUID().toString().replace("-", "")}.$extension"
+        val file = File(storageDir, newFileName)
+
+        try {
+            val stream: OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            stream.flush()
+            stream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return Uri.parse(file.absolutePath)
     }
 
     fun checkFileExists(path: String) = File(path).exists()

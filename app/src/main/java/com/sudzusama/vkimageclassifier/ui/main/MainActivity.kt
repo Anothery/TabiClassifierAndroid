@@ -9,6 +9,7 @@ import com.sudzusama.vkimageclassifier.databinding.ActivityMainBinding
 import com.sudzusama.vkimageclassifier.ui.base.BaseActivity
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetailParentFragment
 import com.sudzusama.vkimageclassifier.utils.view.OnBackPressedListener
+import com.vk.api.sdk.utils.VKUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 

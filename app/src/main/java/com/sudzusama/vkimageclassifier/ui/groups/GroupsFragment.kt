@@ -61,7 +61,7 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
 
         viewModel.groups.observe(viewLifecycleOwner, { adapter?.setGroups(it) })
 
-        viewModel.errorMessage.observe(viewLifecycleOwner, { requireContext().shortToast(it) })
+        viewModel.showMessage.observe(viewLifecycleOwner, { requireContext().shortToast(it) })
 
         viewModel.showGroupDetail.observe(viewLifecycleOwner, {
             showGroupDetail(it.id)

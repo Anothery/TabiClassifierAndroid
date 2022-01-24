@@ -11,9 +11,9 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/image_view_pager"
-        android:visibility="invisible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
 
 
     <androidx.appcompat.widget.Toolbar
@@ -56,8 +56,26 @@
                 android:paddingEnd="16dp"
                 android:textColor="@color/colorOnSecondary"
                 android:textSize="22sp"
-                android:visibility="gone"
+                android:visibility="visible"
                 tools:text="Title" />
+
+            <ImageButton
+                android:id="@+id/btn_save"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/baseline_save_24"
+                android:tint="@color/colorOnSecondary" />
+
+            <ImageButton
+                android:id="@+id/btn_share"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/baseline_share_24"
+                android:tint="@color/colorOnSecondary" />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 

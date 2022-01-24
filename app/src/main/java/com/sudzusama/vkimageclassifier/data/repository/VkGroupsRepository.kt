@@ -15,7 +15,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.json.JSONException
-import java.io.File
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -74,22 +73,15 @@ class VkGroupsRepository @Inject constructor(
             getResponseOrThrow(groupsApi.getUploadServer(API_VERSION, groupId)).uploadUrl
         val uploadedPhotos = mutableListOf<String>()
         photos.forEach { photo ->
-            val body = if (photo.isInternal) {
-                val file = File(photo.uri)
-                MultipartBody.Part.createFormData(
-                    "photo",
-                    file.name,
-                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-                )
-            } else {
-                val content = fileUtils.contentFileToByteUtils(Uri.parse(photo.uri))
-                val name = fileUtils.getFileName(Uri.parse(photo.uri)) ?: ""
-                MultipartBody.Part.createFormData(
-                    "photo",
-                    name,
-                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), content)
-                )
-            }
+
+            val content = fileUtils.contentFileToByteUtils(Uri.parse(photo.uri))
+            val name = fileUtils.getFileName(Uri.parse(photo.uri)) ?: ""
+            val body = MultipartBody.Part.createFormData(
+                "photo",
+                name,
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), content)
+            )
+
 
             val uploadedResult = groupsApi.uploadFileToServer(uploadServerUrl, API_VERSION, body)
             val wallResponse = groupsApi.saveWallPhoto(

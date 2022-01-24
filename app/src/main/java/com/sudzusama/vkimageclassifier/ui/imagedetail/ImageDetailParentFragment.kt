@@ -1,28 +1,43 @@
 package com.sudzusama.vkimageclassifier.ui.imagedetail
 
+import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import androidx.core.content.FileProvider
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
+import com.sudzusama.vkimageclassifier.BuildConfig
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentImageDetailParentBinding
 import com.sudzusama.vkimageclassifier.utils.view.OnBackPressedListener
+import com.sudzusama.vkimageclassifier.utils.view.shortToast
 import com.sudzusama.vkimageclassifier.utils.view.toDp
 import com.sudzusama.vkimageclassifier.utils.view.visible
+import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
+
+@AndroidEntryPoint
 class ImageDetailParentFragment(
     private val images: List<ImageDetail>,
     private val selectedImageIndex: Int
 ) : DialogFragment(R.layout.fragment_image_detail_parent), OnBackPressedListener {
     private val binding by viewBinding(FragmentImageDetailParentBinding::bind)
     private var adapter: ImageViewPagerAdapter? = null
+    private val viewModel: ImageDetailViewModel by viewModels()
+
     private var isFinishing = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,6 +54,7 @@ class ImageDetailParentFragment(
             this::onSingleClickToImage
         )
 
+        binding.imageViewPager.currentItem
         binding.imageViewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
@@ -53,7 +69,8 @@ class ImageDetailParentFragment(
         })
 
         binding.btnBack.setOnClickListener { onBackPressed() }
-
+        binding.btnSave.setOnClickListener { onSaveButtonClicked() }
+        binding.btnShare.setOnClickListener { onShareButtonClicked() }
         hideToolbar()
         binding.imageViewPager.setPageTransformer(MarginPageTransformer(24.toDp(requireContext())))
         binding.imageViewPager.adapter = adapter
@@ -61,7 +78,52 @@ class ImageDetailParentFragment(
         binding.imageViewPager.doOnPreDraw {
             binding.imageViewPager.setCurrentItem(selectedImageIndex, false)
         }
+
+        viewModel.showMessage.observe(viewLifecycleOwner) { activity?.shortToast(it) }
+        viewModel.shareImage.observe(viewLifecycleOwner, this::shareImage)
         setBlackStatusBar()
+    }
+
+    private fun shareImage(path: String) {
+        context?.let { ctx ->
+            val file = File(path)
+            val contentUri =
+                FileProvider.getUriForFile(ctx, BuildConfig.APPLICATION_ID + ".fileprovider", file)
+            val shareIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                setDataAndType(contentUri, ctx.contentResolver.getType(contentUri))
+                putExtra(Intent.EXTRA_STREAM, contentUri)
+                type = "image/*"
+            }
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.choose_an_app)))
+        }
+    }
+
+    private fun onShareButtonClicked() {
+        val picture = images[binding.imageViewPager.currentItem]
+        Glide.with(this).asBitmap().load(picture.url)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    viewModel.onShareClicked(picture.url, resource)
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {}
+            })
+    }
+
+
+    private fun onSaveButtonClicked() {
+        val picture = images[binding.imageViewPager.currentItem]
+        Glide.with(this).asBitmap().load(picture.url)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    viewModel.onSaveClicked(picture.url, resource)
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {}
+            })
+
     }
 
     private fun onImageDragStart() {
@@ -77,7 +139,7 @@ class ImageDetailParentFragment(
     }
 
     private fun onSingleClickToImage() {
-        if(!isFinishing) {
+        if (!isFinishing) {
             if (binding.toolbar.alpha == 1f) {
                 hideToolbar(true)
             } else {

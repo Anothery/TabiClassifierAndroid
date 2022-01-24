@@ -148,7 +148,7 @@ class CreatePostFragment : BottomSheetDialogFragment() {
                 }
             }
         }
-        viewModel.errorMessage.observe(viewLifecycleOwner) { context?.shortToast(it) }
+        viewModel.showMessage.observe(viewLifecycleOwner) { context?.shortToast(it) }
         viewModel.onPostSent.observe(viewLifecycleOwner) {
             activity?.supportFragmentManager?.setFragmentResult(ON_POST_CREATED, bundleOf())
             dismiss()

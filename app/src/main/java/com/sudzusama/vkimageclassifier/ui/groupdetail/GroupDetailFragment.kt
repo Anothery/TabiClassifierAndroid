@@ -141,7 +141,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
             if (!showStartProgress) binding.progressBar.visibility = View.GONE
         })
 
-        viewModel.errorMessage.observe(viewLifecycleOwner, { requireContext().shortToast(it) })
+        viewModel.showMessage.observe(viewLifecycleOwner, { requireContext().shortToast(it) })
 
     }
 

@@ -65,11 +65,11 @@ class GroupsViewModel @Inject constructor(
                                 ), uri
                             )
                         } else {
-                            _errorMessage.value =
+                            _showMessage.value =
                                 "В данную группу нельзя запостить или предложить пост"
                         }
                     } else {
-                        _errorMessage.value = "Передан некорректный файл"
+                        _showMessage.value = "Передан некорректный файл"
                     }
                 }
                 else -> _showGroupDetail.value = group
@@ -89,8 +89,8 @@ class GroupsViewModel @Inject constructor(
                 _groups.value = groupsResult
             } catch (ex: Exception) {
                 ex.printStackTrace()
-                if (ex is UnknownHostException) _errorMessage.value = "Нет соединения с сервером VK"
-                else _errorMessage.value = ex.message
+                if (ex is UnknownHostException) _showMessage.value = "Нет соединения с сервером VK"
+                else _showMessage.value = ex.message
             } finally {
                 _loading.value = false
             }
