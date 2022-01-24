@@ -26,7 +26,7 @@ class FileUtils @Inject constructor(private val context: Context) {
             ?: throw Exception("Не удалось получить внешний файл")
     }
 
-    fun getFileExtensionFromUrl(url: String): String? {
+    fun getImageExtensionFromUrl(url: String): String? {
         val pattern = "[.](jpg|jpeg|gif|png|webp)".toRegex()
         return pattern.find(url)?.value?.replace(".", "")
     }

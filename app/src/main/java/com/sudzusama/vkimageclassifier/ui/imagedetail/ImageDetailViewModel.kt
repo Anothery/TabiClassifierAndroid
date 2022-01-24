@@ -23,7 +23,7 @@ class ImageDetailViewModel @Inject constructor(
 
     fun onSaveClicked(url: String, bitmap: Bitmap) = viewModelScope.launch {
         try {
-            val extension = fileUtils.getFileExtensionFromUrl(url) ?: ""
+            val extension = fileUtils.getImageExtensionFromUrl(url) ?: ""
             fileUtils.saveImageToExternalStorage(bitmap, extension)
             _showMessage.value = "Изображение сохранено"
 
@@ -34,7 +34,7 @@ class ImageDetailViewModel @Inject constructor(
 
     fun onShareClicked(url: String, bitmap: Bitmap) = viewModelScope.launch {
         try {
-            val extension = fileUtils.getFileExtensionFromUrl(url) ?: ""
+            val extension = fileUtils.getImageExtensionFromUrl(url) ?: ""
             val name = fileUtils.saveBitmapToCache(bitmap, extension)
             name?.let { _shareImage.value = it }
                 ?: _showMessage.setValue("Не удалось отправить изображение")
