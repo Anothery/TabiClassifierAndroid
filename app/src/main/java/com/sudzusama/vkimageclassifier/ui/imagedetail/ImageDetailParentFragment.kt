@@ -1,5 +1,6 @@
 package com.sudzusama.vkimageclassifier.ui.imagedetail
 
+import android.Manifest
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -18,6 +19,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.fondesa.kpermissions.allGranted
+import com.fondesa.kpermissions.extension.permissionsBuilder
+import com.fondesa.kpermissions.extension.send
 import com.sudzusama.vkimageclassifier.BuildConfig
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentImageDetailParentBinding
@@ -114,16 +118,25 @@ class ImageDetailParentFragment(
 
 
     private fun onSaveButtonClicked() {
-        val picture = images[binding.imageViewPager.currentItem]
-        Glide.with(this).asBitmap().load(picture.url)
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    viewModel.onSaveClicked(picture.url, resource)
-                }
+        permissionsBuilder(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ).build().send {
+            if (it.allGranted()) {
+                val picture = images[binding.imageViewPager.currentItem]
+                Glide.with(this).asBitmap().load(picture.url)
+                    .into(object : CustomTarget<Bitmap>() {
+                        override fun onResourceReady(
+                            resource: Bitmap,
+                            transition: Transition<in Bitmap>?
+                        ) {
+                            viewModel.onSaveClicked(picture.url, resource)
+                        }
 
-                override fun onLoadCleared(placeholder: Drawable?) {}
-            })
-
+                        override fun onLoadCleared(placeholder: Drawable?) {}
+                    })
+            }
+        }
     }
 
     private fun onImageDragStart() {
