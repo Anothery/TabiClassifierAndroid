@@ -28,7 +28,7 @@ class VkGroupsRepository @Inject constructor(
     }
 
     override suspend fun getGroups(
-        userId: Int,
+        userId: Long,
         extended: Int,
         filter: String?,
         fields: List<String>

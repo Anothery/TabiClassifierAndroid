@@ -59,8 +59,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
         binding.fabCreate.setOnClickListener {
             permissionsBuilder(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ).build().send {
+                Manifest.permission.WRITE_EXTERNAL_STORAGE).build().send {
                 if (it.allGranted()) {
                     viewModel.onFabCreateClicked()
                 }

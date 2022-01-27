@@ -24,8 +24,8 @@ class ImageDetailViewModel @Inject constructor(
     fun onSaveClicked(url: String, bitmap: Bitmap) = viewModelScope.launch {
         try {
             val extension = fileUtils.getImageExtensionFromUrl(url) ?: ""
-            fileUtils.saveImageToExternalStorage(bitmap, extension)
-            _showMessage.value = "Изображение сохранено"
+            val storageDir = fileUtils.saveImageToExternalStorage(bitmap, extension)
+            _showMessage.value = "Изображение сохранено в папку $storageDir"
 
         } catch (ex: Exception) {
             _showMessage.value = "Не удалось сохранить изображение"

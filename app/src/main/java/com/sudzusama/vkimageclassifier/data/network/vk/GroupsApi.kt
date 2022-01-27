@@ -9,7 +9,7 @@ interface GroupsApi {
     @GET("groups.get")
     suspend fun getGroups(
         @Query("v") version: String,
-        @Query("user_id") userId: Int,
+        @Query("user_id") userId: Long,
         @Query("extended") extended: Int,
         @Query("filter") filter: String?,
         @Query("fields") fields: String
@@ -19,7 +19,7 @@ interface GroupsApi {
     @GET("groups.getById")
     suspend fun getGroupById(
         @Query("v") version: String,
-        @Query("group_id") userId: Int,
+        @Query("group_id") groupId: Int,
         @Query("fields") fields: String?
     ): VkResponse<List<GroupDetailResponse>>
 

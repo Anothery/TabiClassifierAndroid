@@ -13,7 +13,7 @@ class AuthViewModel @Inject constructor(private val authInteractor: AuthInteract
     BaseViewModel(authInteractor) {
 
     fun onLoginSuccess(token: VKAccessToken) {
-        authInteractor.saveSession(token.accessToken, token.userId.value.toInt()) // TODO change userId to long
+        authInteractor.saveSession(token.accessToken, token.userId.value)
     }
 
     fun onLogin(activityContext: Activity) {

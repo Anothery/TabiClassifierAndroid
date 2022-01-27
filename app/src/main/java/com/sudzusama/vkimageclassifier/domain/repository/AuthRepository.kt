@@ -12,6 +12,6 @@ interface AuthRepository {
     fun login(activityContext: Activity, scopes: Collection<VKScope>)
     fun logout()
     fun getLoginStateFlow(): StateFlow<Boolean>
-    fun saveSession(token: String, userId: Int)
-    fun getUserId(): Int
+    fun saveSession(token: String, userId: Long)
+    fun getUserId(): Long
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.sudzusama.vkimageclassifier.databinding.GalleryItemBinding
 
 class GalleryAdapter(
@@ -52,7 +53,10 @@ class GalleryAdapter(
                 binding.flSelected.animate().alpha(0f)
                 binding.ivSelectedDone.animate().scaleX(0f).scaleY(0f)
             }
-            glide.load(galleryItem.uri).centerCrop().into(binding.ivPicture)
+            glide
+                .load(galleryItem.uri)
+                .transition(DrawableTransitionOptions.withCrossFade(500))
+                .centerCrop().into(binding.ivPicture)
             binding.ivPicture.setOnClickListener { onItemClicked(galleryItem, position) }
 
         }

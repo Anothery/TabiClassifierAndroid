@@ -9,11 +9,11 @@ class AuthInteractor @Inject constructor(private val authRepository: AuthReposit
 
     fun getLoginStateFlow() = authRepository.getLoginStateFlow()
 
-    fun saveSession(token: String, userId: Int) {
+    fun saveSession(token: String, userId: Long) {
         authRepository.saveSession(token, userId)
     }
 
-    fun getUserId() : Int = authRepository.getUserId()
+    fun getUserId() : Long = authRepository.getUserId()
 
     fun login(activityContext: Activity) {
         val scopes = listOf(VKScope.GROUPS, VKScope.WALL, VKScope.PHOTOS)

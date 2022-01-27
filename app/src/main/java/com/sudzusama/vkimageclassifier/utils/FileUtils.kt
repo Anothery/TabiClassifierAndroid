@@ -73,9 +73,7 @@ class FileUtils @Inject constructor(private val context: Context) {
 
         val collection =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                MediaStore.Images.Media.getContentUri(
-                    MediaStore.VOLUME_EXTERNAL
-                )
+                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
             } else {
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             }
@@ -83,9 +81,8 @@ class FileUtils @Inject constructor(private val context: Context) {
         val projection = arrayOf(
             MediaStore.Images.Media._ID,
             MediaStore.Images.Media.DISPLAY_NAME,
-            MediaStore.Images.Media.SIZE
+            MediaStore.Images.Media.SIZE,
         )
-
 
         val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} ASC"
 
@@ -100,10 +97,8 @@ class FileUtils @Inject constructor(private val context: Context) {
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
-                val contentUri: Uri = ContentUris.withAppendedId(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    id
-                )
+                val contentUri: Uri =
+                    ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
                 imgList += contentUri.toString()
             }
         }
@@ -119,17 +114,11 @@ class FileUtils @Inject constructor(private val context: Context) {
         val newFileName = "${UUID.randomUUID().toString().replace("-", "")}.$extension"
         val file = File(storageDir, newFileName)
 
-        try {
-            val stream: OutputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-            stream.flush()
-            stream.close()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+        val stream: OutputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        stream.flush()
+        stream.close()
 
-        return Uri.parse(file.absolutePath)
+        return Uri.parse(storageDir.absolutePath)
     }
-
-    fun checkFileExists(path: String) = File(path).exists()
 }

@@ -7,7 +7,7 @@ import com.sudzusama.vkimageclassifier.ui.createpost.pictures.Picture
 
 interface GroupsRepository {
     suspend fun getGroups(
-        userId: Int,
+        userId: Long,
         extended: Int,
         filter: String?,
         fields: List<String>
