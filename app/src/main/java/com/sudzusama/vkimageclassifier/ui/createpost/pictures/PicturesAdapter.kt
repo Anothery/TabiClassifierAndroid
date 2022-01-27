@@ -53,7 +53,7 @@ class PicturesAdapter(
         super.onViewRecycled(holder)
         holder.recycle()
     }
-    
+
     inner class ViewHolder(private val binding: CreatePostPictureItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -107,9 +107,7 @@ class PicturesAdapter(
                                 binding.tvGenre.animate().alpha(1f).scaleX(1f).scaleY(1f)
                             }
                             binding.fabRemove.visible()
-                            binding.flClassifying.updateLayoutParams {
-                                width = resource?.intrinsicWidth ?: 0
-                            }
+
                             return false
                         }
 

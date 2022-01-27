@@ -106,8 +106,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:clipToPadding="false"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp" />
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_color_tags"
