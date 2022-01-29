@@ -49,8 +49,10 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
 
         arguments?.getInt(GROUP_ID)?.let(viewModel::initialize)
 
-        activity?.supportFragmentManager?.setFragmentResultListener(ON_POST_CREATED,
-            viewLifecycleOwner, { requestKey, result -> viewModel.onUpdateWall() })
+        activity?.supportFragmentManager?.setFragmentResultListener(
+            ON_POST_CREATED,
+            viewLifecycleOwner
+        ) { requestKey, result -> viewModel.onUpdateWall() }
 
 
         binding.btnBack.setOnClickListener {
@@ -68,13 +70,13 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
             }
         }
 
-        viewModel.showCreateScreen.observe(viewLifecycleOwner, { detail ->
+        viewModel.showCreateScreen.observe(viewLifecycleOwner) { detail ->
             activity?.supportFragmentManager?.let {
                 CreatePostFragment.newInstance(detail, null).show(it, CreatePostFragment.TAG)
             }
-        })
+        }
 
-        viewModel.details.observe(viewLifecycleOwner, {
+        viewModel.details.observe(viewLifecycleOwner) {
             wallAdapter?.showDeletePrompt(it.isAdmin) // TODO ADD POSIBILITY TO DELETE SELF POSTS
             binding.fabCreate.visible()
             if (!it.canPost) {
@@ -120,30 +122,28 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
                     } else binding.tvTitle.alpha = 1f
                 }
             })
-        })
+        }
 
-        viewModel.wallItems.observe(viewLifecycleOwner, { newList ->
-            if (newList.isEmpty()) {
-                binding.tvEmptyWall.visibility = View.VISIBLE
-            } else {
-                binding.tvEmptyWall.visibility = View.GONE
-            }
+        viewModel.wallItems.observe(viewLifecycleOwner) { newList ->
+            if (newList.isEmpty()) binding.tvEmptyWall.visible()
+            else binding.tvEmptyWall.gone()
+
             wallAdapter?.setWall(newList)
-        })
+        }
 
-        viewModel.isLoading.observe(viewLifecycleOwner, { isLoading ->
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             wallAdapter?.setIsDataLoading(isLoading)
-        })
+        }
 
-        viewModel.downloadMore.observe(viewLifecycleOwner, { downloadMore ->
+        viewModel.downloadMore.observe(viewLifecycleOwner) { downloadMore ->
             wallAdapter?.setDownloadMore(downloadMore)
-        })
+        }
 
-        viewModel.showStartProgress.observe(viewLifecycleOwner, { showStartProgress ->
-            if (!showStartProgress) binding.progressBar.visibility = View.GONE
-        })
+        viewModel.showStartProgress.observe(viewLifecycleOwner) { showStartProgress ->
+            if (!showStartProgress) binding.progressBar.gone()
+        }
 
-        viewModel.showMessage.observe(viewLifecycleOwner, { requireContext().shortToast(it) })
+        viewModel.showMessage.observe(viewLifecycleOwner) { requireContext().shortToast(it) }
 
     }
 

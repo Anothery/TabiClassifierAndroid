@@ -48,9 +48,11 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                binding.marginView.layoutParams = binding.marginView.layoutParams.apply {
-                    height = binding.actionBar.height
-                }
+                binding.srlGroups.setProgressViewOffset(
+                    false,
+                    binding.actionBar.height / 2,
+                    binding.actionBar.height + 8.toPx
+                )
             }
         })
 
@@ -59,14 +61,19 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
         initGroupsList()
         initSearchBar()
 
-        viewModel.groups.observe(viewLifecycleOwner, { adapter?.setGroups(it) })
+        binding.srlGroups.setOnRefreshListener {
+            viewModel.onSwipedToRefresh()
+            binding.srlGroups.isRefreshing = false
+        }
 
-        viewModel.showMessage.observe(viewLifecycleOwner, { requireContext().shortToast(it) })
+        viewModel.groups.observe(viewLifecycleOwner) { adapter?.setGroups(it) }
 
-        viewModel.showGroupDetail.observe(viewLifecycleOwner, {
+        viewModel.showMessage.observe(viewLifecycleOwner) { requireContext().shortToast(it) }
+
+        viewModel.showGroupDetail.observe(viewLifecycleOwner) {
             showGroupDetail(it.id)
             context?.hideKeyboard(view)
-        })
+        }
 
         viewModel.loading.observe(viewLifecycleOwner) { if (it) binding.progressBar.visible() else binding.progressBar.gone() }
 
@@ -78,7 +85,8 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
                 if (permStatuses.allGranted()) {
                     activity?.supportFragmentManager?.setFragmentResultListener(
                         CreatePostFragment.ON_POST_CREATED,
-                        viewLifecycleOwner, { _, _ -> activity?.finish() })
+                        viewLifecycleOwner
+                    ) { _, _ -> activity?.finish() }
                     activity?.supportFragmentManager?.let { fm ->
                         CreatePostFragment.newInstance(it.first, it.second)
                             .show(fm, CreatePostFragment.TAG)
@@ -88,9 +96,7 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
 
         }
 
-        viewModel.exit.observe(viewLifecycleOwner, {
-            activity?.finish()
-        })
+        viewModel.exit.observe(viewLifecycleOwner) { activity?.finish() }
     }
 
     private fun showGroupDetail(id: Int) {

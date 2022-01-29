@@ -28,13 +28,13 @@ class ClassifyInteractor @Inject constructor(private val tabiRepository: Classif
         Tag("red", Color.parseColor("#DC143C"), false),
         Tag("orange", Color.parseColor("#FFA500"), false),
         Tag("pink", Color.parseColor("#FFC0CB"), false),
-        Tag("violet", Color.parseColor("#EE82EE"), false),
+        Tag("violet", Color.parseColor("#7a41bb"), false),
         Tag("cyan", Color.parseColor("#AFEEEE"), false),
         Tag("blue", Color.parseColor("#4169E1"), false),
         Tag("yellow", Color.parseColor("#FFFF99"), false),
         Tag("green", Color.parseColor("#228B22"), false),
         Tag("gold", Color.parseColor("#FFD700"), false),
         Tag("beige", Color.parseColor("#F5F5DC"), false),
-        Tag("brown", Color.parseColor("#A52A2A"), false),
+        Tag("brown", Color.parseColor("#7e5331"), false),
     )
 }

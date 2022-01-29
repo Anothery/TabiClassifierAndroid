@@ -36,7 +36,7 @@ class VkSpannableHelper @Inject constructor(private val context: Context) {
         spannable.append(sb.toString())
 
         // Match tags
-        val tagMatcher = Pattern.compile("#\\w+").matcher(spannable)
+        val tagMatcher = Pattern.compile("#\\w+(@[\\w]*)?").matcher(spannable)
         while (tagMatcher.find()) {
             sb.setLength(0)
             spannable.append(sb.toString())
@@ -51,7 +51,7 @@ class VkSpannableHelper @Inject constructor(private val context: Context) {
             if (color == Color.WHITE) {
                 chip.chipStrokeWidth = 2.toPx.toFloat()
                 chip.chipStrokeColor =
-                    ColorStateList.valueOf(ColorUtils.blendARGB(color, Color.BLACK, 0.2f))
+                    ColorStateList.valueOf(ColorUtils.blendARGB(color, Color.BLACK, 0.1f))
             }
 
             chip.setBounds(0, 0, chip.intrinsicWidth, chip.intrinsicHeight)
@@ -76,14 +76,14 @@ class VkSpannableHelper @Inject constructor(private val context: Context) {
             "red" -> Color.parseColor("#DC143C")
             "orange" -> Color.parseColor("#FFA500")
             "pink" -> Color.parseColor("#FFC0CB")
-            "violet" -> Color.parseColor("#EE82EE")
+            "violet" -> Color.parseColor("#7a41bb")
             "cyan" -> Color.parseColor("#AFEEEE")
             "blue" -> Color.parseColor("#4169E1")
             "yellow" -> Color.parseColor("#FFFF99")
             "green" -> Color.parseColor("#228B22")
             "gold" -> Color.parseColor("#FFD700")
             "beige" -> Color.parseColor("#F5F5DC")
-            "brown" -> Color.parseColor("#A52A2A")
+            "brown" -> Color.parseColor("#7e5331")
             else -> Color.LTGRAY
         }
     }

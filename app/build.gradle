@@ -18,8 +18,8 @@ android {
         targetSdkVersion target_sdk_version
 
         applicationId "xyz.anothery.tabiclassifier"
-        versionCode 6
-        versionName "1.33"
+        versionCode 8
+        versionName "1.34"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

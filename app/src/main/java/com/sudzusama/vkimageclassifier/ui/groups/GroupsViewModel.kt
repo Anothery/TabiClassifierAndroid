@@ -96,4 +96,19 @@ class GroupsViewModel @Inject constructor(
             }
         }
     }
+
+
+    fun onSwipedToRefresh() = viewModelScope.launch {
+        try {
+            if (_groups.value?.isEmpty() == true) _loading.value = true
+            val groupsResult = groupsInteractor.getGroups()
+            _groups.value = groupsResult
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            if (ex is UnknownHostException) _showMessage.value = "Нет соединения с сервером VK"
+            else _showMessage.value = ex.message
+        } finally {
+            _loading.value = false
+        }
+    }
 }

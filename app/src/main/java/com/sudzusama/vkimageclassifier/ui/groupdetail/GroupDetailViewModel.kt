@@ -40,7 +40,6 @@ class GroupDetailViewModel @Inject constructor(
 
     private var wallId: Int = -1
 
-
     fun initialize(id: Int) {
         wallId = id
 
@@ -60,18 +59,21 @@ class GroupDetailViewModel @Inject constructor(
         }
     }
 
-    fun onDownloadMore() = viewModelScope.launch {
+    fun onDownloadMore(fromStart: Boolean = false) = viewModelScope.launch {
         try {
             _isLoading.value = true
             val list = wallItems.value?.toMutableList() ?: mutableListOf()
-            val loadedData = groupsInteractor.getGroupWall(wallId, wallItems.value?.size ?: 0)
+            if (list.isEmpty()) _showStartProgress.value = true
+            val offset = if (fromStart) 0 else wallItems.value?.size ?: 0
+            val loadedData = groupsInteractor.getGroupWall(wallId, offset)
             if (loadedData.isEmpty()) _downloadMore.value = false
-            _wallItems.value = list.apply { addAll(loadedData) }.distinctBy { it.id }
-                .sortedByDescending { it.date }
+            if (fromStart) _wallItems.value = loadedData.sortedByDescending { it.date }
+            else _wallItems.value = list.apply { addAll(loadedData) }
+                .distinctBy { it.id }.sortedByDescending { it.date }
         } catch (ex: Exception) {
             _showMessage.value = ex.message
         } finally {
-            if (_showStartProgress.value == true) _showStartProgress.value = false
+            _showStartProgress.value = false
             _isLoading.value = false
         }
     }
@@ -106,8 +108,6 @@ class GroupDetailViewModel @Inject constructor(
         try {
             val list = wallItems.value?.toMutableList() ?: mutableListOf()
             val loadedData = groupsInteractor.getGroupWall(wallId, 0)
-
-
             if (list.isEmpty()) _wallItems.value = loadedData.sortedByDescending { it.date }
             else _wallItems.value = list.apply { addAll(loadedData) }
                 .distinctBy { it.id }.sortedByDescending { it.date }
@@ -133,5 +133,12 @@ class GroupDetailViewModel @Inject constructor(
 
     fun onFabCreateClicked() {
         viewModelScope.launch { _showCreateScreen.value = _details.value }
+    }
+
+    fun onSwipedToRefresh() = viewModelScope.launch {
+        if (isLoading.value != true) {
+            getGroupById()
+            onDownloadMore(true)
+        }
     }
 }

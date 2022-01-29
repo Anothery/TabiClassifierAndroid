@@ -17,7 +17,11 @@ import com.bumptech.glide.request.target.Target
 import com.sudzusama.vkimageclassifier.databinding.GroupWallImageBinding
 import com.sudzusama.vkimageclassifier.domain.model.WallImageItem
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetail
+import com.sudzusama.vkimageclassifier.utils.view.invisible
 import com.sudzusama.vkimageclassifier.utils.view.toPx
+import com.sudzusama.vkimageclassifier.utils.view.visible
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
 
 
 class PostImageAdapter(
@@ -26,7 +30,6 @@ class PostImageAdapter(
 ) : RecyclerView.Adapter<PostImageAdapter.PostImageViewHolder>() {
 
     private var currentRecyclerView: RecyclerView? = null
-
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         currentRecyclerView = recyclerView
@@ -43,7 +46,7 @@ class PostImageAdapter(
         val diffResult = DiffUtil.calculateDiff(WallImageDiffCallback(images, newList))
         images.clear()
         images.addAll(newList)
-        diffResult.dispatchUpdatesTo(this)
+        diffResult.dispatchUpdatesTo(this@PostImageAdapter)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostImageViewHolder {

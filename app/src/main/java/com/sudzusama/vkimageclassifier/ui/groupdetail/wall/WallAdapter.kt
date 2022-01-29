@@ -39,15 +39,17 @@ class WallAdapter(
     private var isLoading = false
     private var showDeletePrompt = false
 
+
     fun setWall(newList: List<WallItem>) {
         val list =
-            if (!downloadMore || newList.isEmpty()) newList else mutableListOf<WallItem?>().apply {
-                addAll(newList); add(null)
-            }
+            if (!downloadMore || newList.isEmpty()) newList
+            else mutableListOf<WallItem?>().apply { addAll(newList); add(null) }
+
         val diffResult = DiffUtil.calculateDiff(WallDiffCallback(posts, list))
         posts.clear()
         posts.addAll(list)
-        diffResult.dispatchUpdatesTo(this)
+        diffResult.dispatchUpdatesTo(this@WallAdapter)
+
     }
 
     fun setDownloadMore(downloadMore: Boolean) {
