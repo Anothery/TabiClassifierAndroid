@@ -173,7 +173,6 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
         adapter = GroupsAdapter(Glide.with(this)) { viewModel.onGroupClicked(it, activity?.intent) }
         binding.rvGroups.layoutManager = LinearLayoutManager(activity)
         binding.rvGroups.adapter = this.adapter
-
     }
 
     override fun onDestroyView() {

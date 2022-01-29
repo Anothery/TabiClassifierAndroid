@@ -73,4 +73,12 @@
 
     <style name="VK.Material" parent="AppTheme" />
 
+    <style name="ChipTextAppearanceOnLight" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="android:textColor">@color/colorOnPrimaryTransparent</item>
+    </style>
+
+    <style name="ChipTextAppearanceOnDark" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>

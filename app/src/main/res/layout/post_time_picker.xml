@@ -28,6 +28,8 @@
             android:layout_gravity="center"
             android:layout_margin="16dp"
             android:layout_weight="1"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text="@string/choose_date"
             android:textSize="22sp" />
 

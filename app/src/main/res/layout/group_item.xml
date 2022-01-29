@@ -50,7 +50,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginBottom="2dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/outline_settings_24"
+                android:src="@drawable/baseline_manage_accounts_24"
                 android:visibility="invisible"
                 app:tint="@color/colorOnPrimaryDisabled"
                 tools:visibility="visible" />

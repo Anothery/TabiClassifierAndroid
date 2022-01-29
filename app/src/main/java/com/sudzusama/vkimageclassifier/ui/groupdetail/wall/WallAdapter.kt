@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Rect
 import android.os.Build
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.sudzusama.vkimageclassifier.databinding.GroupWallItemBinding
 import com.sudzusama.vkimageclassifier.databinding.WallOptionDialogBinding
 import com.sudzusama.vkimageclassifier.domain.model.WallItem
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetail
+import com.sudzusama.vkimageclassifier.utils.view.VkSpannableHelper
 import org.ocpsoft.prettytime.PrettyTime
 import java.util.*
 
@@ -26,6 +28,7 @@ class WallAdapter(
     private val posts: ArrayList<WallItem?>,
     private val context: Context,
     private val glide: RequestManager,
+    private val vkSpannableHelper: VkSpannableHelper,
     private val onPostLiked: (Int, Boolean) -> Unit,
     private val onImageClicked: (List<ImageDetail>, Int) -> Unit,
     private val onDownloadMore: () -> Unit,
@@ -138,7 +141,6 @@ class WallAdapter(
 
         fun bind(wallItem: WallItem) {
             initDialog(wallItem, showDeletePrompt)
-
             if (wallItem.images.isEmpty() && wallItem.text.isBlank()) {
                 binding.tvText.setTextColor(
                     ContextCompat.getColor(context, R.color.colorOnPrimaryDisabled)
@@ -146,7 +148,8 @@ class WallAdapter(
                 binding.tvText.text = context.resources.getString(R.string.wall_item_no_content)
             } else {
                 binding.tvText.setTextColor(ContextCompat.getColor(context, R.color.colorOnPrimary))
-                binding.tvText.text = wallItem.text
+                binding.tvText.text = vkSpannableHelper.formatToSpannable(wallItem.text)
+                binding.tvText.movementMethod = LinkMovementMethod.getInstance()
             }
             val locale: Locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 context.resources.configuration.locales[0]

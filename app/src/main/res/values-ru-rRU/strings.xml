@@ -24,4 +24,5 @@
     <string name="button_select_time">Выберите время для публикации</string>
     <string name="option_delete_post">Удалить пост</string>
     <string name="choose_an_app">Выберите приложение</string>
+    <string name="you_are_admin">Вы администратор/редактор этой группы</string>
 </resources>

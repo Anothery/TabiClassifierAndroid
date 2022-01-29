@@ -66,7 +66,6 @@ class CreatePostViewModel @Inject constructor(
 
     private var groupId: Int? = null
 
-
     init {
         viewModelScope.launch {
             _galleryItems.value =
@@ -295,34 +294,13 @@ class CreatePostViewModel @Inject constructor(
 
     fun onSetDefaultTagsClicked() = viewModelScope.launch {
         _genreTags.value?.let { genres ->
-            val newItems = listOf(
-                Tag("art", Color.GRAY, false),
-                Tag("manga", Color.GRAY, false),
-                Tag("frame", Color.GRAY, false),
-                Tag("gif", Color.GRAY, false),
-                Tag("other", Color.GRAY, false),
-            ).filter { !genres.any { g -> g.name == it.name } }
-
+            val newItems =
+                classifyInteractor.defaultGenreTags.filter { !genres.any { g -> g.name == it.name } }
             _genreTags.value = genres.toMutableList().apply { addAll(newItems) }
         }
         _colorTags.value?.let { colors ->
-            val newItems = listOf(
-                Tag("bw", Color.BLACK, false),
-                Tag("mixed", Color.GREEN, false),
-                Tag("white", Color.WHITE, false),
-                Tag("black", Color.BLACK, false),
-                Tag("gray", Color.GRAY, false),
-                Tag("red", Color.RED, false),
-                Tag("orange", Color.parseColor("#FFA500"), false),
-                Tag("pink", Color.parseColor("#FFC0CB"), false),
-                Tag("violet", Color.parseColor("#EE82EE"), false),
-                Tag("cyan", Color.CYAN, false),
-                Tag("blue", Color.BLUE, false),
-                Tag("yellow", Color.YELLOW, false),
-                Tag("gold", Color.parseColor("#FFD700"), false),
-                Tag("beige", Color.parseColor("#F5F5DC"), false),
-                Tag("brown", Color.parseColor("#A52A2A"), false),
-            ).filter { !colors.any { g -> g.name == it.name } }
+            val newItems =
+                classifyInteractor.defaultColorTags.filter { !colors.any { g -> g.name == it.name } }
             _colorTags.value = colors.toMutableList().apply { addAll(newItems) }
         }
     }

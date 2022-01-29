@@ -52,7 +52,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/outline_settings_24" />
+                android:src="@drawable/baseline_manage_accounts_24"
+                android:tint="@color/colorOnPrimary" />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 

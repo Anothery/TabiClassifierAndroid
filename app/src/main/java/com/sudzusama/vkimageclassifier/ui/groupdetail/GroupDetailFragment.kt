@@ -25,6 +25,7 @@ import com.sudzusama.vkimageclassifier.ui.createpost.CreatePostFragment.Companio
 import com.sudzusama.vkimageclassifier.ui.groupdetail.header.HeaderAdapter
 import com.sudzusama.vkimageclassifier.ui.groupdetail.wall.WallAdapter
 import com.sudzusama.vkimageclassifier.ui.imagedetail.ImageDetailParentFragment
+import com.sudzusama.vkimageclassifier.utils.view.VkSpannableHelper
 import com.sudzusama.vkimageclassifier.utils.view.gone
 import com.sudzusama.vkimageclassifier.utils.view.shortToast
 import com.sudzusama.vkimageclassifier.utils.view.visible
@@ -59,7 +60,8 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
         binding.fabCreate.setOnClickListener {
             permissionsBuilder(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE).build().send {
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ).build().send {
                 if (it.allGranted()) {
                     viewModel.onFabCreateClicked()
                 }
@@ -105,6 +107,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
             }
 
             binding.btnSettings.visibility = if (it.isAdmin) View.VISIBLE else View.GONE
+            binding.btnSettings.setOnClickListener { context?.shortToast(getString(R.string.you_are_admin)) }
             binding.tvTitle.text = it.name
             headerAdapter?.setHeaders(listOf(it))
             binding.rvWall.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -149,6 +152,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
             arrayListOf<WallItem?>().apply { viewModel.wallItems.value?.mapTo(this) { it } },
             requireContext(),
             Glide.with(this),
+            VkSpannableHelper(requireContext()),
             viewModel::onPostLiked,
             { images, pos ->
                 val detailsFragment = ImageDetailParentFragment.newInstance(images, pos)
@@ -157,6 +161,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
                     .commit()
             }, viewModel::onDownloadMore, viewModel::onPostRemoved
         )
+        binding.rvWall.setItemViewCacheSize(4)
         headerAdapter = HeaderAdapter(Glide.with(this))
         binding.rvWall.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

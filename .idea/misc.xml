@@ -21,13 +21,13 @@
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/create_post_picture_item.xml" value="0.22" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_auth.xml" value="0.20833333333333334" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_create_post.xml" value="0.36054421768707484" />
-        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_group_detail.xml" value="0.2" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_group_detail.xml" value="0.18" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_groups.xml" value="0.11" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_image_detail.xml" value="0.20833333333333334" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/fragment_image_detail_parent.xml" value="0.2" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/gallery_item.xml" value="0.25" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/group_detail_info.xml" value="0.12318840579710146" />
-        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/group_item.xml" value="0.11956521739130435" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/group_item.xml" value="0.33" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/group_wall_image.xml" value="0.11956521739130435" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/group_wall_item.xml" value="0.33" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/image_detail_item.xml" value="0.20833333333333334" />
@@ -37,7 +37,9 @@
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/tag_item.xml" value="0.33" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/layout/wall_option_dialog.xml" value="0.16770833333333332" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.19583333333333333" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/xml/chip.xml" value="0.15715579710144928" />
         <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/xml/filepaths.xml" value="0.17831813576494426" />
+        <entry key="..\:/dev/TabiClassifierAndroid/app/src/main/res/xml/light_chip.xml" value="0.15729166666666666" />
       </map>
     </option>
   </component>
