@@ -29,9 +29,9 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         binding.btnLogin.setOnClickListener {
             activity?.let { viewModel.onLogin(it as AppCompatActivity) }
         }
-        viewModel.showMessage.observe(viewLifecycleOwner, {
+        viewModel.showMessage.observe(viewLifecycleOwner) {
             Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
-        })
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
