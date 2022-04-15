@@ -84,7 +84,7 @@ class FileUtils @Inject constructor(private val context: Context) {
             MediaStore.Images.Media.SIZE,
         )
 
-        val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} ASC"
+        val sortOrder = "${MediaStore.Images.Media.DATE_TAKEN} ASC"
 
         val query = context.contentResolver.query(
             collection,
