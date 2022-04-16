@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.sudzusama.vkimageclassifier.domain.model.GroupDetail
 import com.sudzusama.vkimageclassifier.domain.model.GroupShort
 import com.sudzusama.vkimageclassifier.domain.model.GroupTypes
+import com.sudzusama.vkimageclassifier.domain.model.UserShort
 import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.domain.usecase.GroupsInteractor
 import com.sudzusama.vkimageclassifier.ui.base.BaseViewModel
@@ -28,6 +29,9 @@ class GroupsViewModel @Inject constructor(
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
+
+    private val _user = MutableLiveData<UserShort>()
+    val user: LiveData<UserShort> get() = _user
 
     private val _showGroupDetail = SingleLiveEvent<GroupShort>()
     val showGroupDetail: LiveData<GroupShort> get() = _showGroupDetail
@@ -65,11 +69,10 @@ class GroupsViewModel @Inject constructor(
                                 ), uri
                             )
                         } else {
-                            _showMessage.value =
-                                "В данную группу нельзя запостить или предложить пост"
+                            showMessage("В данную группу нельзя запостить или предложить пост")
                         }
                     } else {
-                        _showMessage.value = "Передан некорректный файл"
+                        showMessage("Передан некорректный файл")
                     }
                 }
                 else -> _showGroupDetail.value = group
@@ -80,19 +83,19 @@ class GroupsViewModel @Inject constructor(
 
     }
 
-
     init {
         viewModelScope.launch {
             try {
-                _loading.value = true
+                _loading.postValue(true)
+                authInteractor.getCurrentUser()?.let(_user::postValue)
                 val groupsResult = groupsInteractor.getGroups()
-                _groups.value = groupsResult
+                _groups.postValue(groupsResult)
             } catch (ex: Exception) {
                 ex.printStackTrace()
-                if (ex is UnknownHostException) _showMessage.value = "Нет соединения с сервером VK"
-                else _showMessage.value = ex.message
+                if (ex is UnknownHostException) showMessage("Нет соединения с сервером VK")
+                else showMessage(ex.message ?: "")
             } finally {
-                _loading.value = false
+                _loading.postValue(false)
             }
         }
     }
@@ -105,8 +108,8 @@ class GroupsViewModel @Inject constructor(
             _groups.value = groupsResult
         } catch (ex: Exception) {
             ex.printStackTrace()
-            if (ex is UnknownHostException) _showMessage.value = "Нет соединения с сервером VK"
-            else _showMessage.value = ex.message
+            if (ex is UnknownHostException) showMessage("Нет соединения с сервером VK")
+            else showMessage(ex.message ?: "")
         } finally {
             _loading.value = false
         }

@@ -1,12 +1,15 @@
 package com.sudzusama.vkimageclassifier.data.mapper
 
-import com.sudzusama.vkimageclassifier.data.response.*
 import com.sudzusama.vkimageclassifier.data.response.tabi.TabiClassifyResponse
+import com.sudzusama.vkimageclassifier.data.response.vk.GetUserResponse
 import com.sudzusama.vkimageclassifier.data.response.vk.GroupDetailResponse
 import com.sudzusama.vkimageclassifier.data.response.vk.GroupWallResponse
 import com.sudzusama.vkimageclassifier.data.response.vk.GroupsListResponse
 import com.sudzusama.vkimageclassifier.domain.model.*
 import kotlin.math.abs
+
+fun GetUserResponse.mapToDomain(): UserShort =
+    UserShort(canAccessClosed, firstName, id, isClosed, lastName, photo200)
 
 fun GroupsListResponse.mapToDomain(): List<GroupShort> = this.groups.map {
     GroupShort(

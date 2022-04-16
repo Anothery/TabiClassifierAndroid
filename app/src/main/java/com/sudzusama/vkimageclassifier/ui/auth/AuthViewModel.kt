@@ -21,7 +21,6 @@ class AuthViewModel @Inject constructor(private val authInteractor: AuthInteract
     }
 
     fun onError(authException: VKAuthException) {
-        val message = "Login error: ${authException.message}"
-        _showMessage.value = message
+        showMessage("Login error: ${authException.message}")
     }
 }

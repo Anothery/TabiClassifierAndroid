@@ -10,6 +10,10 @@
         android:id="@+id/global_to_auth_nav_graph"
         app:destination="@id/auth_nav_graph"
         app:launchSingleTop="true"
+        app:enterAnim="@anim/slide_up"
+        app:exitAnim="@anim/nudge_up"
+        app:popEnterAnim="@anim/nudge_down"
+        app:popExitAnim="@anim/slide_down"
         app:popUpTo="@id/auth_nav_graph" />
 
     <action

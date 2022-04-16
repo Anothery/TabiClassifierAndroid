@@ -6,10 +6,14 @@ import com.sudzusama.vkimageclassifier.domain.usecase.AuthInteractor
 import com.sudzusama.vkimageclassifier.utils.view.SingleLiveEvent
 
 abstract class BaseViewModel constructor(private val authInteractor: AuthInteractor) : ViewModel() {
-    protected val _showMessage = SingleLiveEvent<String>()
+    private val _showMessage = SingleLiveEvent<String>()
     val showMessage: LiveData<String> = _showMessage
 
     protected fun onUserLogout() {
         authInteractor.logout()
+    }
+
+    protected fun showMessage(message: String) {
+        _showMessage.postValue(message)
     }
 }

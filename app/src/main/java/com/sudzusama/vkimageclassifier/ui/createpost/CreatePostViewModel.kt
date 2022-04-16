@@ -114,7 +114,7 @@ class CreatePostViewModel @Inject constructor(
     private fun uploadPicture(uri: String, isInternal: Boolean, positionInGallery: Int = -1) {
         pictures.value?.let { pictures ->
             if (pictures.size >= GroupsInteractor.MAX_PICTURES_PER_POST) {
-                _showMessage.value = "Нельзя добавить более 10 изображений"
+                showMessage("Нельзя добавить более 10 изображений")
                 return
             }
 
@@ -167,7 +167,7 @@ class CreatePostViewModel @Inject constructor(
                         ex.printStackTrace()
                         _pictures.value?.let { recent ->
                             recent.find { it.uri == picture.uri }?.let { picture ->
-                                _showMessage.value = "Не удалось классифицировать изображение"
+                                showMessage("Не удалось классифицировать изображение")
                                 _pictures.value = recent.toMutableList().apply {
                                     this[indexOf(picture)] = picture.copy(isLoading = false)
                                 }
@@ -245,7 +245,7 @@ class CreatePostViewModel @Inject constructor(
                 try {
                     groupId?.let { groupId ->
                         if (pictures.firstOrNull { it.isLoading } != null) {
-                            _showMessage.value = "Дождитесь окончания распознавания изображений"
+                            showMessage("Дождитесь окончания распознавания изображений")
                             return@launch
                         }
 
@@ -254,7 +254,7 @@ class CreatePostViewModel @Inject constructor(
                         val hasTags = !selectedColors.isNullOrEmpty() && selectedGenre != null
                         val hasPictures = pictures.isNotEmpty()
                         if (!hasTags && !hasPictures) {
-                            _showMessage.value = "Добавьте хотя бы одно изображение или тег"
+                            showMessage("Добавьте хотя бы одно изображение или тег")
                             return@launch
                         }
                         _postingState.value = true
@@ -276,10 +276,10 @@ class CreatePostViewModel @Inject constructor(
                     }
                 } catch (ex: VkException) {
                     ex.printStackTrace()
-                    _showMessage.value = ex.message
+                    showMessage(ex.message)
                 } catch (ex: Exception) {
                     ex.printStackTrace()
-                    _showMessage.value = "Не удалось отправить пост"
+                    showMessage("Не удалось отправить пост")
                 } finally {
                     _postingState.value = false
                 }

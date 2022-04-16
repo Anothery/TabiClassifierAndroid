@@ -33,8 +33,7 @@ class WallAdapter(
     private val onImageClicked: (List<ImageDetail>, Int) -> Unit,
     private val onDownloadMore: () -> Unit,
     private val onPostRemoved: (Int) -> Unit,
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var downloadMore = true
     private var isLoading = false
     private var showDeletePrompt = false

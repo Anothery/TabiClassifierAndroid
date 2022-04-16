@@ -2,6 +2,9 @@ package com.sudzusama.vkimageclassifier.data.repository
 
 import android.app.Activity
 import com.sudzusama.vkimageclassifier.data.local.preferences.VKSessionPreferences
+import com.sudzusama.vkimageclassifier.data.mapper.mapToDomain
+import com.sudzusama.vkimageclassifier.data.network.vk.UsersApi
+import com.sudzusama.vkimageclassifier.domain.model.UserShort
 import com.sudzusama.vkimageclassifier.domain.repository.AuthRepository
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKScope
@@ -9,8 +12,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
-class VkAuthRepository @Inject constructor(private val vkSessionPreferences: VKSessionPreferences) :
-    AuthRepository {
+class VkAuthRepository @Inject constructor(
+    private val vkSessionPreferences: VKSessionPreferences,
+) : AuthRepository {
 
     private val loginState: MutableStateFlow<Boolean> = MutableStateFlow(isLoggedIn())
 

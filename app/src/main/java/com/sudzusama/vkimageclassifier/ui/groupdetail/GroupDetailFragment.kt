@@ -7,7 +7,8 @@ import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,27 +38,20 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
     private val viewModel: GroupDetailViewModel by viewModels()
     private var wallAdapter: WallAdapter? = null
     private var headerAdapter: HeaderAdapter? = null
-
-    companion object {
-        const val GROUP_ID = "groupId"
-    }
+    private val args by navArgs<GroupDetailFragmentArgs>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initDetailRecyclerView()
 
-        arguments?.getInt(GROUP_ID)?.let(viewModel::initialize)
+        viewModel.initialize(args.groupId)
 
         activity?.supportFragmentManager?.setFragmentResultListener(
-            ON_POST_CREATED,
-            viewLifecycleOwner
-        ) { requestKey, result -> viewModel.onUpdateWall() }
+            ON_POST_CREATED, viewLifecycleOwner
+        ) { _, _ -> viewModel.onUpdateWall() }
 
-
-        binding.btnBack.setOnClickListener {
-            activity?.findNavController(R.id.navHostFragment)?.popBackStack()
-        }
+        binding.btnBack.setOnClickListener { findNavController().popBackStack() }
 
         binding.fabCreate.setOnClickListener {
             permissionsBuilder(
@@ -77,7 +71,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail) {
         }
 
         viewModel.details.observe(viewLifecycleOwner) {
-            wallAdapter?.showDeletePrompt(it.isAdmin) // TODO ADD POSIBILITY TO DELETE SELF POSTS
+            wallAdapter?.showDeletePrompt(it.isAdmin) // TODO ADD POSIBILITY TO DELETE USER POSTS
             binding.fabCreate.visible()
             if (!it.canPost) {
                 if (it.type == GroupTypes.PAGE) {

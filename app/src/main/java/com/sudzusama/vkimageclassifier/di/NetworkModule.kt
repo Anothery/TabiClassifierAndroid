@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.sudzusama.vkimageclassifier.BuildConfig
 import com.sudzusama.vkimageclassifier.data.network.tabi.TabiApi
 import com.sudzusama.vkimageclassifier.data.network.vk.GroupsApi
+import com.sudzusama.vkimageclassifier.data.network.vk.UsersApi
 import com.sudzusama.vkimageclassifier.domain.NetworkConstants
 import com.sudzusama.vkimageclassifier.domain.repository.AuthRepository
 import com.sudzusama.vkimageclassifier.utils.network.AuthInterceptor
@@ -16,10 +17,10 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -35,6 +36,17 @@ class NetworkModule {
         .addConverterFactory(converterFactory)
         .baseUrl(BuildConfig.VK_API_URL)
         .build().create(GroupsApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUsersApi(
+        okHttpClient: OkHttpClient,
+        converterFactory: Converter.Factory
+    ): UsersApi = Retrofit.Builder()
+        .client(okHttpClient)
+        .addConverterFactory(converterFactory)
+        .baseUrl(BuildConfig.VK_API_URL)
+        .build().create(UsersApi::class.java)
 
     @Provides
     @Singleton

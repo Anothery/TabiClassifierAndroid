@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -22,7 +21,6 @@ import com.fondesa.kpermissions.extension.send
 import com.sudzusama.vkimageclassifier.R
 import com.sudzusama.vkimageclassifier.databinding.FragmentGroupsBinding
 import com.sudzusama.vkimageclassifier.ui.createpost.CreatePostFragment
-import com.sudzusama.vkimageclassifier.ui.groupdetail.GroupDetailFragment
 import com.sudzusama.vkimageclassifier.utils.view.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -93,7 +91,14 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
                     }
                 }
             }
+        }
 
+        viewModel.user.observe(viewLifecycleOwner) {
+            Glide.with(this).load(it.avatarMedium).error(R.drawable.group_stub_avatar)
+                .circleCrop()
+                .into(binding.ivAvatar)
+            binding.tvName.text = it.firstName
+            binding.tvLastName.text = it.lastName
         }
 
         viewModel.exit.observe(viewLifecycleOwner) { activity?.finish() }
@@ -101,10 +106,7 @@ class GroupsFragment : Fragment(R.layout.fragment_groups) {
 
     private fun showGroupDetail(id: Int) {
         activity?.findNavController(R.id.navHostFragment)
-            ?.navigate(
-                R.id.action_groupsFragment_to_groupDetailFragment,
-                bundleOf(GroupDetailFragment.GROUP_ID to id)
-            )
+            ?.navigate(GroupsFragmentDirections.actionGroupsFragmentToGroupDetailFragment(id))
     }
 
 

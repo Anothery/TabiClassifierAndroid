@@ -54,7 +54,7 @@ class GroupDetailViewModel @Inject constructor(
             try {
                 _details.value = groupsInteractor.getGroupById(wallId)
             } catch (ex: Exception) {
-                _showMessage.value = ex.message
+                showMessage(ex.message ?: "")
             }
         }
     }
@@ -71,7 +71,7 @@ class GroupDetailViewModel @Inject constructor(
             else _wallItems.value = list.apply { addAll(loadedData) }
                 .distinctBy { it.id }.sortedByDescending { it.date }
         } catch (ex: Exception) {
-            _showMessage.value = ex.message
+            showMessage(ex.message ?:"")
         } finally {
             _showStartProgress.value = false
             _isLoading.value = false
@@ -99,7 +99,7 @@ class GroupDetailViewModel @Inject constructor(
                     }
                 }
             } catch (ex: Exception) {
-                _showMessage.value = ex.message
+                showMessage(ex.message ?:"")
             }
         }
     }
@@ -112,7 +112,7 @@ class GroupDetailViewModel @Inject constructor(
             else _wallItems.value = list.apply { addAll(loadedData) }
                 .distinctBy { it.id }.sortedByDescending { it.date }
         } catch (ex: Exception) {
-            _showMessage.value = ex.message
+            showMessage(ex.message ?:"")
         }
     }
 
@@ -123,10 +123,10 @@ class GroupDetailViewModel @Inject constructor(
                     _wallItems.value =
                         _wallItems.value?.toMutableList()?.apply { removeAll { it.id == id } }
                 } else {
-                    _showMessage.value = "Не удалось удалить пост"
+                    showMessage("Не удалось удалить пост")
                 }
             } catch (ex: Exception) {
-                _showMessage.value = "Не удалось удалить пост"
+                showMessage("Не удалось удалить пост")
             }
         }
     }

@@ -25,10 +25,10 @@ class ImageDetailViewModel @Inject constructor(
         try {
             val extension = fileUtils.getImageExtensionFromUrl(url) ?: ""
             val storageDir = fileUtils.saveImageToExternalStorage(bitmap, extension)
-            _showMessage.value = "Изображение сохранено в папку $storageDir"
+            showMessage("Изображение сохранено в папку $storageDir")
 
         } catch (ex: Exception) {
-            _showMessage.value = "Не удалось сохранить изображение"
+            showMessage("Не удалось сохранить изображение")
         }
     }
 
@@ -36,11 +36,10 @@ class ImageDetailViewModel @Inject constructor(
         try {
             val extension = fileUtils.getImageExtensionFromUrl(url) ?: ""
             val name = fileUtils.saveBitmapToCache(bitmap, extension)
-            name?.let { _shareImage.value = it }
-                ?: _showMessage.setValue("Не удалось отправить изображение")
+            name?.let { _shareImage.value = it } ?: showMessage("Не удалось отправить изображение")
 
         } catch (ex: Exception) {
-            _showMessage.value = "Не удалось отправить изображение"
+            showMessage("Не удалось отправить изображение")
         }
     }
 }

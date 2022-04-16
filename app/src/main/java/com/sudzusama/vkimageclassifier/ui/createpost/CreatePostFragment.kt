@@ -43,7 +43,6 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     private var picturesAdapter: PicturesAdapter? = null
     private var genresAdapter: TagsAdapter? = null
     private var colorsAdapter: TagsAdapter? = null
-
     private var datePickerDialog: AlertDialog? = null
 
     override fun onCreateView(
@@ -51,8 +50,7 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCreatePostBinding.inflate(inflater)
-        return binding!!.root
+        return FragmentCreatePostBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,7 +62,6 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         initPictures()
         initGenres()
         initColors()
-
 
         TooltipCompat.setTooltipText(
             binding?.btnSetDefaultTags as View,

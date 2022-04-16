@@ -40,6 +40,7 @@ android {
             resValue "integer", "com_vk_sdk_AppId", vkAppId
             buildConfigField "String", "VK_API_URL", "\"https://api.vk.com/method/\""
             buildConfigField "String", "TABI_API_URL", "\"http://81.163.26.108/\""
+            buildConfigField "String", "VK_API_VERSION", "\"5.131\""
         }
         release {
             minifyEnabled false
@@ -48,6 +49,7 @@ android {
             resValue "integer", "com_vk_sdk_AppId", vkAppId
             buildConfigField "String", "VK_API_URL", "\"https://api.vk.com/method/\""
             buildConfigField "String", "TABI_API_URL", "\"http://81.163.26.108/\""
+            buildConfigField "String", "VK_API_VERSION", "\"5.131\""
         }
     }
 

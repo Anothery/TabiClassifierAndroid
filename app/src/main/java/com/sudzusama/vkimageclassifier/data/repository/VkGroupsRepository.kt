@@ -1,6 +1,7 @@
 package com.sudzusama.vkimageclassifier.data.repository
 
 import android.net.Uri
+import com.sudzusama.vkimageclassifier.BuildConfig
 import com.sudzusama.vkimageclassifier.data.mapper.mapToDomain
 import com.sudzusama.vkimageclassifier.data.network.vk.GroupsApi
 import com.sudzusama.vkimageclassifier.data.network.vk.VkException
@@ -23,10 +24,6 @@ class VkGroupsRepository @Inject constructor(
     private val fileUtils: FileUtils,
     private val groupsApi: GroupsApi
 ) : GroupsRepository {
-    companion object {
-        private const val API_VERSION = "5.131"
-    }
-
     override suspend fun getGroups(
         userId: Long,
         extended: Int,
@@ -34,7 +31,13 @@ class VkGroupsRepository @Inject constructor(
         fields: List<String>
     ): List<GroupShort> {
         val groups =
-            groupsApi.getGroups(API_VERSION, userId, extended, filter, fields.joinToString(","))
+            groupsApi.getGroups(
+                BuildConfig.VK_API_VERSION,
+                userId,
+                extended,
+                filter,
+                fields.joinToString(",")
+            )
         return getResponseOrThrow(groups).mapToDomain()
     }
 
@@ -42,7 +45,8 @@ class VkGroupsRepository @Inject constructor(
         groupId: Int,
         fields: List<String>
     ): GroupDetail {
-        val group = groupsApi.getGroupById(API_VERSION, groupId, fields.joinToString(","))
+        val group =
+            groupsApi.getGroupById(BuildConfig.VK_API_VERSION, groupId, fields.joinToString(","))
         return getResponseOrThrow(group).mapToDomain()
     }
 
@@ -54,7 +58,7 @@ class VkGroupsRepository @Inject constructor(
         fields: List<String>?
     ): List<WallItem> {
         val wall = groupsApi.getWallById(
-            API_VERSION,
+            BuildConfig.VK_API_VERSION,
             groupId,
             offset,
             count,
@@ -70,7 +74,12 @@ class VkGroupsRepository @Inject constructor(
         photos: List<Picture>
     ): List<String> {
         val uploadServerUrl =
-            getResponseOrThrow(groupsApi.getUploadServer(API_VERSION, groupId)).uploadUrl
+            getResponseOrThrow(
+                groupsApi.getUploadServer(
+                    BuildConfig.VK_API_VERSION,
+                    groupId
+                )
+            ).uploadUrl
         val uploadedPhotos = mutableListOf<String>()
         photos.forEach { photo ->
 
@@ -83,9 +92,10 @@ class VkGroupsRepository @Inject constructor(
             )
 
 
-            val uploadedResult = groupsApi.uploadFileToServer(uploadServerUrl, API_VERSION, body)
+            val uploadedResult =
+                groupsApi.uploadFileToServer(uploadServerUrl, BuildConfig.VK_API_VERSION, body)
             val wallResponse = groupsApi.saveWallPhoto(
-                API_VERSION,
+                BuildConfig.VK_API_VERSION,
                 groupId,
                 uploadedResult.photo,
                 uploadedResult.server,
@@ -108,7 +118,7 @@ class VkGroupsRepository @Inject constructor(
     ): Int {
         return getResponseOrThrow(
             groupsApi.postToWall(
-                API_VERSION,
+                BuildConfig.VK_API_VERSION,
                 -abs(ownerId),
                 fromGroup,
                 message,
@@ -123,7 +133,7 @@ class VkGroupsRepository @Inject constructor(
         itemId: Int,
         type: String
     ) {
-        groupsApi.likeAnItem(API_VERSION, ownerId, itemId, type)
+        groupsApi.likeAnItem(BuildConfig.VK_API_VERSION, ownerId, itemId, type)
     }
 
 
@@ -132,11 +142,11 @@ class VkGroupsRepository @Inject constructor(
         itemId: Int,
         type: String
     ) {
-        groupsApi.removeLikeFromItem(API_VERSION, ownerId, itemId, type)
+        groupsApi.removeLikeFromItem(BuildConfig.VK_API_VERSION, ownerId, itemId, type)
     }
 
     override suspend fun deletePost(groupId: Int, postId: Int): Boolean {
-        val deleteResult = groupsApi.deletePost(API_VERSION, -abs(groupId), postId)
+        val deleteResult = groupsApi.deletePost(BuildConfig.VK_API_VERSION, -abs(groupId), postId)
         return getResponseOrThrow(deleteResult) == 1
     }
 

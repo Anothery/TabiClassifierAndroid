@@ -24,6 +24,9 @@
         <action
             android:id="@+id/itemToImageDetailFragment"
             app:destination="@id/imageDetailFragment" />
+        <argument
+            android:name="groupId"
+            app:argType="integer" />
 
     </fragment>
 
