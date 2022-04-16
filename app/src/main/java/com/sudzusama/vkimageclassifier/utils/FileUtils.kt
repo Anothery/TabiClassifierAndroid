@@ -78,13 +78,9 @@ class FileUtils @Inject constructor(private val context: Context) {
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             }
 
-        val projection = arrayOf(
-            MediaStore.Images.Media._ID,
-            MediaStore.Images.Media.DISPLAY_NAME,
-            MediaStore.Images.Media.SIZE,
-        )
+        val projection = arrayOf(MediaStore.Images.Media._ID)
 
-        val sortOrder = "${MediaStore.Images.Media.DATE_TAKEN} ASC"
+        val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} ASC"
 
         val query = context.contentResolver.query(
             collection,
